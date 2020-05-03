@@ -5,11 +5,10 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import com.moko.support.utils.MokoUtils;
 
 import java.io.Serializable;
-
 /**
- * @Date 2017/12/14 0014
+ * @Date 2020/4/20
  * @Author wenzheng.liu
- * @Description
+ * @Description 
  * @ClassPath com.moko.support.entity.MokoCharacteristic
  */
 public class MokoCharacteristic implements Serializable {

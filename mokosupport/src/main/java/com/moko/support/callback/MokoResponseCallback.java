@@ -4,9 +4,9 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 
 /**
- * @Date 2017/12/12 0012
+ * @Date 2020/4/20
  * @Author wenzheng.liu
- * @Description
+ * @Description 
  * @ClassPath com.moko.support.callback.MokoResponseCallback
  */
 public interface MokoResponseCallback {

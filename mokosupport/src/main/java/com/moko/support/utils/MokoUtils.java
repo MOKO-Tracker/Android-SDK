@@ -3,6 +3,8 @@ package com.moko.support.utils;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.text.TextUtils;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +33,10 @@ public class MokoUtils {
     }
 
     public static String byte2HexString(byte b) {
+        return String.format("%02X", b);
+    }
+
+    public static String int2HexString(int b) {
         return String.format("%02X", b);
     }
 
@@ -141,9 +147,9 @@ public class MokoUtils {
         int iOutcome = 0;
         byte bLoop;
 
-        for (int i = 0; i < bRefArr.length; i++) {
+        for (int i = 0, length = bRefArr.length; i < length; i++) {
             bLoop = bRefArr[i];
-            iOutcome += (bLoop & 0xFF) << (8 * i);
+            iOutcome += (bLoop & 0xFF) << (8 * (length - 1 - i));
         }
         return iOutcome;
     }
@@ -212,5 +218,29 @@ public class MokoUtils {
         }
 
         return result;
+    }
+
+    public static DecimalFormat getDecimalFormat(String pattern) {
+        DecimalFormat decimalFormat = new DecimalFormat(pattern);
+        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+        dfs.setDecimalSeparator('.');
+        decimalFormat.setDecimalFormatSymbols(dfs);
+        return decimalFormat;
+    }
+
+    public static short byte2short(byte[] bytes) {
+        byte high = bytes[0];
+        byte low = bytes[1];
+        short z = (short) (((high & 0x00FF) << 8) | (0x00FF & low));
+        return z;
+    }
+
+    public static byte[] short2Byte(short x) {
+        byte high = (byte) (0x00FF & (x >> 8));//定义第一个byte
+        byte low = (byte) (0x00FF & x);//定义第二个byte
+        byte[] bytes = new byte[2];
+        bytes[0] = high;
+        bytes[1] = low;
+        return bytes;
     }
 }

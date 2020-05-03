@@ -1,18 +1,18 @@
 package com.moko.support.callback;
 
-import com.moko.support.entity.OrderType;
+import com.moko.support.task.OrderTaskResponse;
 
 /**
- * @Date 2017/5/10
+ * @Date 2020/4/20
  * @Author wenzheng.liu
- * @Description 返回数据回调类
- * @ClassPath com.moko.support.callback.OrderCallback
+ * @Description 
+ * @ClassPath com.moko.support.callback.MokoOrderTaskCallback
  */
 public interface MokoOrderTaskCallback {
 
-    void onOrderResult(OrderType orderType, byte[] value, int responseType);
+    void onOrderResult(OrderTaskResponse response);
 
-    void onOrderTimeout(OrderType orderType);
+    void onOrderTimeout(OrderTaskResponse response);
 
     void onOrderFinish();
 }

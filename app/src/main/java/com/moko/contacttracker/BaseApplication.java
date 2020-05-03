@@ -15,6 +15,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import es.dmoral.toasty.Toasty;
+
 /**
  * @Date 2020/4/18
  * @Author wenzheng.liu
@@ -25,9 +27,9 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Toasty.Config.getInstance().apply();
         MokoSupport.getInstance().init(getApplicationContext());
         // 启动蓝牙服务
-        startService(new Intent(this, MokoService.class));
         Thread.setDefaultUncaughtExceptionHandler(new BTUncaughtExceptionHandler());
     }
 

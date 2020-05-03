@@ -1,359 +1,137 @@
 package com.moko.contacttracker.service;
 
-import android.Manifest;
 import android.app.Service;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.v4.content.ContextCompat;
 
 import com.moko.support.MokoConstants;
 import com.moko.support.MokoSupport;
 import com.moko.support.callback.MokoOrderTaskCallback;
-import com.moko.support.callback.MokoScanDeviceCallback;
+import com.moko.support.entity.ConfigKeyEnum;
 import com.moko.support.entity.OrderType;
 import com.moko.support.handler.BaseMessageHandler;
 import com.moko.support.log.LogModule;
-import com.moko.support.task.BatteryTask;
-import com.moko.support.task.BroadcastingIntervalTask;
-import com.moko.support.task.ChangePasswordTask;
-import com.moko.support.task.ChipModelTask;
-import com.moko.support.task.CloseTask;
-import com.moko.support.task.ConnectionModeTask;
-import com.moko.support.task.DevicenameTask;
-import com.moko.support.task.FirmnameTask;
-import com.moko.support.task.FirmwareVersionTask;
-import com.moko.support.task.HardwareVersionTask;
-import com.moko.support.task.IBeaconDateTask;
-import com.moko.support.task.IBeaconMacTask;
-import com.moko.support.task.IBeaconNameTask;
-import com.moko.support.task.IBeaconUuidTask;
-import com.moko.support.task.MajorTask;
-import com.moko.support.task.MeasurePowerTask;
-import com.moko.support.task.MinorTask;
-import com.moko.support.task.NotifyTask;
+import com.moko.support.task.GetAdvIntervalTask;
+import com.moko.support.task.GetBatteryTask;
+import com.moko.support.task.GetConnectionModeTask;
+import com.moko.support.task.GetDeviceModelTask;
+import com.moko.support.task.GetDeviceNameTask;
+import com.moko.support.task.GetDeviceTypeTask;
+import com.moko.support.task.GetFirmwareVersionTask;
+import com.moko.support.task.GetHardwareVersionTask;
+import com.moko.support.task.GetMajorTask;
+import com.moko.support.task.GetManufacturerTask;
+import com.moko.support.task.GetMeasurePowerTask;
+import com.moko.support.task.GetMinorTask;
+import com.moko.support.task.GetProductDateTask;
+import com.moko.support.task.GetScanModeTask;
+import com.moko.support.task.GetSoftwareVersionTask;
+import com.moko.support.task.GetStoreAlertTask;
+import com.moko.support.task.GetTransmissionTask;
+import com.moko.support.task.GetUUIDTask;
+import com.moko.support.task.OpenNotifyTask;
 import com.moko.support.task.OrderTask;
-import com.moko.support.task.OvertimeTask;
-import com.moko.support.task.RunntimeTask;
-import com.moko.support.task.SerialIDTask;
-import com.moko.support.task.SoftRebootModeTask;
-import com.moko.support.task.SoftVersionTask;
-import com.moko.support.task.ThreeAxesTask;
-import com.moko.support.task.TransmissionTask;
+import com.moko.support.task.OrderTaskResponse;
+import com.moko.support.task.SetAdvIntervlTask;
+import com.moko.support.task.SetConnectionModeTask;
+import com.moko.support.task.SetDeviceNameTask;
+import com.moko.support.task.SetMajorTask;
+import com.moko.support.task.SetMeasurePowerTask;
+import com.moko.support.task.SetMinorTask;
+import com.moko.support.task.SetPasswordTask;
+import com.moko.support.task.SetResetTask;
+import com.moko.support.task.SetScanModeTask;
+import com.moko.support.task.SetStoreAlertTask;
+import com.moko.support.task.SetTransmissionTask;
+import com.moko.support.task.SetUUIDTask;
+import com.moko.support.task.WriteConfigTask;
 
 /**
- * @Date 2017/12/7 0007
+ * @Date 2020/4/21
  * @Author wenzheng.liu
  * @Description
- * @ClassPath com.moko.beacon.service.MokoService
+ * @ClassPath com.moko.contacttracker.service.MokoService
  */
 public class MokoService extends Service implements MokoOrderTaskCallback {
-    private IBinder mBinder = new LocalBinder();
-
-    public class LocalBinder extends Binder {
-        public MokoService getService() {
-            return MokoService.this;
-        }
-    }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        return mBinder;
-    }
-
-    @Override
-    public boolean onUnbind(Intent intent) {
-        return super.onUnbind(intent);
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            LogModule.i("启动后台服务");
-        }
-        mHandler = new ServiceHandler(this);
-
-    }
-
-    @Override
-    public void onDestroy() {
-        LogModule.i("关闭后台服务");
-        MokoSupport.getInstance().disConnectBle();
-        super.onDestroy();
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        return super.onStartCommand(intent, flags, startId);
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // 处理扫描
-    ///////////////////////////////////////////////////////////////////////////
-
-    public void startScanDevice(MokoScanDeviceCallback callback) {
-        MokoSupport.getInstance().startScanDevice(callback);
-    }
-
-    public void stopScanDevice() {
-        MokoSupport.getInstance().stopScanDevice();
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // 处理连接
-    ///////////////////////////////////////////////////////////////////////////
-
-    public void connDevice(String address) {
-        MokoSupport.getInstance().connDevice(this, address);
-    }
-
-//    @Override
-//    public void onConnectSuccess() {
-//        Intent intent = new Intent(MokoConstants.ACTION_CONNECT_SUCCESS);
-//        sendOrderedBroadcast(intent, null);
-//    }
-//
-//    @Override
-//    public void onDisConnected() {
-//        Intent intent = new Intent(MokoConstants.ACTION_CONNECT_DISCONNECTED);
-//        sendOrderedBroadcast(intent, null);
-//    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // 处理应答
-    ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * @Date 2017/12/14 0014
-     * @Author wenzheng.liu
-     * @Description 获取可读信息
-     */
-    public void getReadableData(String password) {
-        MokoSupport.getInstance().sendOrder(getBattery(), getSoftVersion(), getFirmname(), getDevicename(),
-                getiBeaconDate(), getHardwareVersion(), getFirmwareVersion(), getIBeaconUuid(),
-                getMajor(), getMinor(), getMeasurePower(), getTransmission(), getBroadcastingInterval(),
-                getSerialID(), getIBeaconName(), getConnectionMode(), getIBeaconMac(),
-                setNotify(),
-                getRunntime(), getChipModel(),
-                setOvertime(),
-                setChangePasswordNotify(),
-                setChangePassword(password));
-    }
-
-    public void sendOrder(OrderTask... orderTasks) {
-        MokoSupport.getInstance().sendOrder(orderTasks);
-    }
-
-    public OrderTask getBattery() {
-        BatteryTask batteryTask = new BatteryTask(this, OrderTask.RESPONSE_TYPE_READ);
-        return batteryTask;
-    }
-
-    public OrderTask getSoftVersion() {
-        SoftVersionTask softVersionTask = new SoftVersionTask(this, OrderTask.RESPONSE_TYPE_READ);
-        return softVersionTask;
-    }
-
-    public OrderTask getFirmname() {
-        FirmnameTask firmnameTask = new FirmnameTask(this, OrderTask.RESPONSE_TYPE_READ);
-        return firmnameTask;
-    }
-
-    public OrderTask getDevicename() {
-        DevicenameTask devicenameTask = new DevicenameTask(this, OrderTask.RESPONSE_TYPE_READ);
-        return devicenameTask;
-    }
-
-    public OrderTask getiBeaconDate() {
-        IBeaconDateTask iBeaconDateTask = new IBeaconDateTask(this, OrderTask.RESPONSE_TYPE_READ);
-        return iBeaconDateTask;
-    }
-
-    public OrderTask getHardwareVersion() {
-        HardwareVersionTask hardwareVersionTask = new HardwareVersionTask(this, OrderTask.RESPONSE_TYPE_READ);
-        return hardwareVersionTask;
-    }
-
-    public OrderTask getFirmwareVersion() {
-        FirmwareVersionTask firmwareVersionTask = new FirmwareVersionTask(this, OrderTask.RESPONSE_TYPE_READ);
-        return firmwareVersionTask;
-    }
-
-    public OrderTask setNotify() {
-        NotifyTask notifyTask = new NotifyTask(this, OrderTask.RESPONSE_TYPE_NOTIFY);
-        return notifyTask;
-    }
-
-    public OrderTask setChangePasswordNotify() {
-        ChangePasswordTask changePasswordTask = new ChangePasswordTask(this, OrderTask.RESPONSE_TYPE_NOTIFY);
-        return changePasswordTask;
-    }
-
-    public OrderTask getRunntime() {
-        RunntimeTask runntimeTask = new RunntimeTask(this, OrderTask.RESPONSE_TYPE_WRITE_NO_RESPONSE);
-        return runntimeTask;
-    }
-
-    public OrderTask getChipModel() {
-        ChipModelTask chipModelTask = new ChipModelTask(this, OrderTask.RESPONSE_TYPE_WRITE_NO_RESPONSE);
-        return chipModelTask;
-    }
-
-    public OrderTask setThreeAxes(boolean isOpen) {
-        ThreeAxesTask threeAxesTask = new ThreeAxesTask(this, OrderTask.RESPONSE_TYPE_WRITE_NO_RESPONSE);
-        threeAxesTask.setData(isOpen);
-        return threeAxesTask;
-    }
-
-    public OrderTask setChangePassword(String password) {
-        ChangePasswordTask changePasswordTask = new ChangePasswordTask(this, OrderTask.RESPONSE_TYPE_WRITE_NO_RESPONSE);
-        changePasswordTask.setData(password);
-        return changePasswordTask;
-    }
-
-    public OrderTask getIBeaconUuid() {
-        IBeaconUuidTask iBeaconUuidTask = new IBeaconUuidTask(this, OrderTask.RESPONSE_TYPE_READ);
-        return iBeaconUuidTask;
-    }
-
-    public OrderTask setIBeaconUuid(String uuid) {
-        IBeaconUuidTask iBeaconUuidTask = new IBeaconUuidTask(this, OrderTask.RESPONSE_TYPE_WRITE);
-        iBeaconUuidTask.setData(uuid);
-        return iBeaconUuidTask;
-    }
-
-    public OrderTask getMajor() {
-        MajorTask majorTask = new MajorTask(this, OrderTask.RESPONSE_TYPE_READ);
-        return majorTask;
-    }
-
-    public OrderTask setMajor(int major) {
-        MajorTask majorTask = new MajorTask(this, OrderTask.RESPONSE_TYPE_WRITE);
-        majorTask.setData(major);
-        return majorTask;
-    }
-
-    public OrderTask getMinor() {
-        MinorTask minorTask = new MinorTask(this, OrderTask.RESPONSE_TYPE_READ);
-        return minorTask;
-    }
-
-    public OrderTask setMinor(int minor) {
-        MinorTask minorTask = new MinorTask(this, OrderTask.RESPONSE_TYPE_WRITE);
-        minorTask.setData(minor);
-        return minorTask;
-    }
-
-    public OrderTask getMeasurePower() {
-        MeasurePowerTask measurePowerTask = new MeasurePowerTask(this, OrderTask.RESPONSE_TYPE_READ);
-        return measurePowerTask;
-    }
-
-    public OrderTask setMeasurePower(int measurePower) {
-        MeasurePowerTask measurePowerTask = new MeasurePowerTask(this, OrderTask.RESPONSE_TYPE_WRITE);
-        measurePowerTask.setData(measurePower);
-        return measurePowerTask;
-    }
-
-
-    public OrderTask getTransmission() {
-        TransmissionTask transmissionTask = new TransmissionTask(this, OrderTask.RESPONSE_TYPE_READ);
-        return transmissionTask;
-    }
-
-    public OrderTask setTransmission(int transmission) {
-        TransmissionTask transmissionTask = new TransmissionTask(this, OrderTask.RESPONSE_TYPE_WRITE);
-        transmissionTask.setData(transmission);
-        return transmissionTask;
-    }
-
-    public OrderTask getBroadcastingInterval() {
-        BroadcastingIntervalTask broadcastingIntervalTask = new BroadcastingIntervalTask(this, OrderTask.RESPONSE_TYPE_READ);
-        return broadcastingIntervalTask;
-    }
-
-    public OrderTask setBroadcastingInterval(int broadcastInterval) {
-        BroadcastingIntervalTask broadcastingIntervalTask = new BroadcastingIntervalTask(this, OrderTask.RESPONSE_TYPE_WRITE);
-        broadcastingIntervalTask.setData(broadcastInterval);
-        return broadcastingIntervalTask;
-    }
-
-    public OrderTask getSerialID() {
-        SerialIDTask serialIDTask = new SerialIDTask(this, OrderTask.RESPONSE_TYPE_READ);
-        return serialIDTask;
-    }
-
-    public OrderTask setSerialID(String deviceId) {
-        SerialIDTask serialIDTask = new SerialIDTask(this, OrderTask.RESPONSE_TYPE_WRITE);
-        serialIDTask.setData(deviceId);
-        return serialIDTask;
-    }
-
-    public OrderTask getIBeaconName() {
-        IBeaconNameTask iBeaconNameTask = new IBeaconNameTask(this, OrderTask.RESPONSE_TYPE_READ);
-        return iBeaconNameTask;
-    }
-
-    public OrderTask setIBeaconName(String deviceName) {
-        IBeaconNameTask iBeaconNameTask = new IBeaconNameTask(this, OrderTask.RESPONSE_TYPE_WRITE);
-        iBeaconNameTask.setData(deviceName);
-        return iBeaconNameTask;
-    }
-
-    public OrderTask getConnectionMode() {
-        ConnectionModeTask connectionModeTask = new ConnectionModeTask(this, OrderTask.RESPONSE_TYPE_READ);
-        return connectionModeTask;
-    }
-
-    public OrderTask setConnectionMode(String connectionMode) {
-        ConnectionModeTask connectionModeTask = new ConnectionModeTask(this, OrderTask.RESPONSE_TYPE_WRITE);
-        connectionModeTask.setData(connectionMode);
-        return connectionModeTask;
-    }
-
-    public OrderTask closeDevice() {
-        return new CloseTask(this, OrderTask.RESPONSE_TYPE_WRITE_NO_RESPONSE);
-    }
-
-    public OrderTask setSoftReboot() {
-        SoftRebootModeTask softRebootModeTask = new SoftRebootModeTask(this, OrderTask.RESPONSE_TYPE_WRITE);
-        return softRebootModeTask;
-    }
-
-    public OrderTask getIBeaconMac() {
-        IBeaconMacTask iBeaconMacTask = new IBeaconMacTask(this, OrderTask.RESPONSE_TYPE_READ);
-        return iBeaconMacTask;
-    }
-
-    public OrderTask setOvertime() {
-        OvertimeTask overtimeTask = new OvertimeTask(this, OrderTask.RESPONSE_TYPE_WRITE);
-        return overtimeTask;
-    }
-
-    @Override
-    public void onOrderResult(OrderType orderType, byte[] value, int responseType) {
-        Intent intent = new Intent(MokoConstants.ACTION_RESPONSE_SUCCESS);
-        intent.putExtra(MokoConstants.EXTRA_KEY_RESPONSE_ORDER_TYPE, orderType);
-        intent.putExtra(MokoConstants.EXTRA_KEY_RESPONSE_VALUE, value);
-        intent.putExtra(MokoConstants.EXTRA_KEY_RESPONSE_TYPE, responseType);
+    public void onOrderResult(OrderTaskResponse response) {
+        Intent intent = new Intent(new Intent(MokoConstants.ACTION_ORDER_RESULT));
+        intent.putExtra(MokoConstants.EXTRA_KEY_RESPONSE_ORDER_TASK, response);
         sendOrderedBroadcast(intent, null);
     }
 
     @Override
-    public void onOrderTimeout(OrderType orderType) {
-        Intent intent = new Intent(MokoConstants.ACTION_RESPONSE_TIMEOUT);
-        intent.putExtra(MokoConstants.EXTRA_KEY_RESPONSE_ORDER_TYPE, orderType);
+    public void onOrderTimeout(OrderTaskResponse response) {
+        Intent intent = new Intent(new Intent(MokoConstants.ACTION_ORDER_TIMEOUT));
+        intent.putExtra(MokoConstants.EXTRA_KEY_RESPONSE_ORDER_TASK, response);
         sendOrderedBroadcast(intent, null);
     }
 
     @Override
     public void onOrderFinish() {
-        LogModule.i("任务完成");
-        Intent intent = new Intent(MokoConstants.ACTION_RESPONSE_FINISH);
-        sendOrderedBroadcast(intent, null);
+        sendOrderedBroadcast(new Intent(MokoConstants.ACTION_ORDER_FINISH), null);
+    }
+
+    @Override
+    public void onCreate() {
+        LogModule.v("MokoService...onCreate");
+        mHandler = new ServiceHandler(this);
+        super.onCreate();
+    }
+
+    public void connectBluetoothDevice(String address) {
+        MokoSupport.getInstance().connDevice(this, address);
+    }
+
+    public void disConnectBle() {
+        MokoSupport.getInstance().disConnectBle();
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    ///////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        LogModule.v("MokoService...onStartCommand");
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    private IBinder mBinder = new LocalBinder();
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        LogModule.v("MokoService...onBind");
+        return mBinder;
+    }
+
+    @Override
+    public void onLowMemory() {
+        LogModule.v("MokoService...onLowMemory");
+        disConnectBle();
+        super.onLowMemory();
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        LogModule.v("MokoService...onUnbind");
+        return super.onUnbind(intent);
+    }
+
+    @Override
+    public void onDestroy() {
+        LogModule.v("MokoService...onDestroy");
+        disConnectBle();
+        super.onDestroy();
+    }
+
+    public class LocalBinder extends Binder {
+        public MokoService getService() {
+            return MokoService.this;
+        }
     }
 
     public ServiceHandler mHandler;
@@ -367,5 +145,195 @@ public class MokoService extends Service implements MokoOrderTaskCallback {
         @Override
         protected void handleMessage(MokoService service, Message msg) {
         }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // READ
+    ///////////////////////////////////////////////////////////////////////////
+
+    public OrderTask getManufacturer() {
+        GetManufacturerTask getManufacturerTask = new GetManufacturerTask(this);
+        return getManufacturerTask;
+    }
+
+    public OrderTask getDeviceModel() {
+        GetDeviceModelTask getDeviceModelTask = new GetDeviceModelTask(this);
+        return getDeviceModelTask;
+    }
+
+    public OrderTask getProductDate() {
+        GetProductDateTask getProductDateTask = new GetProductDateTask(this);
+        return getProductDateTask;
+    }
+
+    public OrderTask getHardwareVersion() {
+        GetHardwareVersionTask getHardwareVersionTask = new GetHardwareVersionTask(this);
+        return getHardwareVersionTask;
+    }
+
+    public OrderTask getFirmwareVersion() {
+        GetFirmwareVersionTask getFirmwareVersionTask = new GetFirmwareVersionTask(this);
+        return getFirmwareVersionTask;
+    }
+
+    public OrderTask getSoftwareVersion() {
+        GetSoftwareVersionTask getSoftwareVersionTask = new GetSoftwareVersionTask(this);
+        return getSoftwareVersionTask;
+    }
+
+    public OrderTask getBattery() {
+        GetBatteryTask getBatteryTask = new GetBatteryTask(this);
+        return getBatteryTask;
+    }
+
+    public OrderTask getDeviceName() {
+        GetDeviceNameTask getDeviceNameTask = new GetDeviceNameTask(this);
+        return getDeviceNameTask;
+    }
+
+    public OrderTask getConnectionMode() {
+        GetConnectionModeTask getConnectionModeTask = new GetConnectionModeTask(this);
+        return getConnectionModeTask;
+    }
+
+    public OrderTask getDeviceType() {
+        GetDeviceTypeTask getDeviceTypeTask = new GetDeviceTypeTask(this);
+        return getDeviceTypeTask;
+    }
+
+    public OrderTask getMajor() {
+        GetMajorTask getMajorTask = new GetMajorTask(this);
+        return getMajorTask;
+    }
+
+    public OrderTask getMinor() {
+        GetMinorTask getMinorTask = new GetMinorTask(this);
+        return getMinorTask;
+    }
+
+    public OrderTask getMeasurePower() {
+        GetMeasurePowerTask getMeasurePowerTask = new GetMeasurePowerTask(this);
+        return getMeasurePowerTask;
+    }
+
+    public OrderTask getStoreAlert() {
+        GetStoreAlertTask getStoreAlertTask = new GetStoreAlertTask(this);
+        return getStoreAlertTask;
+    }
+
+    public OrderTask getTransmission() {
+        GetTransmissionTask getTransmissionTask = new GetTransmissionTask(this);
+        return getTransmissionTask;
+    }
+
+    public OrderTask getUUID() {
+        GetUUIDTask getUUIDTask = new GetUUIDTask(this);
+        return getUUIDTask;
+    }
+
+    public OrderTask getAdvInterval() {
+        GetAdvIntervalTask getAdvIntervalTask = new GetAdvIntervalTask(this);
+        return getAdvIntervalTask;
+    }
+
+    public OrderTask getScanMode() {
+        GetScanModeTask getScanModeTask = new GetScanModeTask(this);
+        return getScanModeTask;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // WRITE
+    ///////////////////////////////////////////////////////////////////////////
+
+    public OrderTask setAdvInterval(int advInterval) {
+        SetAdvIntervlTask setAdvIntervlTask = new SetAdvIntervlTask(this);
+        setAdvIntervlTask.setData(advInterval);
+        return setAdvIntervlTask;
+    }
+
+    public OrderTask setConnectionMode(int connectionMode) {
+        SetConnectionModeTask setConnectionModeTask = new SetConnectionModeTask(this);
+        setConnectionModeTask.setData(connectionMode);
+        return setConnectionModeTask;
+    }
+
+    public OrderTask setDeviceName(String deviceName) {
+        SetDeviceNameTask setDeviceNameTask = new SetDeviceNameTask(this);
+        setDeviceNameTask.setData(deviceName);
+        return setDeviceNameTask;
+    }
+
+    public OrderTask setMajor(int major) {
+        SetMajorTask setMajorTask = new SetMajorTask(this);
+        setMajorTask.setData(major);
+        return setMajorTask;
+    }
+
+    public OrderTask setMeasurePower(int measurePower) {
+        SetMeasurePowerTask setMeasurePowerTask = new SetMeasurePowerTask(this);
+        setMeasurePowerTask.setData(measurePower);
+        return setMeasurePowerTask;
+    }
+
+    public OrderTask setMinor(int minor) {
+        SetMinorTask setMinorTask = new SetMinorTask(this);
+        setMinorTask.setData(minor);
+        return setMinorTask;
+    }
+
+    public OrderTask setPassword(String password) {
+        SetPasswordTask setPasswordTask = new SetPasswordTask(this);
+        setPasswordTask.setData(password);
+        return setPasswordTask;
+    }
+
+    public OrderTask setReset(String password) {
+        SetResetTask setResetTask = new SetResetTask(this);
+        setResetTask.setData(password);
+        return setResetTask;
+    }
+
+    public OrderTask setScanMode(int scanMode) {
+        SetScanModeTask setScanModeTask = new SetScanModeTask(this);
+        setScanModeTask.setData(scanMode);
+        return setScanModeTask;
+    }
+
+    public OrderTask setStoreAlert(int enable) {
+        SetStoreAlertTask setStoreAlertTask = new SetStoreAlertTask(this);
+        setStoreAlertTask.setData(enable);
+        return setStoreAlertTask;
+    }
+
+    public OrderTask setTransmission(int transmission) {
+        SetTransmissionTask setTransmissionTask = new SetTransmissionTask(this);
+        setTransmissionTask.setData(transmission);
+        return setTransmissionTask;
+    }
+
+    public OrderTask setUUID(String uuid) {
+        SetUUIDTask setUUIDTask = new SetUUIDTask(this);
+        setUUIDTask.setData(uuid);
+        return setUUIDTask;
+    }
+
+
+    public WriteConfigTask setWriteConfig(ConfigKeyEnum configKeyEnum) {
+        WriteConfigTask writeConfigTask = new WriteConfigTask(this);
+        writeConfigTask.setData(configKeyEnum);
+        return writeConfigTask;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // NOTIFY
+    ///////////////////////////////////////////////////////////////////////////
+    public OrderTask openWriteConfigNotify() {
+        OpenNotifyTask task = new OpenNotifyTask(OrderType.WRITE_CONFIG, this);
+        return task;
+    }
+
+    public OrderTask openPasswordNotify() {
+        OpenNotifyTask task = new OpenNotifyTask(OrderType.PASSWORD, this);
+        return task;
     }
 }

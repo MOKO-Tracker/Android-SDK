@@ -3,9 +3,9 @@ package com.moko.support.service;
 import com.moko.support.entity.DeviceInfo;
 
 /**
- * @Date 2018/1/11
+ * @Date 2020/4/20
  * @Author wenzheng.liu
- * @Description 设备解析接口
+ * @Description 
  * @ClassPath com.moko.support.service.DeviceInfoParseable
  */
 public interface DeviceInfoParseable<T> {

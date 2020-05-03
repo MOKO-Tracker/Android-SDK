@@ -5,9 +5,9 @@ import java.io.Serializable;
 import no.nordicsemi.android.support.v18.scanner.ScanResult;
 
 /**
- * @Date 2017/12/28
+ * @Date 2020/4/20
  * @Author wenzheng.liu
- * @Description
+ * @Description 
  * @ClassPath com.moko.support.entity.DeviceInfo
  */
 public class DeviceInfo implements Serializable {

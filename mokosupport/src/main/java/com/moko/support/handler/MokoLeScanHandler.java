@@ -11,9 +11,9 @@ import no.nordicsemi.android.support.v18.scanner.ScanCallback;
 import no.nordicsemi.android.support.v18.scanner.ScanResult;
 
 /**
- * @Date 2017/12/12 0012
+ * @Date 2020/4/20
  * @Author wenzheng.liu
- * @Description 搜索设备回调类
+ * @Description
  * @ClassPath com.moko.support.handler.MokoLeScanHandler
  */
 public class MokoLeScanHandler extends ScanCallback {
@@ -29,11 +29,12 @@ public class MokoLeScanHandler extends ScanCallback {
             BluetoothDevice device = result.getDevice();
             byte[] scanRecord = result.getScanRecord().getBytes();
             int rssi = result.getRssi();
-            if (TextUtils.isEmpty(device.getName()) || scanRecord.length == 0 || rssi == 127) {
+            String name = result.getScanRecord().getDeviceName();
+            if (TextUtils.isEmpty(name) || scanRecord.length == 0 || rssi == 127) {
                 return;
             }
             DeviceInfo deviceInfo = new DeviceInfo();
-            deviceInfo.name = result.getScanRecord().getDeviceName();
+            deviceInfo.name = name;
             deviceInfo.rssi = rssi;
             deviceInfo.mac = device.getAddress();
             String scanRecordStr = MokoUtils.bytesToHexString(scanRecord);
