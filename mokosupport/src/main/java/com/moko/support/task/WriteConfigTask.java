@@ -70,8 +70,8 @@ public class WriteConfigTask extends OrderTask {
         data[9] = macBytes[5];
     }
 
-    public void setAdvMoveCondition(int second) {
-        if (second == 0) {
+    public void setAdvMoveCondition(int seconds) {
+        if (seconds == 0) {
             data = new byte[5];
             data[0] = (byte) 0xEA;
             data[1] = (byte) ConfigKeyEnum.SET_ADV_MOVE_CONDITION.getConfigKey();
@@ -79,7 +79,7 @@ public class WriteConfigTask extends OrderTask {
             data[3] = (byte) 0x01;
             data[4] = (byte) 0x00;
         } else {
-            byte[] secondBytes = MokoUtils.toByteArray(second, 2);
+            byte[] secondBytes = MokoUtils.toByteArray(seconds, 2);
             data = new byte[6];
             data[0] = (byte) 0xEA;
             data[1] = (byte) ConfigKeyEnum.SET_ADV_MOVE_CONDITION.getConfigKey();

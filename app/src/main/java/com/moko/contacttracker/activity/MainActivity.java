@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.moko.contacttracker.AppConstants;
 import com.moko.contacttracker.R;
 import com.moko.contacttracker.adapter.BeaconListAdapter;
 import com.moko.contacttracker.dialog.AlertMessageDialog;
@@ -239,7 +241,6 @@ public class MainActivity extends BaseActivity implements MokoScanDeviceCallback
                 if (isWindowLocked())
                     return;
                 if (!MokoSupport.getInstance().isBluetoothOpen()) {
-                    // 蓝牙未打开，开启蓝牙
                     MokoSupport.getInstance().enableBluetooth();
                     return;
                 }
@@ -324,7 +325,6 @@ public class MainActivity extends BaseActivity implements MokoScanDeviceCallback
     @Override
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
         if (!MokoSupport.getInstance().isBluetoothOpen()) {
-            // 蓝牙未打开，开启蓝牙
             MokoSupport.getInstance().enableBluetooth();
             return;
         }
@@ -334,14 +334,13 @@ public class MainActivity extends BaseActivity implements MokoScanDeviceCallback
                 mMokoService.mHandler.removeMessages(0);
                 MokoSupport.getInstance().stopScanDevice();
             }
-            // 弹出密码框
+            // show password
             final PasswordDialog dialog = new PasswordDialog(MainActivity.this);
             dialog.setData(mSavedPassword);
             dialog.setOnPasswordClicked(new PasswordDialog.PasswordClickListener() {
                 @Override
                 public void onEnsureClicked(String password) {
                     if (!MokoSupport.getInstance().isBluetoothOpen()) {
-                        // 蓝牙未打开，开启蓝牙
                         MokoSupport.getInstance().enableBluetooth();
                         return;
                     }
@@ -397,7 +396,7 @@ public class MainActivity extends BaseActivity implements MokoScanDeviceCallback
                             }
                             dismissLoadingProgressDialog();
                             Intent i = new Intent(MainActivity.this, DeviceInfoActivity.class);
-                            startActivity(i);
+                            startActivityForResult(i, AppConstants.REQUEST_CODE_DEVICE_INFO);
 //                            rvDevices.postDelayed(() -> MokoSupport.getInstance().disConnectBle(), 3000);
                             break;
                         case PASSWORD:
@@ -468,6 +467,18 @@ public class MainActivity extends BaseActivity implements MokoScanDeviceCallback
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == AppConstants.REQUEST_CODE_DEVICE_INFO) {
+            if (resultCode == RESULT_OK) {
+                if (animation == null) {
+                    startScan();
+                }
+            }
+        }
+    }
+
     private void deviceTypeErrorAlert() {
         MokoSupport.getInstance().disConnectBle();
         AlertMessageDialog dialog = new AlertMessageDialog();
@@ -515,7 +526,6 @@ public class MainActivity extends BaseActivity implements MokoScanDeviceCallback
         super.onDestroy();
         if (mReceiverTag) {
             mReceiverTag = false;
-            // 注销广播
             unregisterReceiver(mReceiver);
         }
         unbindService(mServiceConnection);

@@ -336,6 +336,12 @@ public class MokoService extends Service implements MokoOrderTaskCallback {
         return writeConfigTask;
     }
 
+    public WriteConfigTask setAdvMoveCondition(int seconds) {
+        WriteConfigTask writeConfigTask = new WriteConfigTask(this);
+        writeConfigTask.setAdvMoveCondition(seconds);
+        return writeConfigTask;
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // NOTIFY
     ///////////////////////////////////////////////////////////////////////////

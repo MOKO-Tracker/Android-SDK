@@ -8,7 +8,7 @@ public class SetMeasurePowerTask extends OrderTask {
     public byte[] data;
 
     public SetMeasurePowerTask(MokoOrderTaskCallback callback) {
-        super(OrderType.MAJOR, callback, OrderTask.RESPONSE_TYPE_WRITE);
+        super(OrderType.MEASURE_POWER, callback, OrderTask.RESPONSE_TYPE_WRITE);
     }
 
     public void setData(int measurePower) {

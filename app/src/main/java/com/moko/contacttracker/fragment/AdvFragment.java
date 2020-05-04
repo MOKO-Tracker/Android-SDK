@@ -4,6 +4,9 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +20,12 @@ import android.widget.TextView;
 import com.moko.contacttracker.R;
 import com.moko.contacttracker.activity.DeviceInfoActivity;
 import com.moko.contacttracker.entity.TxPowerEnum;
+import com.moko.contacttracker.service.MokoService;
+import com.moko.support.MokoSupport;
+import com.moko.support.task.OrderTask;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import butterknife.Bind;
@@ -27,6 +35,7 @@ import butterknife.OnClick;
 public class AdvFragment extends Fragment implements SeekBar.OnSeekBarChangeListener {
     private static final String TAG = AdvFragment.class.getSimpleName();
     public static final String UUID_PATTERN = "[A-Fa-f0-9]{8}-(?:[A-Fa-f0-9]{4}-){3}[A-Fa-f0-9]{12}";
+    private final String FILTER_ASCII = "\\A\\p{ASCII}*\\z";
     @Bind(R.id.et_adv_name)
     EditText etAdvName;
     @Bind(R.id.et_uuid)
@@ -122,6 +131,14 @@ public class AdvFragment extends Fragment implements SeekBar.OnSeekBarChangeList
                 }
             }
         });
+        InputFilter filter = (source, start, end, dest, dstart, dend) -> {
+            if (!(source + "").matches(FILTER_ASCII)) {
+                return "";
+            }
+
+            return null;
+        };
+        etAdvName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(10), filter});
 //        setDefault();
         return view;
     }
@@ -189,14 +206,14 @@ public class AdvFragment extends Fragment implements SeekBar.OnSeekBarChangeList
         etUuid.setSelection(length);
     }
 
-    public void setMajor(String major) {
-        etMajor.setText(major);
-        etMajor.setSelection(major.length());
+    public void setMajor(int major) {
+        etMajor.setText(String.valueOf(major));
+        etMajor.setSelection(String.valueOf(major).length());
     }
 
-    public void setMinor(String minor) {
-        etMinor.setText(minor);
-        etMinor.setSelection(minor.length());
+    public void setMinor(int minor) {
+        etMinor.setText(String.valueOf(minor));
+        etMinor.setSelection(String.valueOf(minor).length());
     }
 
     public void setAdvInterval(int advInterval) {
@@ -204,7 +221,7 @@ public class AdvFragment extends Fragment implements SeekBar.OnSeekBarChangeList
         etAdvInterval.setSelection(String.valueOf(advInterval).length());
     }
 
-    public void MeasurePower(int rssi_1m) {
+    public void setMeasurePower(int rssi_1m) {
         int progress = rssi_1m + 127;
         sbRssi1m.setProgress(progress);
         tvRssi1mValue.setText(String.format("%ddBm", rssi_1m));
@@ -241,5 +258,80 @@ public class AdvFragment extends Fragment implements SeekBar.OnSeekBarChangeList
                 clAdvTrigger.setVisibility(isAdvTriggerOpen ? View.VISIBLE : View.GONE);
                 break;
         }
+    }
+
+    public boolean isValid() {
+        final String advNameStr = etAdvName.getText().toString();
+        final String uuidStr = etUuid.getText().toString();
+        final String majorStr = etMajor.getText().toString();
+        final String minorStr = etMinor.getText().toString();
+        final String advIntervalStr = etAdvInterval.getText().toString();
+        final String advTriggerStr = etAdvTrigger.getText().toString();
+        if (TextUtils.isEmpty(advNameStr))
+            return false;
+        if (TextUtils.isEmpty(advNameStr) || uuidStr.length() != 36)
+            return false;
+        if (TextUtils.isEmpty(majorStr))
+            return false;
+        int major = Integer.parseInt(majorStr);
+        if (major < 0 || major > 65535)
+            return false;
+        if (TextUtils.isEmpty(minorStr))
+            return false;
+        int minor = Integer.parseInt(minorStr);
+        if (minor < 0 || minor > 65535)
+            return false;
+        if (TextUtils.isEmpty(advIntervalStr))
+            return false;
+        int advInterval = Integer.parseInt(advIntervalStr);
+        if (advInterval < 1 || advInterval > 100)
+            return false;
+        if (TextUtils.isEmpty(advTriggerStr))
+            return false;
+        int advTrigger = Integer.parseInt(advTriggerStr);
+        if (advTrigger < 1 || advTrigger > 65535)
+            return false;
+        return true;
+    }
+
+
+    public void saveParams(MokoService mokoService) {
+        final String advNameStr = etAdvName.getText().toString();
+        final String uuidStr = etUuid.getText().toString();
+        final String majorStr = etMajor.getText().toString();
+        final String minorStr = etMinor.getText().toString();
+        final String advIntervalStr = etAdvInterval.getText().toString();
+        final String advTriggerStr = etAdvTrigger.getText().toString();
+        List<OrderTask> orderTasks = new ArrayList<>();
+
+        orderTasks.add(mokoService.setDeviceName(advNameStr));
+
+        String uuid = uuidStr.replaceAll("-", "");
+        orderTasks.add(mokoService.setUUID(uuid));
+
+        int major = Integer.parseInt(majorStr);
+        orderTasks.add(mokoService.setMajor(major));
+
+        int minor = Integer.parseInt(minorStr);
+        orderTasks.add(mokoService.setMinor(minor));
+
+        int advInterval = Integer.parseInt(advIntervalStr);
+        orderTasks.add(mokoService.setAdvInterval(advInterval));
+
+        int rssi1mProgress = sbRssi1m.getProgress();
+        int rssi1m = rssi1mProgress - 127;
+        orderTasks.add(mokoService.setMeasurePower(rssi1m));
+
+        int txPowerProgress = sbTxPower.getProgress();
+        int txPower = TxPowerEnum.fromOrdinal(txPowerProgress).getTxPower();
+        orderTasks.add(mokoService.setTransmission(txPower));
+
+        if (isAdvTriggerOpen) {
+            int advTrigger = Integer.parseInt(advTriggerStr);
+            orderTasks.add(mokoService.setAdvMoveCondition(advTrigger));
+        } else {
+            orderTasks.add(mokoService.setAdvMoveCondition(0));
+        }
+        MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 }

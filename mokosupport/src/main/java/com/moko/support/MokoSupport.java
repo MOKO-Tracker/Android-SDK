@@ -421,16 +421,17 @@ public class MokoSupport implements MokoResponseCallback {
         if (!isSyncData()) {
             OrderType orderType = null;
             if (characteristic.getUuid().toString().equals(OrderType.WRITE_CONFIG.getUuid())) {
-                // 写通知命令
                 orderType = OrderType.WRITE_CONFIG;
             }
-            // 延时应答
+            if (characteristic.getUuid().toString().equals(OrderType.DISCONNECTED_NOTIFY.getUuid())) {
+                orderType = OrderType.DISCONNECTED_NOTIFY;
+            }
             if (orderType != null) {
                 LogModule.i(orderType.getName());
                 Intent intent = new Intent(MokoConstants.ACTION_CURRENT_DATA);
                 intent.putExtra(MokoConstants.EXTRA_KEY_CURRENT_DATA_TYPE, orderType);
                 intent.putExtra(MokoConstants.EXTRA_KEY_RESPONSE_VALUE, value);
-                mContext.sendBroadcast(intent);
+                mContext.sendOrderedBroadcast(intent, null);
             }
         } else {
             OrderTask orderTask = mQueue.peek();
@@ -454,7 +455,6 @@ public class MokoSupport implements MokoResponseCallback {
         OrderTask orderTask = mQueue.peek();
         if (value != null && value.length > 0) {
             switch (orderTask.orderType) {
-                case WRITE_CONFIG:
                 case UUID:
                 case MAJOR:
                 case MINOR:

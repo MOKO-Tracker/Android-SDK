@@ -12,7 +12,7 @@ public class SetAdvIntervlTask extends OrderTask {
     }
 
     public void setData(int advInterval) {
-        this.data = MokoUtils.toByteArray(advInterval, 2);
+        this.data = MokoUtils.toByteArray(advInterval, 1);
     }
 
     @Override
