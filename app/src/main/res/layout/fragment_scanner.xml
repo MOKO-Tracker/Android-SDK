@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_ffffff"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/tv_filter_options"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:drawableRight="@drawable/arrow_right"
+        android:gravity="center_vertical"
+        android:text="Filter Options"
+        android:textColor="@color/black_333333"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        style="@style/divider_line"
+        android:layout_width="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_filter_options" />
+
+    <TextView
+        android:id="@+id/storage_interval"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Storage Interval"
+        android:textColor="@color/black_333333"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/sb_storage_interval"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:text="(0min~100min)"
+        android:textColor="@color/grey_b3b3b3"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/sb_storage_interval"
+        app:layout_constraintLeft_toRightOf="@id/storage_interval" />
+
+    <SeekBar
+        android:id="@+id/sb_storage_interval"
+        style="@style/CustomSeekbarStyle"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="50dp"
+        android:max="100"
+        android:paddingStart="0dp"
+        android:paddingEnd="0dp"
+        android:progress="0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/tv_storage_interval_value"
+        app:layout_constraintTop_toBottomOf="@id/tv_filter_options" />
+
+    <TextView
+        android:id="@+id/tv_storage_interval_value"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="0min"
+        android:textColor="@color/black_333333"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/sb_storage_interval"
+        app:layout_constraintLeft_toRightOf="@id/sb_storage_interval"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/sb_storage_interval" />
+
+    <TextView
+        android:id="@+id/tv_storage_interval_tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/storage_interval"
+        android:textColor="@color/black_333333"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sb_storage_interval" />
+
+    <View
+        style="@style/divider_line"
+        android:layout_width="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_storage_interval_tips" />
+
+    <TextView
+        android:id="@+id/tracking_notify"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        android:text="Tracking Notification"
+        android:textColor="@color/black_333333"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/npv_tracking_notify"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/npv_tracking_notify" />
+
+    <cn.carbswang.android.numberpickerview.library.NumberPickerView
+        android:id="@+id/npv_tracking_notify"
+        android:layout_width="120dp"
+        android:layout_height="130dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shape_stroke_blue_bg"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_storage_interval_tips"
+        app:npv_DividerColor="@color/blue_2f84d0"
+        app:npv_DividerMarginLeft="15dp"
+        app:npv_DividerMarginRight="15dp"
+        app:npv_MaxValue="3"
+        app:npv_MinValue="0"
+        app:npv_TextArray="@array/tracking_notify"
+        app:npv_TextColorNormal="@color/grey_b3b3b3"
+        app:npv_TextColorSelected="@color/blue_2f84d0"
+        app:npv_TextSizeNormal="13sp"
+        app:npv_TextSizeSelected="15sp"
+        app:npv_WrapSelectorWheel="false" />
+
+    <View
+        style="@style/divider_line"
+        android:layout_width="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/npv_tracking_notify" />
+
+    <TextView
+        android:id="@+id/scanner_trigger"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Scanner Trigger"
+        android:textColor="@color/black_333333"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/npv_tracking_notify" />
+
+    <ImageView
+        android:id="@+id/iv_scanner_trigger"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:src="@drawable/ic_unchecked"
+        app:layout_constraintBottom_toBottomOf="@id/scanner_trigger"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/npv_tracking_notify"
+        app:layout_constraintTop_toTopOf="@id/scanner_trigger" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_scanner_trigger"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_scanner_trigger">
+
+        <TextView
+            android:id="@+id/scanner_trigger_tips"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="The Beacon will stop scanning after static period of"
+            android:textColor="@color/black_333333"
+            android:textSize="15sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/et_scanner_trigger"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxLength="5"
+            android:text=""
+            android:textColor="@color/black_333333"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/scanner_trigger_tips" />
+
+        <TextView
+            android:id="@+id/scanner_trigger_range"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(1~65535)"
+            android:textColor="@color/grey_b3b3b3"
+            android:textSize="15sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/et_scanner_trigger"
+            app:layout_constraintLeft_toRightOf="@id/et_scanner_trigger" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="seconds."
+            android:textColor="@color/black_333333"
+            android:textSize="15sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/scanner_trigger_range"
+            app:layout_constraintLeft_toRightOf="@id/scanner_trigger_range" />
+    </android.support.constraint.ConstraintLayout>
+
+    <View
+        style="@style/divider_line"
+        android:layout_width="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_scanner_trigger" />
+
+    <TextView
+        android:id="@+id/tv_tracked_data"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:drawableRight="@drawable/arrow_right"
+        android:gravity="center_vertical"
+        android:text="Tracked Data"
+        android:textColor="@color/black_333333"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_scanner_trigger" />
+</android.support.constraint.ConstraintLayout>

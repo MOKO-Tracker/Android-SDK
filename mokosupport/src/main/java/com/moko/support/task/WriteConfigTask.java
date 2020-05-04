@@ -19,7 +19,7 @@ public class WriteConfigTask extends OrderTask {
     public byte[] data;
 
     public WriteConfigTask(MokoOrderTaskCallback callback) {
-        super(OrderType.WRITE_CONFIG, callback, OrderTask.RESPONSE_TYPE_WRITE_NO_RESPONSE);
+        super(OrderType.WRITE_CONFIG, callback, OrderTask.RESPONSE_TYPE_WRITE);
     }
 
     @Override
@@ -122,7 +122,7 @@ public class WriteConfigTask extends OrderTask {
     public void setStoreTimeCondition(int minute) {
         data = new byte[5];
         data[0] = (byte) 0xEA;
-        data[1] = (byte) ConfigKeyEnum.SET_STORE_RSSI_CONDITION.getConfigKey();
+        data[1] = (byte) ConfigKeyEnum.SET_STORE_TIME_CONDITION.getConfigKey();
         data[2] = (byte) 0x00;
         data[3] = (byte) 0x01;
         data[4] = (byte) minute;

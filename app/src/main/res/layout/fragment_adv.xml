@@ -9,7 +9,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="12dp">
+        android:padding="10dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -17,6 +17,7 @@
             android:text="ADV Name"
             android:textColor="@color/black_333333"
             android:textSize="15sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/et_adv_name"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="@id/et_adv_name" />
@@ -50,6 +51,7 @@
             android:text="Proximity UUID"
             android:textColor="@color/black_333333"
             android:textSize="15sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/et_uuid"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="@id/et_uuid" />
@@ -95,6 +97,7 @@
             android:text="Major"
             android:textColor="@color/black_333333"
             android:textSize="15sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/et_major"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="@id/et_major" />
@@ -130,6 +133,7 @@
             android:text="Minor"
             android:textColor="@color/black_333333"
             android:textSize="15sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/et_minor"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="@id/et_minor" />
@@ -165,6 +169,7 @@
             android:text="ADV Interval"
             android:textColor="@color/black_333333"
             android:textSize="15sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/et_adv_interval"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="@id/et_adv_interval" />
@@ -194,6 +199,7 @@
             android:text="x 100ms"
             android:textColor="@color/black_333333"
             android:textSize="15sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/et_adv_interval"
             app:layout_constraintLeft_toRightOf="@id/et_adv_interval"
             app:layout_constraintTop_toTopOf="@id/et_adv_interval" />
@@ -225,6 +231,7 @@
             android:text="RSSI@1m"
             android:textColor="@color/black_333333"
             android:textSize="15sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/sb_rssi_1m"
             app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -260,6 +267,7 @@
             android:text="0dBm"
             android:textColor="@color/black_333333"
             android:textSize="15sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/sb_rssi_1m"
             app:layout_constraintLeft_toRightOf="@id/sb_rssi_1m"
             app:layout_constraintRight_toRightOf="parent"
@@ -280,6 +288,7 @@
             android:text="Tx Power"
             android:textColor="@color/black_333333"
             android:textSize="15sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/sb_tx_power"
             app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -315,6 +324,7 @@
             android:text="0dBm"
             android:textColor="@color/black_333333"
             android:textSize="15sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/sb_tx_power"
             app:layout_constraintLeft_toRightOf="@id/sb_tx_power"
             app:layout_constraintRight_toRightOf="parent"
@@ -336,6 +346,7 @@
             android:text="ADV Trigger"
             android:textColor="@color/black_333333"
             android:textSize="15sp"
+            android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sb_tx_power" />
 

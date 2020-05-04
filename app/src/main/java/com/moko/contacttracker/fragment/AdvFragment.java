@@ -286,11 +286,13 @@ public class AdvFragment extends Fragment implements SeekBar.OnSeekBarChangeList
         int advInterval = Integer.parseInt(advIntervalStr);
         if (advInterval < 1 || advInterval > 100)
             return false;
-        if (TextUtils.isEmpty(advTriggerStr))
-            return false;
-        int advTrigger = Integer.parseInt(advTriggerStr);
-        if (advTrigger < 1 || advTrigger > 65535)
-            return false;
+        if (isAdvTriggerOpen) {
+            if (TextUtils.isEmpty(advTriggerStr))
+                return false;
+            int advTrigger = Integer.parseInt(advTriggerStr);
+            if (advTrigger < 1 || advTrigger > 65535)
+                return false;
+        }
         return true;
     }
 

@@ -15,6 +15,7 @@
     <string name="company_name">MOKO TECHNOLOGY LTD.</string>
     <string name="about_title">ABOUT</string>
     <string name="company_website">www.mokosmart.com</string>
+    <string name="storage_interval">*The Beacon will no longer store the ADV data with the same MAC address within %d min.</string>
 
     <string name="permission_storage_close_title">Storage permission is not available</string>
     <string name="permission_storage_close_content">Please find it in cellphone setting- permission, and allow ContactTracker use the Storage permission</string>
@@ -33,6 +34,10 @@
     <string name="title_setting">SETTING</string>
     <string name="title_device">DEVICE</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="tracking_notify">
+        <item>Off</item>
+        <item>Light</item>
+        <item>Vibration</item>
+        <item>Light+Vibration</item>
+    </string-array>
 </resources>

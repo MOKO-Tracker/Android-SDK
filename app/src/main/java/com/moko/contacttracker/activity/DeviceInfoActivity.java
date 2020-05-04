@@ -31,6 +31,7 @@ import com.moko.contacttracker.R;
 import com.moko.contacttracker.dialog.AlertMessageDialog;
 import com.moko.contacttracker.dialog.LoadingMessageDialog;
 import com.moko.contacttracker.fragment.AdvFragment;
+import com.moko.contacttracker.fragment.ScannerFragment;
 import com.moko.contacttracker.service.DfuService;
 import com.moko.contacttracker.service.MokoService;
 import com.moko.contacttracker.utils.ToastUtils;
@@ -81,6 +82,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     ImageView ivSave;
     private FragmentManager fragmentManager;
     private AdvFragment advFragment;
+    private ScannerFragment scannerFragment;
     //    private SettingFragment settingFragment;
 //    private DeviceFragment deviceFragment;
 //    public String mPassword;
@@ -117,9 +119,12 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
 
     private void initFragment() {
         advFragment = AdvFragment.newInstance();
+        scannerFragment = ScannerFragment.newInstance();
         fragmentManager.beginTransaction()
                 .add(R.id.frame_container, advFragment)
+                .add(R.id.frame_container, scannerFragment)
                 .show(advFragment)
+                .hide(scannerFragment)
                 .commit();
     }
 
@@ -148,9 +153,9 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                 showSyncingProgressDialog();
                 List<OrderTask> orderTasks = new ArrayList<>();
                 // sync time after connect success;
-                orderTasks.add(mMokoService.setTime());
                 orderTasks.add(mMokoService.openDisconnectedNotify());
                 orderTasks.add(mMokoService.openWriteConfigNotify());
+                orderTasks.add(mMokoService.setTime());
                 // get adv params
                 orderTasks.add(mMokoService.getDeviceName());
                 orderTasks.add(mMokoService.getUUID());
@@ -160,6 +165,10 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                 orderTasks.add(mMokoService.getTransmission());
                 orderTasks.add(mMokoService.getMeasurePower());
                 orderTasks.add(mMokoService.getAdvTrigger());
+                // scanner
+                orderTasks.add(mMokoService.getStoreTimeCondition());
+                orderTasks.add(mMokoService.getStoreAlert());
+                orderTasks.add(mMokoService.getScannerTrigger());
                 MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
             }
         }
@@ -327,25 +336,18 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                             int txPower = value[0];
                             advFragment.setTransmission(txPower);
                             break;
-//                        case connectable:
-//                            if (responseType == OrderTask.RESPONSE_TYPE_READ) {
-//                                if (value.length >= 1) {
-//                                    settingFragment.setConnectable(value);
-//                                    validParams.connectable = MokoUtils.byte2HexString(value[0]);
-//                                }
-//                            }
-//                            if (responseType == OrderTask.RESPONSE_TYPE_WRITE) {
-//                                ToastUtils.showToast(DeviceInfoActivity.this, "Success!");
-//                            }
-//                            break;
+                        case STORE_ALERT:
+                            int trackNotify = value[0] & 0xFF;
+                            scannerFragment.setTrackNotify(trackNotify);
+                            break;
                         case WRITE_CONFIG:
                             if (value.length >= 2) {
-                                int key = value[1] & 0xff;
+                                int key = value[1] & 0xFF;
                                 ConfigKeyEnum configKeyEnum = ConfigKeyEnum.fromConfigKey(key);
                                 if (configKeyEnum == null) {
                                     return;
                                 }
-                                int length = value[3] & 0xff;
+                                int length = value[3] & 0xFF;
                                 switch (configKeyEnum) {
                                     case GET_ADV_MOVE_CONDITION:
                                         if (length == 1) {
@@ -356,10 +358,32 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                                             advFragment.setAdvTrigger(duration);
                                         }
                                         break;
+                                    case GET_STORE_TIME_CONDITION:
+                                        if (length == 1) {
+                                            final int time = value[4] & 0xFF;
+                                            scannerFragment.setStorageInterval(time);
+                                        }
+                                        break;
+                                    case GET_SCAN_MOVE_CONDITION:
+                                        if (length == 1) {
+                                            scannerFragment.setScannerTriggerClose();
+                                        }
+                                        if (length == 2) {
+                                            final int duration = MokoUtils.toInt(Arrays.copyOfRange(value, 4, 6));
+                                            scannerFragment.setScannerTrigger(duration);
+                                        }
+                                        break;
                                     case SET_ADV_MOVE_CONDITION:
+                                    case SET_SCAN_MOVE_CONDITION:
                                         // EB 31 00 00
+                                        // EB 32 00 00
                                         if (length == 0) {
-                                            ToastUtils.showToast(DeviceInfoActivity.this, "Success");
+                                            AlertMessageDialog dialog = new AlertMessageDialog();
+                                            dialog.setMessage("Saved Successfully！");
+                                            dialog.setConfirm("OK");
+                                            dialog.setCancelGone();
+                                            dialog.show(getSupportFragmentManager());
+                                            ToastUtils.showToast(DeviceInfoActivity.this, "Saved Successfully！");
                                         }
                                         break;
 //                                    case GET_DEVICE_MAC:
@@ -620,7 +644,12 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                     }
                 }
                 if (radioBtnScanner.isChecked()) {
-
+                    if (scannerFragment.isValid()) {
+                        showSyncingProgressDialog();
+                        scannerFragment.saveParams(mMokoService);
+                    } else {
+                        ToastUtils.showToast(this, "Opps！Save failed. Please check the input characters and try again.");
+                    }
                 }
                 break;
         }
@@ -676,12 +705,20 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
             case R.id.radioBtn_adv:
                 tvTitle.setText(R.string.title_advertiser);
                 ivSave.setVisibility(View.VISIBLE);
+                fragmentManager.beginTransaction()
+                        .show(advFragment)
+                        .hide(scannerFragment)
+                        .commit();
 //                showSlotFragment();
 //                getSlotType();
                 break;
             case R.id.radioBtn_scanner:
                 tvTitle.setText(R.string.title_scanner);
                 ivSave.setVisibility(View.VISIBLE);
+                fragmentManager.beginTransaction()
+                        .hide(advFragment)
+                        .show(scannerFragment)
+                        .commit();
 //                showSlotFragment();
 //                getSlotType();
                 break;

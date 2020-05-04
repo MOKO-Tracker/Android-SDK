@@ -247,6 +247,18 @@ public class MokoService extends Service implements MokoOrderTaskCallback {
         return task;
     }
 
+    public OrderTask getStoreTimeCondition() {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setData(ConfigKeyEnum.GET_STORE_TIME_CONDITION);
+        return task;
+    }
+
+    public OrderTask getScannerTrigger() {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setData(ConfigKeyEnum.GET_SCAN_MOVE_CONDITION);
+        return task;
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // WRITE
     ///////////////////////////////////////////////////////////////////////////
@@ -339,6 +351,18 @@ public class MokoService extends Service implements MokoOrderTaskCallback {
     public WriteConfigTask setAdvMoveCondition(int seconds) {
         WriteConfigTask writeConfigTask = new WriteConfigTask(this);
         writeConfigTask.setAdvMoveCondition(seconds);
+        return writeConfigTask;
+    }
+
+    public WriteConfigTask setStorageInterval(int minutes) {
+        WriteConfigTask writeConfigTask = new WriteConfigTask(this);
+        writeConfigTask.setStoreTimeCondition(minutes);
+        return writeConfigTask;
+    }
+
+    public WriteConfigTask setScannerMoveCondition(int seconds) {
+        WriteConfigTask writeConfigTask = new WriteConfigTask(this);
+        writeConfigTask.setScanMoveCondition(seconds);
         return writeConfigTask;
     }
 
