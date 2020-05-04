@@ -14,7 +14,7 @@ import android.os.Process;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 
-import com.moko.contacttracker.BeaconConstants;
+import com.moko.contacttracker.AppConstants;
 import com.moko.contacttracker.R;
 import com.moko.contacttracker.utils.Utils;
 
@@ -48,7 +48,7 @@ public class GuideActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == BeaconConstants.REQUEST_CODE_PERMISSION) {
+        if (requestCode == AppConstants.REQUEST_CODE_PERMISSION) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (!isWriteStoragePermissionOpen()) {
                     showOpenSettingsDialog();
@@ -57,10 +57,10 @@ public class GuideActivity extends BaseActivity {
                 }
             }
         }
-        if (requestCode == BeaconConstants.REQUEST_CODE_PERMISSION_2) {
+        if (requestCode == AppConstants.REQUEST_CODE_PERMISSION_2) {
             delayGotoMain();
         }
-        if (requestCode == BeaconConstants.REQUEST_CODE_LOCATION_SETTINGS) {
+        if (requestCode == AppConstants.REQUEST_CODE_LOCATION_SETTINGS) {
             if (!Utils.isLocServiceEnable(this)) {
                 showOpenLocationDialog();
             } else {
@@ -73,7 +73,7 @@ public class GuideActivity extends BaseActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case BeaconConstants.PERMISSION_REQUEST_CODE: {
+            case AppConstants.PERMISSION_REQUEST_CODE: {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                         // 判断用户是否 点击了不再提醒。(检测该权限是否还可以申请)
@@ -146,7 +146,7 @@ public class GuideActivity extends BaseActivity {
                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                         // 根据包名打开对应的设置界面
                         intent.setData(Uri.parse("package:" + getPackageName()));
-                        startActivityForResult(intent, BeaconConstants.REQUEST_CODE_PERMISSION);
+                        startActivityForResult(intent, AppConstants.REQUEST_CODE_PERMISSION);
                     }
                 })
                 .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -167,7 +167,7 @@ public class GuideActivity extends BaseActivity {
                 .setPositiveButton(getString(R.string.ensure), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ActivityCompat.requestPermissions(GuideActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, BeaconConstants.PERMISSION_REQUEST_CODE);
+                        ActivityCompat.requestPermissions(GuideActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, AppConstants.PERMISSION_REQUEST_CODE);
                     }
                 })
                 .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -190,7 +190,7 @@ public class GuideActivity extends BaseActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent();
                         intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        startActivityForResult(intent, BeaconConstants.REQUEST_CODE_LOCATION_SETTINGS);
+                        startActivityForResult(intent, AppConstants.REQUEST_CODE_LOCATION_SETTINGS);
                     }
                 })
                 .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -214,7 +214,7 @@ public class GuideActivity extends BaseActivity {
                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                         // 根据包名打开对应的设置界面
                         intent.setData(Uri.parse("package:" + getPackageName()));
-                        startActivityForResult(intent, BeaconConstants.REQUEST_CODE_PERMISSION_2);
+                        startActivityForResult(intent, AppConstants.REQUEST_CODE_PERMISSION_2);
                     }
                 })
                 .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -235,7 +235,7 @@ public class GuideActivity extends BaseActivity {
                 .setPositiveButton(getString(R.string.ensure), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ActivityCompat.requestPermissions(GuideActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, BeaconConstants.PERMISSION_REQUEST_CODE);
+                        ActivityCompat.requestPermissions(GuideActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, AppConstants.PERMISSION_REQUEST_CODE);
                     }
                 })
                 .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {

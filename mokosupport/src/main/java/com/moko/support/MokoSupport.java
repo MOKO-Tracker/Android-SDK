@@ -462,7 +462,6 @@ public class MokoSupport implements MokoResponseCallback {
                 case TRANSMISSION:
                 case ADV_INTERVAL:
                 case DEVICE_NAME:
-                case PASSWORD:
                 case SCAN_MODE:
                 case CONNECTION_MODE:
                 case STORE_ALERT:

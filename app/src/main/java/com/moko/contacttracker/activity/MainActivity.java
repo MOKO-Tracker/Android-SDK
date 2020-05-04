@@ -396,7 +396,8 @@ public class MainActivity extends BaseActivity implements MokoScanDeviceCallback
                                 return;
                             }
                             dismissLoadingProgressDialog();
-                            // TODO: 2020/5/2 跳转
+                            Intent i = new Intent(MainActivity.this, DeviceInfoActivity.class);
+                            startActivity(i);
 //                            rvDevices.postDelayed(() -> MokoSupport.getInstance().disConnectBle(), 3000);
                             break;
                         case PASSWORD:

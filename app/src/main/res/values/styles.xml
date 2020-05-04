@@ -48,4 +48,13 @@
         <item name="android:windowEnterAnimation">@anim/slide_in_from_center</item>
         <item name="android:windowExitAnimation">@anim/slide_out_to_center</item>
     </style>
+
+    <!--自定义seekbarstyle-->
+    <style name="CustomSeekbarStyle">
+        <item name="android:maxHeight">2dp</item>
+        <item name="android:progressDrawable">@drawable/seekbar_progress_drawable</item>
+        <item name="android:minHeight">2dp</item>
+        <item name="android:thumb">@drawable/seekbar_thumb</item>
+        <item name="android:thumbOffset">0dp</item>
+    </style>
 </resources>

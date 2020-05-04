@@ -241,6 +241,12 @@ public class MokoService extends Service implements MokoOrderTaskCallback {
         return getScanModeTask;
     }
 
+    public OrderTask getAdvTrigger() {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setData(ConfigKeyEnum.GET_ADV_MOVE_CONDITION);
+        return task;
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // WRITE
     ///////////////////////////////////////////////////////////////////////////
@@ -324,11 +330,22 @@ public class MokoService extends Service implements MokoOrderTaskCallback {
         return writeConfigTask;
     }
 
+    public WriteConfigTask setTime() {
+        WriteConfigTask writeConfigTask = new WriteConfigTask(this);
+        writeConfigTask.setTime();
+        return writeConfigTask;
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // NOTIFY
     ///////////////////////////////////////////////////////////////////////////
     public OrderTask openWriteConfigNotify() {
         OpenNotifyTask task = new OpenNotifyTask(OrderType.WRITE_CONFIG, this);
+        return task;
+    }
+
+    public OrderTask openDisconnectedNotify() {
+        OpenNotifyTask task = new OpenNotifyTask(OrderType.DISCONNECTED_NOTIFY, this);
         return task;
     }
 

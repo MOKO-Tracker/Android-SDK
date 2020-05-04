@@ -1,6 +1,6 @@
 package com.moko.contacttracker;
 
-public class BeaconConstants {
+public class AppConstants {
     // data time pattern
     public static final String PATTERN_HH_MM = "HH:mm";
     public static final String PATTERN_HH_MM_SS = "HH:mm:ss";

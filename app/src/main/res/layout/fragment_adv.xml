@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_ffffff"
+    android:orientation="vertical">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ADV Name"
+            android:textColor="@color/black_333333"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@id/et_adv_name"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/et_adv_name" />
+
+        <EditText
+            android:id="@+id/et_adv_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="1~10 Characters"
+            android:maxLength="10"
+            android:textColor="@color/black_333333"
+            android:textColorHint="@color/grey_ebebeb"
+            android:textSize="15sp"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.65" />
+
+        <View
+            style="@style/divider_line"
+            android:layout_width="0dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_adv_name" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Proximity UUID"
+            android:textColor="@color/black_333333"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@id/et_uuid"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/et_uuid" />
+
+        <EditText
+            android:id="@+id/et_uuid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:digits="-0123456789abcdefABCDEF"
+            android:hint="16 Bytes"
+            android:maxLength="36"
+            android:textColor="@color/black_333333"
+            android:textColorHint="@color/grey_ebebeb"
+            android:textSize="15sp"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_adv_name"
+            app:layout_constraintWidth_percent="0.65" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0x"
+            android:textColor="@color/grey_b3b3b3"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@id/et_uuid"
+            app:layout_constraintRight_toLeftOf="@id/et_uuid"
+            app:layout_constraintTop_toTopOf="@id/et_uuid" />
+
+        <View
+            style="@style/divider_line"
+            android:layout_width="0dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_uuid" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Major"
+            android:textColor="@color/black_333333"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@id/et_major"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/et_major" />
+
+        <EditText
+            android:id="@+id/et_major"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="0~65535"
+            android:inputType="number"
+            android:maxLength="5"
+            android:textColor="@color/black_333333"
+            android:textColorHint="@color/grey_ebebeb"
+            android:textSize="15sp"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_uuid"
+            app:layout_constraintWidth_percent="0.65" />
+
+        <View
+            style="@style/divider_line"
+            android:layout_width="0dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_major" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Minor"
+            android:textColor="@color/black_333333"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@id/et_minor"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/et_minor" />
+
+        <EditText
+            android:id="@+id/et_minor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="0~65535"
+            android:inputType="number"
+            android:maxLength="5"
+            android:textColor="@color/black_333333"
+            android:textColorHint="@color/grey_ebebeb"
+            android:textSize="15sp"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_major"
+            app:layout_constraintWidth_percent="0.65" />
+
+        <View
+            style="@style/divider_line"
+            android:layout_width="0dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_minor" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ADV Interval"
+            android:textColor="@color/black_333333"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@id/et_adv_interval"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/et_adv_interval" />
+
+        <EditText
+            android:id="@+id/et_adv_interval"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="1~100"
+            android:inputType="number"
+            android:maxLength="3"
+            android:text=""
+            android:textColor="@color/black_333333"
+            android:textColorHint="@color/grey_ebebeb"
+            android:textSize="15sp"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintLeft_toLeftOf="@id/et_minor"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_minor"
+            app:layout_constraintWidth_percent="0.2" />
+
+        <TextView
+            android:id="@+id/adv_interval_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="x 100ms"
+            android:textColor="@color/black_333333"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@id/et_adv_interval"
+            app:layout_constraintLeft_toRightOf="@id/et_adv_interval"
+            app:layout_constraintTop_toTopOf="@id/et_adv_interval" />
+
+        <TextView
+            android:id="@+id/adv_interval_range"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="(Min:100ms Max:10s)"
+            android:textColor="@color/grey_b3b3b3"
+            android:textSize="10sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/adv_interval_unit"
+            app:layout_constraintLeft_toRightOf="@id/adv_interval_unit"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <View
+            style="@style/divider_line"
+            android:layout_width="0dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_adv_interval" />
+
+        <TextView
+            android:id="@+id/rssi_1m"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RSSI@1m"
+            android:textColor="@color/black_333333"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@id/sb_rssi_1m"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="(-127dBm~0dBm)"
+            android:textColor="@color/grey_b3b3b3"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@id/sb_rssi_1m"
+            app:layout_constraintLeft_toRightOf="@id/rssi_1m" />
+
+        <SeekBar
+            android:id="@+id/sb_rssi_1m"
+            style="@style/CustomSeekbarStyle"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="50dp"
+            android:max="127"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
+            android:progress="0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/tv_rssi_1m_value"
+            app:layout_constraintTop_toBottomOf="@id/et_adv_interval" />
+
+        <TextView
+            android:id="@+id/tv_rssi_1m_value"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="0dBm"
+            android:textColor="@color/black_333333"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@id/sb_rssi_1m"
+            app:layout_constraintLeft_toRightOf="@id/sb_rssi_1m"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/sb_rssi_1m" />
+
+        <View
+            style="@style/divider_line"
+            android:layout_width="0dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sb_rssi_1m" />
+
+        <TextView
+            android:id="@+id/tx_power"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tx Power"
+            android:textColor="@color/black_333333"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@id/sb_tx_power"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="(-40,-20,-16,-12,-8-4,0,+3,+4)"
+            android:textColor="@color/grey_b3b3b3"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@id/sb_tx_power"
+            app:layout_constraintLeft_toRightOf="@id/tx_power" />
+
+        <SeekBar
+            android:id="@+id/sb_tx_power"
+            style="@style/CustomSeekbarStyle"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="50dp"
+            android:max="8"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
+            android:progress="0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/tv_tx_power_value"
+            app:layout_constraintTop_toBottomOf="@id/sb_rssi_1m" />
+
+        <TextView
+            android:id="@+id/tv_tx_power_value"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="0dBm"
+            android:textColor="@color/black_333333"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@id/sb_tx_power"
+            app:layout_constraintLeft_toRightOf="@id/sb_tx_power"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/sb_tx_power" />
+
+        <View
+            style="@style/divider_line"
+            android:layout_width="0dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sb_tx_power" />
+
+        <TextView
+            android:id="@+id/adv_trigger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="ADV Trigger"
+            android:textColor="@color/black_333333"
+            android:textSize="15sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sb_tx_power" />
+
+        <ImageView
+            android:id="@+id/iv_adv_trigger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:src="@drawable/ic_unchecked"
+            app:layout_constraintBottom_toBottomOf="@id/adv_trigger"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sb_tx_power"
+            app:layout_constraintTop_toTopOf="@id/adv_trigger" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/cl_adv_trigger"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_adv_trigger">
+
+            <TextView
+                android:id="@+id/adv_trigger_tips"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="The Beacon will stop advertising after static period of"
+                android:textColor="@color/black_333333"
+                android:textSize="15sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/et_adv_trigger"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="5"
+                android:text=""
+                android:textColor="@color/black_333333"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/adv_trigger_tips" />
+
+            <TextView
+                android:id="@+id/adv_trigger_range"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(1~65535)"
+                android:textColor="@color/grey_b3b3b3"
+                android:textSize="15sp"
+                app:layout_constraintBaseline_toBaselineOf="@id/et_adv_trigger"
+                app:layout_constraintLeft_toRightOf="@id/et_adv_trigger" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="seconds."
+                android:textColor="@color/black_333333"
+                android:textSize="15sp"
+                app:layout_constraintBaseline_toBaselineOf="@id/adv_trigger_range"
+                app:layout_constraintLeft_toRightOf="@id/adv_trigger_range" />
+        </android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>
