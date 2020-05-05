@@ -70,6 +70,8 @@ public class ScannerFragment extends Fragment implements SeekBar.OnSeekBarChange
         activity = (DeviceInfoActivity) getActivity();
         sbStorageInterval.setOnSeekBarChangeListener(this);
         npvTrackingNotify.setDisplayedValues(getResources().getStringArray(R.array.tracking_notify));
+        npvTrackingNotify.setMaxValue(3);
+        npvTrackingNotify.setMinValue(0);
         npvTrackingNotify.setValue(0);
         return view;
     }

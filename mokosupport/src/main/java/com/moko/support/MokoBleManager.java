@@ -70,12 +70,14 @@ public class MokoBleManager extends BleManager<BleManagerCallbacks> {
 
         @Override
         protected void onCharacteristicWrite(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattCharacteristic characteristic) {
+            LogModule.e("onCharacteristicWrite");
             LogModule.e("device to app : " + MokoUtils.bytesToHexString(characteristic.getValue()));
             mMokoResponseCallback.onCharacteristicWrite(characteristic.getValue());
         }
 
         @Override
         protected void onCharacteristicRead(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattCharacteristic characteristic) {
+            LogModule.e("onCharacteristicRead");
             LogModule.e("device to app : " + MokoUtils.bytesToHexString(characteristic.getValue()));
             mMokoResponseCallback.onCharacteristicRead(characteristic.getValue());
         }

@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.ParcelUuid;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -32,7 +31,6 @@ import com.moko.support.utils.MokoUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -453,7 +451,7 @@ public class MokoSupport implements MokoResponseCallback {
             return;
         }
         OrderTask orderTask = mQueue.peek();
-        if (value != null && value.length > 0) {
+        if (value != null && value.length > 0 && orderTask.response.responseType == OrderTask.RESPONSE_TYPE_WRITE) {
             switch (orderTask.orderType) {
                 case UUID:
                 case MAJOR:
@@ -478,7 +476,7 @@ public class MokoSupport implements MokoResponseCallback {
             return;
         }
         OrderTask orderTask = mQueue.peek();
-        if (value != null && value.length > 0) {
+        if (value != null && value.length > 0 && orderTask.response.responseType == OrderTask.RESPONSE_TYPE_READ) {
             switch (orderTask.orderType) {
                 case DEVICE_MODEL:
                 case PRODUCT_DATE:

@@ -7,7 +7,7 @@ public class SetStoreAlertTask extends OrderTask {
     public byte[] data;
 
     public SetStoreAlertTask(MokoOrderTaskCallback callback) {
-        super(OrderType.SCAN_MODE, callback, OrderTask.RESPONSE_TYPE_WRITE);
+        super(OrderType.STORE_ALERT, callback, OrderTask.RESPONSE_TYPE_WRITE);
     }
 
     public void setData(int enable) {

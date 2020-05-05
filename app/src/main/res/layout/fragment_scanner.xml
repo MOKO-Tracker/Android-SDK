@@ -120,8 +120,6 @@
         app:npv_DividerColor="@color/blue_2f84d0"
         app:npv_DividerMarginLeft="15dp"
         app:npv_DividerMarginRight="15dp"
-        app:npv_MaxValue="3"
-        app:npv_MinValue="0"
         app:npv_TextArray="@array/tracking_notify"
         app:npv_TextColorNormal="@color/grey_b3b3b3"
         app:npv_TextColorSelected="@color/blue_2f84d0"

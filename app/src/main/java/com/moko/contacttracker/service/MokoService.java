@@ -259,6 +259,30 @@ public class MokoService extends Service implements MokoOrderTaskCallback {
         return task;
     }
 
+    public OrderTask getMacAddress() {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setData(ConfigKeyEnum.GET_DEVICE_MAC);
+        return task;
+    }
+
+    public OrderTask getTriggerSensitivity() {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setData(ConfigKeyEnum.GET_MOVE_SENSITIVE);
+        return task;
+    }
+
+    public OrderTask getButtonPower() {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setData(ConfigKeyEnum.GET_TRIGGER_ENABLE);
+        return task;
+    }
+
+    public OrderTask closePower() {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setData(ConfigKeyEnum.CLOSE_DEVICE);
+        return task;
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // WRITE
     ///////////////////////////////////////////////////////////////////////////

@@ -46,9 +46,9 @@ android {
             def outputFile = output.outputFile
             if (outputFile != null && outputFile.name.endsWith('.apk')) {
                 def formatedDate = new Date().format("yyyyMMddHHmm")
-                def apkFileName = "ContactTracker_${defaultConfig.versionName}_${formatedDate}.apk"
+                def apkFileName = "Tracker_${defaultConfig.versionName}_${formatedDate}.apk"
                 if (outputFile.name.contains('debug')) {
-                    apkFileName = "ContactTracker_${defaultConfig.versionName}_${formatedDate}_debug.apk"
+                    apkFileName = "Tracker_${defaultConfig.versionName}_${formatedDate}_debug.apk"
                 }
                 outputFileName = apkFileName
             }

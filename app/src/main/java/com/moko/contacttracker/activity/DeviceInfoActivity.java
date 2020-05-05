@@ -31,7 +31,9 @@ import com.moko.contacttracker.R;
 import com.moko.contacttracker.dialog.AlertMessageDialog;
 import com.moko.contacttracker.dialog.LoadingMessageDialog;
 import com.moko.contacttracker.fragment.AdvFragment;
+import com.moko.contacttracker.fragment.DeviceFragment;
 import com.moko.contacttracker.fragment.ScannerFragment;
+import com.moko.contacttracker.fragment.SettingFragment;
 import com.moko.contacttracker.service.DfuService;
 import com.moko.contacttracker.service.MokoService;
 import com.moko.contacttracker.utils.ToastUtils;
@@ -83,6 +85,8 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     private FragmentManager fragmentManager;
     private AdvFragment advFragment;
     private ScannerFragment scannerFragment;
+    private SettingFragment settingFragment;
+    private DeviceFragment deviceFragment;
     //    private SettingFragment settingFragment;
 //    private DeviceFragment deviceFragment;
 //    public String mPassword;
@@ -93,7 +97,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
 //    private int validCount;
 //    private int lockState;
     private boolean mReceiverTag = false;
-    private boolean noDataExchange;
+    private int disConnectType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,11 +124,17 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     private void initFragment() {
         advFragment = AdvFragment.newInstance();
         scannerFragment = ScannerFragment.newInstance();
+        settingFragment = SettingFragment.newInstance();
+        deviceFragment = DeviceFragment.newInstance();
         fragmentManager.beginTransaction()
                 .add(R.id.frame_container, advFragment)
                 .add(R.id.frame_container, scannerFragment)
+                .add(R.id.frame_container, settingFragment)
+                .add(R.id.frame_container, deviceFragment)
                 .show(advFragment)
                 .hide(scannerFragment)
+                .hide(settingFragment)
+                .hide(deviceFragment)
                 .commit();
     }
 
@@ -169,6 +179,20 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                 orderTasks.add(mMokoService.getStoreTimeCondition());
                 orderTasks.add(mMokoService.getStoreAlert());
                 orderTasks.add(mMokoService.getScannerTrigger());
+                // setting
+                orderTasks.add(mMokoService.getTriggerSensitivity());
+                orderTasks.add(mMokoService.getScanMode());
+                orderTasks.add(mMokoService.getConnectionMode());
+                orderTasks.add(mMokoService.getButtonPower());
+                // device
+                orderTasks.add(mMokoService.getBattery());
+                orderTasks.add(mMokoService.getMacAddress());
+                orderTasks.add(mMokoService.getDeviceModel());
+                orderTasks.add(mMokoService.getSoftwareVersion());
+                orderTasks.add(mMokoService.getFirmwareVersion());
+                orderTasks.add(mMokoService.getHardwareVersion());
+                orderTasks.add(mMokoService.getProductDate());
+                orderTasks.add(mMokoService.getManufacturer());
                 MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
             }
         }
@@ -208,7 +232,27 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     }
 
     private void showDisconnectDialog() {
-        if (!noDataExchange) {
+        if (disConnectType == 3) {
+            AlertMessageDialog dialog = new AlertMessageDialog();
+            dialog.setMessage("No data communication for 2 minutes, the device is disconnected.");
+            dialog.setConfirm("OK");
+            dialog.setCancelGone();
+            dialog.setOnAlertConfirmListener(() -> {
+                setResult(RESULT_OK);
+                finish();
+            });
+            dialog.show(getSupportFragmentManager());
+        } else if (disConnectType == 4) {
+            AlertMessageDialog dialog = new AlertMessageDialog();
+            dialog.setMessage("The Beacon is disconnected.");
+            dialog.setConfirm("OK");
+            dialog.setCancelGone();
+            dialog.setOnAlertConfirmListener(() -> {
+                setResult(RESULT_OK);
+                finish();
+            });
+            dialog.show(getSupportFragmentManager());
+        } else {
             if (MokoSupport.getInstance().isBluetoothOpen() && !isUpgrade) {
                 AlertMessageDialog dialog = new AlertMessageDialog();
                 dialog.setTitle("Dismiss");
@@ -221,16 +265,6 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                 });
                 dialog.show(getSupportFragmentManager());
             }
-        } else {
-            AlertMessageDialog dialog = new AlertMessageDialog();
-            dialog.setMessage("No data communication for 2 minutes, the device is disconnected.");
-            dialog.setConfirm("OK");
-            dialog.setCancelGone();
-            dialog.setOnAlertConfirmListener(() -> {
-                setResult(RESULT_OK);
-                finish();
-            });
-            dialog.show(getSupportFragmentManager());
         }
     }
 
@@ -278,6 +312,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                     switch (orderType) {
                         case DISCONNECTED_NOTIFY:
                             int type = value[0] & 0xFF;
+                            disConnectType = type;
                             if (type == 0) {
                                 // valid password timeout
                             } else if (type == 1) {
@@ -286,7 +321,8 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                                 // reset success
                             } else if (type == 3) {
                                 // no data exchange timeout
-                                noDataExchange = true;
+                            } else if (type == 4) {
+                                // close device
                             }
                             break;
                     }
@@ -340,6 +376,42 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                             int trackNotify = value[0] & 0xFF;
                             scannerFragment.setTrackNotify(trackNotify);
                             break;
+                        case BATTERY:
+                            int battery = MokoUtils.toInt(value);
+                            deviceFragment.setBatteryValtage(battery);
+                            break;
+                        case DEVICE_MODEL:
+                            String productModel = new String(value);
+                            deviceFragment.setProductModel(productModel);
+                            break;
+                        case SOFTWARE_VERSION:
+                            String softwareVersion = new String(value);
+                            deviceFragment.setSoftwareVersion(softwareVersion);
+                            break;
+                        case FIRMWARE_VERSION:
+                            String firmwareVersion = new String(value);
+                            deviceFragment.setFirmwareVersion(firmwareVersion);
+                            break;
+                        case HARDWARE_VERSION:
+                            String hardwareVersion = new String(value);
+                            deviceFragment.setHardwareVersion(hardwareVersion);
+                            break;
+                        case PRODUCT_DATE:
+                            String manufactureDate = new String(value);
+                            deviceFragment.setManufactureDate(manufactureDate);
+                            break;
+                        case MANUFACTURER:
+                            String manufacture = new String(value);
+                            deviceFragment.setManufacture(manufacture);
+                            break;
+                        case SCAN_MODE:
+                            int scanner = value[0] & 0xFF;
+                            settingFragment.setBeaconScanner(scanner);
+                            break;
+                        case CONNECTION_MODE:
+                            int connectable = value[0] & 0xFF;
+                            settingFragment.setConnectable(connectable);
+                            break;
                         case WRITE_CONFIG:
                             if (value.length >= 2) {
                                 int key = value[1] & 0xFF;
@@ -373,6 +445,30 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                                             scannerFragment.setScannerTrigger(duration);
                                         }
                                         break;
+                                    case GET_DEVICE_MAC:
+                                        if (length == 6) {
+                                            byte[] macBytes = Arrays.copyOfRange(value, 4, 10);
+                                            StringBuffer stringBuffer = new StringBuffer();
+                                            for (int i = 0, l = macBytes.length; i < l; i++) {
+                                                stringBuffer.append(MokoUtils.byte2HexString(macBytes[i]));
+                                                if (i < (l - 1))
+                                                    stringBuffer.append(":");
+                                            }
+                                            deviceFragment.setMacAddress(stringBuffer.toString());
+                                        }
+                                        break;
+                                    case GET_MOVE_SENSITIVE:
+                                        if (length == 1) {
+                                            int sensitivity = value[4] & 0xFF;
+                                            settingFragment.setSensitivity(sensitivity);
+                                        }
+                                        break;
+                                    case GET_TRIGGER_ENABLE:
+                                        if (length == 1) {
+                                            int enable = value[4] & 0xFF;
+                                            settingFragment.setButtonPower(enable);
+                                        }
+                                        break;
                                     case SET_ADV_MOVE_CONDITION:
                                     case SET_SCAN_MOVE_CONDITION:
                                         // EB 31 00 00
@@ -383,7 +479,6 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                                             dialog.setConfirm("OK");
                                             dialog.setCancelGone();
                                             dialog.show(getSupportFragmentManager());
-                                            ToastUtils.showToast(DeviceInfoActivity.this, "Saved Successfully！");
                                         }
                                         break;
 //                                    case GET_DEVICE_MAC:
@@ -708,6 +803,8 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                 fragmentManager.beginTransaction()
                         .show(advFragment)
                         .hide(scannerFragment)
+                        .hide(settingFragment)
+                        .hide(deviceFragment)
                         .commit();
 //                showSlotFragment();
 //                getSlotType();
@@ -718,6 +815,8 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                 fragmentManager.beginTransaction()
                         .hide(advFragment)
                         .show(scannerFragment)
+                        .hide(settingFragment)
+                        .hide(deviceFragment)
                         .commit();
 //                showSlotFragment();
 //                getSlotType();
@@ -725,12 +824,24 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
             case R.id.radioBtn_setting:
                 tvTitle.setText(R.string.title_setting);
                 ivSave.setVisibility(View.GONE);
+                fragmentManager.beginTransaction()
+                        .hide(advFragment)
+                        .hide(scannerFragment)
+                        .show(settingFragment)
+                        .hide(deviceFragment)
+                        .commit();
 //                showSettingFragment();
 //                getDeviceInfo();
                 break;
             case R.id.radioBtn_device:
                 tvTitle.setText(R.string.title_device);
                 ivSave.setVisibility(View.GONE);
+                fragmentManager.beginTransaction()
+                        .hide(advFragment)
+                        .hide(scannerFragment)
+                        .hide(settingFragment)
+                        .show(deviceFragment)
+                        .commit();
 //                showDeviceFragment();
 //                getDeviceInfo();
                 break;

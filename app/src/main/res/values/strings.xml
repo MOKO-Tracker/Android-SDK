@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ContactTracker</string>
+    <string name="app_name">Tracker</string>
 
     <string name="cancel">Cancel</string>
     <string name="ensure">OK</string>
@@ -18,21 +18,22 @@
     <string name="storage_interval">*The Beacon will no longer store the ADV data with the same MAC address within %d min.</string>
 
     <string name="permission_storage_close_title">Storage permission is not available</string>
-    <string name="permission_storage_close_content">Please find it in cellphone setting- permission, and allow ContactTracker use the Storage permission</string>
+    <string name="permission_storage_close_content">Please find it in cellphone setting- permission, and allow Tracker use the Storage permission</string>
     <string name="permission_open">OK</string>
     <string name="permission_storage_need_title">Please turn on Storage permissions</string>
-    <string name="permission_storage_need_content">ContactTracker requires access to Location and Storage permission. If the permissions are not on, ContactTracker cannot be used normally.</string>
+    <string name="permission_storage_need_content">Tracker requires access to Location and Storage permission. If the permissions are not on, Tracker cannot be used normally.</string>
     <string name="location_need_title">Turn on Location permission</string>
-    <string name="location_need_content">After that, ContactTracker could search and connect with the iBeacon</string>
+    <string name="location_need_content">After that, Tracker could search and connect with the iBeacon</string>
     <string name="permission_location_close_title">Location persission is not available</string>
-    <string name="permission_location_close_content">Please find it in cellphone setting- permission, and allow ContactTracker use the Location and Storage permission</string>
+    <string name="permission_location_close_content">Please find it in cellphone setting- permission, and allow Tracker use the Location and Storage permission</string>
     <string name="permission_location_need_title">Turn on Location permission</string>
-    <string name="permission_location_need_content">After that, ContactTracker could search and connect with the iBeacon</string>
+    <string name="permission_location_need_content">After that, Tracker could search and connect with the iBeacon</string>
     <string name="disconnect_alert">The device is disconnected. Please click the “CONNECT” on the top to reconnect.</string>
     <string name="title_advertiser">ADVERTISER</string>
     <string name="title_scanner">SCANNER</string>
     <string name="title_setting">SETTING</string>
     <string name="title_device">DEVICE</string>
+    <string name="trigger_sensitivity">Trigger Sensitivity(%d)</string>
 
     <string-array name="tracking_notify">
         <item>Off</item>
