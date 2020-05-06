@@ -390,6 +390,18 @@ public class MokoService extends Service implements MokoOrderTaskCallback {
         return writeConfigTask;
     }
 
+    public WriteConfigTask setSensitivity(int sensitivity) {
+        WriteConfigTask writeConfigTask = new WriteConfigTask(this);
+        writeConfigTask.setMoveSensitive(sensitivity);
+        return writeConfigTask;
+    }
+
+    public OrderTask setButtonPower(int enable) {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setTriggerEnable(enable);
+        return task;
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // NOTIFY
     ///////////////////////////////////////////////////////////////////////////

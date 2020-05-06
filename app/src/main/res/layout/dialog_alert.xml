@@ -59,7 +59,7 @@
                 android:layout_weight="1.0"
                 android:gravity="center"
                 android:text="@string/cancel"
-                android:textColor="@color/text_black_4d4d4d"
+                android:textColor="@color/blue_2f84d0"
                 android:textSize="16sp" />
 
             <View
@@ -75,7 +75,7 @@
                 android:layout_weight="1.0"
                 android:gravity="center"
                 android:text="@string/confirm"
-                android:textColor="@color/text_black_4d4d4d"
+                android:textColor="@color/blue_2f84d0"
                 android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>

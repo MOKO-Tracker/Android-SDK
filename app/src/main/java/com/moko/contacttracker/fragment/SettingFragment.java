@@ -11,6 +11,13 @@ import android.widget.TextView;
 
 import com.moko.contacttracker.R;
 import com.moko.contacttracker.activity.DeviceInfoActivity;
+import com.moko.contacttracker.dialog.AlertMessageDialog;
+import com.moko.contacttracker.dialog.ChangePasswordDialog;
+import com.moko.contacttracker.dialog.ResetDialog;
+import com.moko.contacttracker.dialog.TriggerSensitivityDialog;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -89,37 +96,142 @@ public class SettingFragment extends Fragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_change_password:
+                // show password
+                final ChangePasswordDialog dialog = new ChangePasswordDialog(getActivity());
+                dialog.setOnPasswordClicked(password -> activity.changePassword(password));
+                dialog.show();
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+
+                    public void run() {
+                        activity.runOnUiThread(() -> dialog.showKeyboard());
+                    }
+                }, 200);
                 break;
             case R.id.tv_factory_reset:
+                final ResetDialog resetDialog = new ResetDialog(getActivity());
+                resetDialog.setOnPasswordClicked(password -> activity.reset(password));
+                resetDialog.show();
+                Timer resetTimer = new Timer();
+                resetTimer.schedule(new TimerTask() {
+
+                    @Override
+                    public void run() {
+                        activity.runOnUiThread(() -> resetDialog.showKeyboard());
+                    }
+                }, 200);
                 break;
             case R.id.tv_update_firmware:
+                activity.chooseFirmwareFile();
                 break;
             case R.id.tv_trigger_sensitivity:
+                final TriggerSensitivityDialog sensitivityDialog = new TriggerSensitivityDialog(getActivity());
+                sensitivityDialog.setOnSensitivityClicked(sensitivity -> activity.setSensitivity(sensitivity));
+                sensitivityDialog.show();
                 break;
             case R.id.iv_beacon_scanner:
+                showBeaconScannerDialog();
                 break;
             case R.id.iv_connectable:
+                showConnectableDialog();
                 break;
             case R.id.iv_button_power:
+                showButtonPowerDialog();
                 break;
             case R.id.iv_power_off:
+                showPowerOffDialog();
                 break;
         }
     }
 
-    public void setSensitivity(int sensitivity) {
-        tvTriggerSensitivity.setText(getString(R.string.trigger_sensitivity, sensitivity));
+    private void showBeaconScannerDialog() {
+        AlertMessageDialog dialog = new AlertMessageDialog();
+        dialog.setTitle("Warning!");
+        if (scannerState) {
+            dialog.setMessage("If you turn off Beacon Scanner function, the Beacon will stop scanning.");
+        } else {
+            dialog.setMessage("If you turn on Beacon Scanner function, the Beacon will start scanning.");
+        }
+        dialog.setConfirm("OK");
+        dialog.setCancelGone();
+        dialog.setOnAlertConfirmListener(() -> {
+            int value = !scannerState ? 1 : 0;
+            activity.changeScannerState(value);
+        });
+        dialog.show(activity.getSupportFragmentManager());
     }
 
+    private void showConnectableDialog() {
+        AlertMessageDialog dialog = new AlertMessageDialog();
+        dialog.setTitle("Warning!");
+        if (connectState) {
+            dialog.setMessage("Are you sure to make the device Unconnectable？");
+        } else {
+            dialog.setMessage("Are you sure to make the device connectable？");
+        }
+        dialog.setConfirm("OK");
+        dialog.setCancelGone();
+        dialog.setOnAlertConfirmListener(() -> {
+            int value = !connectState ? 1 : 0;
+            activity.changeConnectState(value);
+        });
+        dialog.show(activity.getSupportFragmentManager());
+    }
+
+    private void showButtonPowerDialog() {
+        AlertMessageDialog dialog = new AlertMessageDialog();
+        dialog.setTitle("Warning!");
+        if (buttonPowerState) {
+            dialog.setMessage("If you turn off the Button Power function, you cannot turn off the beacon power with the button.");
+        } else {
+            dialog.setMessage("If you turn on the Button Power function, you can turn off the beacon power with the button.");
+        }
+        dialog.setConfirm("OK");
+        dialog.setCancelGone();
+        dialog.setOnAlertConfirmListener(() -> {
+            int value = !buttonPowerState ? 1 : 0;
+            activity.changeButtonPowerState(value);
+        });
+        dialog.show(activity.getSupportFragmentManager());
+    }
+
+    private void showPowerOffDialog() {
+        AlertMessageDialog dialog = new AlertMessageDialog();
+        dialog.setTitle("Warning!");
+        dialog.setMessage("Are you sure to turn off the device? Please make sure the device has a button to turn on!");
+        dialog.setConfirm("OK");
+        dialog.setCancelGone();
+        dialog.setOnAlertConfirmListener(() -> {
+            activity.powerOff();
+        });
+        dialog.show(activity.getSupportFragmentManager());
+    }
+
+
+    public void setSensitivity(int sensitivity) {
+        tvTriggerSensitivity.setText(getString(R.string.trigger_sensitivity, sensitivity));
+        tvTriggerSensitivity.setTag(String.valueOf(sensitivity));
+    }
+
+    private boolean scannerState;
+
     public void setBeaconScanner(int scanner) {
+        scannerState = scanner == 1;
         ivBeaconScanner.setImageResource(scanner == 1 ? R.drawable.ic_checked : R.drawable.ic_unchecked);
     }
 
+    private boolean connectState;
+
     public void setConnectable(int connectable) {
+        connectState = connectable == 1;
         ivConnectable.setImageResource(connectable == 1 ? R.drawable.ic_checked : R.drawable.ic_unchecked);
     }
 
+    private boolean buttonPowerState;
+
     public void setButtonPower(int enable) {
+        buttonPowerState = enable == 1;
         ivButtonPower.setImageResource(enable == 1 ? R.drawable.ic_checked : R.drawable.ic_unchecked);
     }
 }

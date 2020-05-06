@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/shape_radius_white_bg"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="Trigger Sensitivity"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:gravity="center"
+            android:text="The larger the value, the more sensitive Beacon judges the movement."
+            android:textSize="12sp" />
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MAX"
+                android:textColor="@color/grey_999999"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@id/sb_sensitivity"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MIN"
+                android:textColor="@color/grey_999999"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@id/sb_sensitivity"
+                app:layout_constraintRight_toRightOf="@id/sb_sensitivity" />
+
+            <SeekBar
+                android:id="@+id/sb_sensitivity"
+                style="@style/CustomSeekbarStyle"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:max="248"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:progress="0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/tv_sensitivity_value"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_sensitivity_value"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="248"
+                android:textColor="@color/black_333333"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="@id/sb_sensitivity"
+                app:layout_constraintLeft_toRightOf="@id/sb_sensitivity"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/sb_sensitivity" />
+        </android.support.constraint.ConstraintLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="20dp"
+            android:background="@color/grey_ebebeb" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <TextView
+                android:id="@+id/tv_cancel"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.0"
+                android:gravity="center"
+                android:text="@string/cancel"
+                android:textColor="@color/blue_2f84d0"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/grey_ebebeb" />
+
+            <TextView
+                android:id="@+id/tv_ensure"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.0"
+                android:gravity="center"
+                android:text="@string/permission_open"
+                android:textColor="@color/blue_2f84d0"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

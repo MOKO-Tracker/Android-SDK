@@ -13,10 +13,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.IdRes;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -36,6 +38,7 @@ import com.moko.contacttracker.fragment.ScannerFragment;
 import com.moko.contacttracker.fragment.SettingFragment;
 import com.moko.contacttracker.service.DfuService;
 import com.moko.contacttracker.service.MokoService;
+import com.moko.contacttracker.utils.FileUtils;
 import com.moko.contacttracker.utils.ToastUtils;
 import com.moko.support.MokoConstants;
 import com.moko.support.MokoSupport;
@@ -51,6 +54,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -60,6 +64,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import no.nordicsemi.android.dfu.DfuProgressListener;
 import no.nordicsemi.android.dfu.DfuProgressListenerAdapter;
+import no.nordicsemi.android.dfu.DfuServiceInitiator;
 import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 
 public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
@@ -87,12 +92,10 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     private ScannerFragment scannerFragment;
     private SettingFragment settingFragment;
     private DeviceFragment deviceFragment;
-    //    private SettingFragment settingFragment;
-//    private DeviceFragment deviceFragment;
-//    public String mPassword;
-//    public String mDeviceMac;
-//    public String mDeviceName;
-//    private boolean mIsClose;
+    //    public String mPassword;
+    public String mDeviceMac;
+    public String mDeviceName;
+    //    private boolean mIsClose;
 //    private ValidParams validParams;
 //    private int validCount;
 //    private int lockState;
@@ -184,6 +187,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                 orderTasks.add(mMokoService.getScanMode());
                 orderTasks.add(mMokoService.getConnectionMode());
                 orderTasks.add(mMokoService.getButtonPower());
+                orderTasks.add(mMokoService.getScanMode());
                 // device
                 orderTasks.add(mMokoService.getBattery());
                 orderTasks.add(mMokoService.getMacAddress());
@@ -232,7 +236,29 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     }
 
     private void showDisconnectDialog() {
-        if (disConnectType == 3) {
+        if (disConnectType == 1) {
+            AlertMessageDialog dialog = new AlertMessageDialog();
+            dialog.setTitle("Change Password");
+            dialog.setMessage("Password changed successfully!Please reconnect the device.");
+            dialog.setConfirm("OK");
+            dialog.setCancelGone();
+            dialog.setOnAlertConfirmListener(() -> {
+                setResult(RESULT_OK);
+                finish();
+            });
+            dialog.show(getSupportFragmentManager());
+        } else if (disConnectType == 2) {
+            AlertMessageDialog dialog = new AlertMessageDialog();
+            dialog.setTitle("Factory Reset");
+            dialog.setMessage("Factory reset successfully!Please reconnect the device.");
+            dialog.setConfirm("OK");
+            dialog.setCancelGone();
+            dialog.setOnAlertConfirmListener(() -> {
+                setResult(RESULT_OK);
+                finish();
+            });
+            dialog.show(getSupportFragmentManager());
+        } else if (disConnectType == 3) {
             AlertMessageDialog dialog = new AlertMessageDialog();
             dialog.setMessage("No data communication for 2 minutes, the device is disconnected.");
             dialog.setConfirm("OK");
@@ -648,23 +674,24 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    back();
+                                    DeviceInfoActivity.this.setResult(RESULT_OK);
+                                    finish();
                                 }
                             });
                             builder.show();
                             break;
-                        case BluetoothAdapter.STATE_TURNING_ON:
-                            if (mMokoService == null) {
-                                return;
-                            }
-                            showSyncingProgressDialog();
+//                        case BluetoothAdapter.STATE_TURNING_ON:
+//                            if (mMokoService == null) {
+//                                return;
+//                            }
+//                            showSyncingProgressDialog();
 //                            MokoSupport.getInstance().sendOrder(mMokoService.getSlotType(),
 //                                    mMokoService.getDeviceMac(), mMokoService.getConnectable(),
 //                                    mMokoService.getManufacturer(), mMokoService.getDeviceModel(),
 //                                    mMokoService.getProductDate(), mMokoService.getHardwareVersion(),
 //                                    mMokoService.getFirmwareVersion(), mMokoService.getSoftwareVersion(),
 //                                    mMokoService.getBattery());
-                            break;
+//                            break;
 
                     }
                 }
@@ -672,30 +699,31 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         }
     };
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == REQUEST_CODE_SELECT_FIRMWARE) {
-//            if (resultCode == RESULT_OK) {
-//                //得到uri，后面就是将uri转化成file的过程。
-//                Uri uri = data.getData();
-//                String firmwareFilePath = FileUtils.getPath(this, uri);
-//                //
-//                final File firmwareFile = new File(firmwareFilePath);
-//                if (firmwareFile.exists()) {
-//                    final DfuServiceInitiator starter = new DfuServiceInitiator(mDeviceMac)
-//                            .setDeviceName(mDeviceName)
-//                            .setKeepBond(false)
-//                            .setDisableNotification(true);
-//                    starter.setZip(null, firmwareFilePath);
-//                    starter.start(this, DfuService.class);
-//                    showDFUProgressDialog("Waiting...");
-//                } else {
-//                    Toast.makeText(this, "file is not exists!", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        }
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_SELECT_FIRMWARE) {
+            if (resultCode == RESULT_OK) {
+                //得到uri，后面就是将uri转化成file的过程。
+                Uri uri = data.getData();
+                String firmwareFilePath = FileUtils.getPath(this, uri);
+                if (TextUtils.isEmpty(firmwareFilePath))
+                    return;
+                final File firmwareFile = new File(firmwareFilePath);
+                if (firmwareFile.exists()) {
+                    final DfuServiceInitiator starter = new DfuServiceInitiator(mDeviceMac)
+                            .setDeviceName(mDeviceName)
+                            .setKeepBond(false)
+                            .setDisableNotification(true);
+                    starter.setZip(null, firmwareFilePath);
+                    starter.start(this, DfuService.class);
+                    showDFUProgressDialog("Waiting...");
+                } else {
+                    Toast.makeText(this, "file is not exists!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
 
     @Override
     protected void onDestroy() {
@@ -764,36 +792,6 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         return super.onKeyDown(keyCode, event);
     }
 
-//    private void showSlotFragment() {
-//        if (slotFragment == null) {
-//            slotFragment = SlotFragment.newInstance();
-//            fragmentManager.beginTransaction().add(R.id.frame_container, slotFragment).commit();
-//        } else {
-//            fragmentManager.beginTransaction().hide(settingFragment).hide(deviceFragment).show(slotFragment).commit();
-//        }
-//        tvTitle.setText(getString(R.string.slot_title));
-//    }
-//
-//    private void showSettingFragment() {
-//        if (settingFragment == null) {
-//            settingFragment = SettingFragment.newInstance();
-//            fragmentManager.beginTransaction().add(R.id.frame_container, settingFragment).commit();
-//        } else {
-//            fragmentManager.beginTransaction().hide(slotFragment).hide(deviceFragment).show(settingFragment).commit();
-//        }
-//        tvTitle.setText(getString(R.string.setting_title));
-//    }
-//
-//    private void showDeviceFragment() {
-//        if (deviceFragment == null) {
-//            deviceFragment = DeviceFragment.newInstance();
-//            fragmentManager.beginTransaction().add(R.id.frame_container, deviceFragment).commit();
-//        } else {
-//            fragmentManager.beginTransaction().hide(slotFragment).hide(settingFragment).show(deviceFragment).commit();
-//        }
-//        tvTitle.setText(getString(R.string.device_title));
-//    }
-
     @Override
     public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
         switch (checkedId) {
@@ -806,7 +804,6 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                         .hide(settingFragment)
                         .hide(deviceFragment)
                         .commit();
-//                showSlotFragment();
 //                getSlotType();
                 break;
             case R.id.radioBtn_scanner:
@@ -818,7 +815,6 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                         .hide(settingFragment)
                         .hide(deviceFragment)
                         .commit();
-//                showSlotFragment();
 //                getSlotType();
                 break;
             case R.id.radioBtn_setting:
@@ -830,7 +826,6 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                         .show(settingFragment)
                         .hide(deviceFragment)
                         .commit();
-//                showSettingFragment();
 //                getDeviceInfo();
                 break;
             case R.id.radioBtn_device:
@@ -842,41 +837,48 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                         .hide(settingFragment)
                         .show(deviceFragment)
                         .commit();
-//                showDeviceFragment();
 //                getDeviceInfo();
                 break;
         }
     }
 
 //    private boolean isModifyPassword;
-//
-//    public void modifyPassword(String password) {
+
+    public void changePassword(String password) {
 //        isModifyPassword = true;
-//        showSyncingProgressDialog();
-//        MokoSupport.getInstance().sendOrder(mMokoService.setLockState(password));
-//    }
-//
-//    public void resetDevice() {
-//        showSyncingProgressDialog();
-//        MokoSupport.getInstance().sendOrder(mMokoService.resetDevice());
-//    }
-//
-//
-//    public void setConnectable(boolean isConneacted) {
-//        showSyncingProgressDialog();
-//        MokoSupport.getInstance().sendOrder(mMokoService.setConnectable(isConneacted), mMokoService.getConnectable());
-//    }
-//
-//    public void setDirectedConnectable(boolean noPassword) {
-//        showSyncingProgressDialog();
-//        MokoSupport.getInstance().sendOrder(mMokoService.setLockStateDirected(noPassword), mMokoService.getLockState());
-//    }
-//
-//    public void setClose() {
-//        mIsClose = true;
-//        showSyncingProgressDialog();
-//        MokoSupport.getInstance().sendOrder(mMokoService.setClose());
-//    }
+        showSyncingProgressDialog();
+        MokoSupport.getInstance().sendOrder(mMokoService.setPassword(password));
+    }
+
+    public void reset(String password) {
+        showSyncingProgressDialog();
+        MokoSupport.getInstance().sendOrder(mMokoService.setReset(password));
+    }
+
+    public void setSensitivity(int sensitivity) {
+        showSyncingProgressDialog();
+        MokoSupport.getInstance().sendOrder(mMokoService.setSensitivity(sensitivity), mMokoService.getTriggerSensitivity());
+    }
+
+    public void changeScannerState(int scannerState) {
+        showSyncingProgressDialog();
+        MokoSupport.getInstance().sendOrder(mMokoService.setScanMode(scannerState), mMokoService.getTriggerSensitivity());
+    }
+
+    public void changeConnectState(int connectState) {
+        showSyncingProgressDialog();
+        MokoSupport.getInstance().sendOrder(mMokoService.setConnectionMode(connectState), mMokoService.getConnectionMode());
+    }
+
+    public void changeButtonPowerState(int buttonPowerState) {
+        showSyncingProgressDialog();
+        MokoSupport.getInstance().sendOrder(mMokoService.setButtonPower(buttonPowerState), mMokoService.getButtonPower());
+    }
+
+    public void powerOff() {
+        showSyncingProgressDialog();
+        MokoSupport.getInstance().sendOrder(mMokoService.closePower());
+    }
 
     public void chooseFirmwareFile() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -916,7 +918,8 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 isUpgrade = false;
-                back();
+                DeviceInfoActivity.this.setResult(RESULT_OK);
+                finish();
             }
         });
         builder.show();
