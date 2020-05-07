@@ -1,6 +1,7 @@
 package com.moko.contacttracker.fragment;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.text.TextUtils;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.moko.contacttracker.R;
 import com.moko.contacttracker.activity.DeviceInfoActivity;
+import com.moko.contacttracker.activity.FilterOptionsActivity;
 import com.moko.contacttracker.service.MokoService;
 import com.moko.support.MokoSupport;
 import com.moko.support.task.OrderTask;
@@ -141,7 +143,7 @@ public class ScannerFragment extends Fragment implements SeekBar.OnSeekBarChange
                 clScannerTrigger.setVisibility(isScannerTriggerOpen ? View.VISIBLE : View.GONE);
                 break;
             case R.id.tv_filter_options:
-                // TODO: 2020/5/4 跳转过滤条件
+                startActivity(new Intent(getActivity(), FilterOptionsActivity.class));
                 break;
             case R.id.tv_tracked_data:
                 // TODO: 2020/5/4 跳转追踪数据

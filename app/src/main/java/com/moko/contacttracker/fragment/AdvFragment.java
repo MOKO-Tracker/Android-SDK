@@ -35,7 +35,7 @@ import butterknife.OnClick;
 public class AdvFragment extends Fragment implements SeekBar.OnSeekBarChangeListener {
     private static final String TAG = AdvFragment.class.getSimpleName();
     public static final String UUID_PATTERN = "[A-Fa-f0-9]{8}-(?:[A-Fa-f0-9]{4}-){3}[A-Fa-f0-9]{12}";
-    private final String FILTER_ASCII = "\\A\\p{ASCII}*\\z";
+//    private final String FILTER_ASCII = "\\A\\p{ASCII}*\\z";
     @Bind(R.id.et_adv_name)
     EditText etAdvName;
     @Bind(R.id.et_uuid)
@@ -131,14 +131,14 @@ public class AdvFragment extends Fragment implements SeekBar.OnSeekBarChangeList
                 }
             }
         });
-        InputFilter filter = (source, start, end, dest, dstart, dend) -> {
-            if (!(source + "").matches(FILTER_ASCII)) {
-                return "";
-            }
-
-            return null;
-        };
-        etAdvName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(10), filter});
+//        InputFilter filter = (source, start, end, dest, dstart, dend) -> {
+//            if (!(source + "").matches(FILTER_ASCII)) {
+//                return "";
+//            }
+//
+//            return null;
+//        };
+//        etAdvName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(10), filter});
 //        setDefault();
         return view;
     }

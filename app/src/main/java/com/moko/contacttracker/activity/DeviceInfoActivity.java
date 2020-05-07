@@ -82,7 +82,6 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     RadioButton radioBtnDevice;
     @Bind(R.id.rg_options)
     RadioGroup rgOptions;
-    public MokoService mMokoService;
     @Bind(R.id.tv_title)
     TextView tvTitle;
     @Bind(R.id.iv_save)
@@ -99,6 +98,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
 //    private ValidParams validParams;
 //    private int validCount;
 //    private int lockState;
+    public MokoService mMokoService;
     private boolean mReceiverTag = false;
     private int disConnectType;
 
@@ -372,6 +372,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                     switch (orderType) {
                         case DEVICE_NAME:
                             final String deviceName = new String(value);
+                            mDeviceName = deviceName;
                             advFragment.setDeviceName(deviceName);
                             break;
                         case UUID:
@@ -480,6 +481,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                                                 if (i < (l - 1))
                                                     stringBuffer.append(":");
                                             }
+                                            mDeviceMac = stringBuffer.toString();
                                             deviceFragment.setMacAddress(stringBuffer.toString());
                                         }
                                         break;
@@ -823,13 +825,6 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         List<OrderTask> orderTasks = new ArrayList<>();
         // device
         orderTasks.add(mMokoService.getBattery());
-        orderTasks.add(mMokoService.getMacAddress());
-        orderTasks.add(mMokoService.getDeviceModel());
-        orderTasks.add(mMokoService.getSoftwareVersion());
-        orderTasks.add(mMokoService.getFirmwareVersion());
-        orderTasks.add(mMokoService.getHardwareVersion());
-        orderTasks.add(mMokoService.getProductDate());
-        orderTasks.add(mMokoService.getManufacturer());
         MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
@@ -846,10 +841,6 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         List<OrderTask> orderTasks = new ArrayList<>();
         // setting
         orderTasks.add(mMokoService.getTriggerSensitivity());
-        orderTasks.add(mMokoService.getScanMode());
-        orderTasks.add(mMokoService.getConnectionMode());
-        orderTasks.add(mMokoService.getButtonPower());
-        orderTasks.add(mMokoService.getScanMode());
         MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 

@@ -283,6 +283,54 @@ public class MokoService extends Service implements MokoOrderTaskCallback {
         return task;
     }
 
+    public OrderTask getRssiFilter() {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setData(ConfigKeyEnum.GET_STORE_RSSI_CONDITION);
+        return task;
+    }
+
+    public OrderTask getFilterEnable() {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setData(ConfigKeyEnum.GET_FILTER_ENABLE);
+        return task;
+    }
+
+    public OrderTask getFilterMac() {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setData(ConfigKeyEnum.GET_FILTER_MAC);
+        return task;
+    }
+
+    public OrderTask getFilterName() {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setData(ConfigKeyEnum.GET_FILTER_NAME);
+        return task;
+    }
+
+    public OrderTask getFilterUUID() {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setData(ConfigKeyEnum.GET_FILTER_UUID);
+        return task;
+    }
+
+    public OrderTask getFilterMajor() {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setData(ConfigKeyEnum.GET_FILTER_MAJOR);
+        return task;
+    }
+
+    public OrderTask getFilterMinor() {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setData(ConfigKeyEnum.GET_FILTER_MINOR);
+        return task;
+    }
+
+    public OrderTask getFilterAdvRawData() {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setData(ConfigKeyEnum.GET_FILTER_ADV_RAW_DATA);
+        return task;
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // WRITE
     ///////////////////////////////////////////////////////////////////////////
@@ -399,6 +447,54 @@ public class MokoService extends Service implements MokoOrderTaskCallback {
     public OrderTask setButtonPower(int enable) {
         WriteConfigTask task = new WriteConfigTask(this);
         task.setTriggerEnable(enable);
+        return task;
+    }
+
+    public OrderTask setFilterRssi(int rssi) {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setStoreRssiCondition(rssi);
+        return task;
+    }
+
+    public OrderTask setFilterEnable(int enable) {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setFilterEnable(enable);
+        return task;
+    }
+
+    public OrderTask setFilterMac(String mac) {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setFilterMac(mac);
+        return task;
+    }
+
+    public OrderTask setFilterName(String name) {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setFilterName(name);
+        return task;
+    }
+
+    public OrderTask setFilterUUID(String uuid) {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setFilterUUID(uuid);
+        return task;
+    }
+
+    public OrderTask setFilterMajor(String major) {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setFilterMajor(major);
+        return task;
+    }
+
+    public OrderTask setFilterMinor(String minor) {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setFilterMinor(minor);
+        return task;
+    }
+
+    public OrderTask setFilterAdvRawData(String rawData) {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setFilterAdvRawData(rawData);
         return task;
     }
 

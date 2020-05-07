@@ -42,10 +42,10 @@ public class WriteConfigTask extends OrderTask {
             case GET_MOVE_SENSITIVE:
             case GET_FILTER_MAC:
             case GET_FILTER_NAME:
-            case GET_FILTER_ADV:
+            case GET_FILTER_ADV_RAW_DATA:
             case GET_FILTER_IBEACON:
             case GET_FILTER_UID:
-            case GET_FILTER_RAW_DATA:
+            case GET_FILTER_ENABLE:
                 createGetConfigData(key.getConfigKey());
                 break;
         }
@@ -213,11 +213,11 @@ public class WriteConfigTask extends OrderTask {
         }
     }
 
-    public void setFilterAdv(String adv) {
+    public void setFilterAdvRawData(String adv) {
         if (TextUtils.isEmpty(adv)) {
             data = new byte[5];
             data[0] = (byte) 0xEA;
-            data[1] = (byte) ConfigKeyEnum.SET_FILTER_ADV.getConfigKey();
+            data[1] = (byte) ConfigKeyEnum.SET_FILTER_ADV_RAW_DATA.getConfigKey();
             data[2] = (byte) 0x00;
             data[3] = (byte) 0x01;
             data[4] = (byte) 0x00;
@@ -226,7 +226,7 @@ public class WriteConfigTask extends OrderTask {
             int length = advBytes.length + 1;
             data = new byte[4 + length];
             data[0] = (byte) 0xEA;
-            data[1] = (byte) ConfigKeyEnum.SET_FILTER_ADV.getConfigKey();
+            data[1] = (byte) ConfigKeyEnum.SET_FILTER_ADV_RAW_DATA.getConfigKey();
             data[2] = (byte) 0x00;
             data[3] = (byte) length;
             data[4] = (byte) 0x01;
@@ -312,12 +312,78 @@ public class WriteConfigTask extends OrderTask {
         }
     }
 
-    public void setFilterRawData(int enable) {
+    public void setFilterEnable(int enable) {
         data = new byte[5];
         data[0] = (byte) 0xEA;
-        data[1] = (byte) ConfigKeyEnum.SET_MOVE_SENSITIVE.getConfigKey();
+        data[1] = (byte) ConfigKeyEnum.SET_FILTER_ENABLE.getConfigKey();
         data[2] = (byte) 0x00;
         data[3] = (byte) 0x01;
         data[4] = (byte) enable;
+    }
+
+    public void setFilterUUID(String uuid) {
+        if (TextUtils.isEmpty(uuid)) {
+            data = new byte[5];
+            data[0] = (byte) 0xEA;
+            data[1] = (byte) ConfigKeyEnum.SET_FILTER_UUID.getConfigKey();
+            data[2] = (byte) 0x00;
+            data[3] = (byte) 0x01;
+            data[4] = (byte) 0x00;
+        } else {
+            byte[] uuidBytes = MokoUtils.hex2bytes(uuid);
+            int length = uuidBytes.length;
+            data = new byte[4 + length];
+            data[0] = (byte) 0xEA;
+            data[1] = (byte) ConfigKeyEnum.SET_FILTER_UUID.getConfigKey();
+            data[2] = (byte) 0x00;
+            data[3] = (byte) length;
+            for (int i = 0; i < uuidBytes.length; i++) {
+                data[4 + i] = uuidBytes[i];
+            }
+        }
+    }
+
+    public void setFilterMajor(String major) {
+        if (TextUtils.isEmpty(major)) {
+            data = new byte[5];
+            data[0] = (byte) 0xEA;
+            data[1] = (byte) ConfigKeyEnum.SET_FILTER_MAJOR.getConfigKey();
+            data[2] = (byte) 0x00;
+            data[3] = (byte) 0x01;
+            data[4] = (byte) 0x00;
+        } else {
+            byte[] majorBytes = MokoUtils.hex2bytes(major);
+            int length = majorBytes.length;
+            data = new byte[4 + length];
+            data[0] = (byte) 0xEA;
+            data[1] = (byte) ConfigKeyEnum.SET_FILTER_MAJOR.getConfigKey();
+            data[2] = (byte) 0x00;
+            data[3] = (byte) length;
+            for (int i = 0; i < majorBytes.length; i++) {
+                data[4 + i] = majorBytes[i];
+            }
+        }
+    }
+
+    public void setFilterMinor(String minor) {
+        if (TextUtils.isEmpty(minor)) {
+            data = new byte[5];
+            data[0] = (byte) 0xEA;
+            data[1] = (byte) ConfigKeyEnum.SET_FILTER_MINOR.getConfigKey();
+            data[2] = (byte) 0x00;
+            data[3] = (byte) 0x01;
+            data[4] = (byte) 0x00;
+        } else {
+            byte[] minorBytes = MokoUtils.hex2bytes(minor);
+            int length = minorBytes.length;
+            data = new byte[4 + length];
+            data[0] = (byte) 0xEA;
+            data[1] = (byte) ConfigKeyEnum.SET_FILTER_MINOR.getConfigKey();
+            data[2] = (byte) 0x00;
+            data[3] = (byte) length;
+            for (int i = 0; i < minorBytes.length; i++) {
+                data[4 + i] = minorBytes[i];
+            }
+        }
     }
 }

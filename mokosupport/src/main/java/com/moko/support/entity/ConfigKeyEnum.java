@@ -39,8 +39,8 @@ public enum ConfigKeyEnum implements Serializable {
     GET_FILTER_NAME(0x42),
     SET_FILTER_NAME(0x52),
 
-    GET_FILTER_ADV(0x43),
-    SET_FILTER_ADV(0x53),
+    GET_FILTER_ADV_RAW_DATA(0x43),
+    SET_FILTER_ADV_RAW_DATA(0x53),
 
     GET_FILTER_IBEACON(0x44),
     SET_FILTER_IBEACON(0x54),
@@ -48,8 +48,17 @@ public enum ConfigKeyEnum implements Serializable {
     GET_FILTER_UID(0x45),
     SET_FILTER_UID(0x55),
 
-    GET_FILTER_RAW_DATA(0x46),
-    SET_FILTER_RAW_DATA(0x56),
+    GET_FILTER_ENABLE(0x46),
+    SET_FILTER_ENABLE(0x56),
+
+    GET_FILTER_UUID(0x47),
+    SET_FILTER_UUID(0x57),
+
+    GET_FILTER_MAJOR(0x48),
+    SET_FILTER_MAJOR(0x58),
+
+    GET_FILTER_MINOR(0x49),
+    SET_FILTER_MINOR(0x59),
     ;
 
     private int configKey;
