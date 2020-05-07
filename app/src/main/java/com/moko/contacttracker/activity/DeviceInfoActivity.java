@@ -796,50 +796,102 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
         switch (checkedId) {
             case R.id.radioBtn_adv:
-                tvTitle.setText(R.string.title_advertiser);
-                ivSave.setVisibility(View.VISIBLE);
-                fragmentManager.beginTransaction()
-                        .show(advFragment)
-                        .hide(scannerFragment)
-                        .hide(settingFragment)
-                        .hide(deviceFragment)
-                        .commit();
-//                getSlotType();
+                showAdvAndGetData();
                 break;
             case R.id.radioBtn_scanner:
-                tvTitle.setText(R.string.title_scanner);
-                ivSave.setVisibility(View.VISIBLE);
-                fragmentManager.beginTransaction()
-                        .hide(advFragment)
-                        .show(scannerFragment)
-                        .hide(settingFragment)
-                        .hide(deviceFragment)
-                        .commit();
-//                getSlotType();
+                showScannerAndGetData();
                 break;
             case R.id.radioBtn_setting:
-                tvTitle.setText(R.string.title_setting);
-                ivSave.setVisibility(View.GONE);
-                fragmentManager.beginTransaction()
-                        .hide(advFragment)
-                        .hide(scannerFragment)
-                        .show(settingFragment)
-                        .hide(deviceFragment)
-                        .commit();
-//                getDeviceInfo();
+                showSettingAndGetData();
                 break;
             case R.id.radioBtn_device:
-                tvTitle.setText(R.string.title_device);
-                ivSave.setVisibility(View.GONE);
-                fragmentManager.beginTransaction()
-                        .hide(advFragment)
-                        .hide(scannerFragment)
-                        .hide(settingFragment)
-                        .show(deviceFragment)
-                        .commit();
-//                getDeviceInfo();
+                showDeviceAndGetData();
                 break;
         }
+    }
+
+    private void showDeviceAndGetData() {
+        tvTitle.setText(R.string.title_device);
+        ivSave.setVisibility(View.GONE);
+        fragmentManager.beginTransaction()
+                .hide(advFragment)
+                .hide(scannerFragment)
+                .hide(settingFragment)
+                .show(deviceFragment)
+                .commit();
+        showSyncingProgressDialog();
+        List<OrderTask> orderTasks = new ArrayList<>();
+        // device
+        orderTasks.add(mMokoService.getBattery());
+        orderTasks.add(mMokoService.getMacAddress());
+        orderTasks.add(mMokoService.getDeviceModel());
+        orderTasks.add(mMokoService.getSoftwareVersion());
+        orderTasks.add(mMokoService.getFirmwareVersion());
+        orderTasks.add(mMokoService.getHardwareVersion());
+        orderTasks.add(mMokoService.getProductDate());
+        orderTasks.add(mMokoService.getManufacturer());
+        MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+    }
+
+    private void showSettingAndGetData() {
+        tvTitle.setText(R.string.title_setting);
+        ivSave.setVisibility(View.GONE);
+        fragmentManager.beginTransaction()
+                .hide(advFragment)
+                .hide(scannerFragment)
+                .show(settingFragment)
+                .hide(deviceFragment)
+                .commit();
+        showSyncingProgressDialog();
+        List<OrderTask> orderTasks = new ArrayList<>();
+        // setting
+        orderTasks.add(mMokoService.getTriggerSensitivity());
+        orderTasks.add(mMokoService.getScanMode());
+        orderTasks.add(mMokoService.getConnectionMode());
+        orderTasks.add(mMokoService.getButtonPower());
+        orderTasks.add(mMokoService.getScanMode());
+        MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+    }
+
+    private void showScannerAndGetData() {
+        tvTitle.setText(R.string.title_scanner);
+        ivSave.setVisibility(View.VISIBLE);
+        fragmentManager.beginTransaction()
+                .hide(advFragment)
+                .show(scannerFragment)
+                .hide(settingFragment)
+                .hide(deviceFragment)
+                .commit();
+        showSyncingProgressDialog();
+        List<OrderTask> orderTasks = new ArrayList<>();
+        // scanner
+        orderTasks.add(mMokoService.getStoreTimeCondition());
+        orderTasks.add(mMokoService.getStoreAlert());
+        orderTasks.add(mMokoService.getScannerTrigger());
+        MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+    }
+
+    private void showAdvAndGetData() {
+        tvTitle.setText(R.string.title_advertiser);
+        ivSave.setVisibility(View.VISIBLE);
+        fragmentManager.beginTransaction()
+                .show(advFragment)
+                .hide(scannerFragment)
+                .hide(settingFragment)
+                .hide(deviceFragment)
+                .commit();
+        showSyncingProgressDialog();
+        List<OrderTask> orderTasks = new ArrayList<>();
+        // get adv params
+        orderTasks.add(mMokoService.getDeviceName());
+        orderTasks.add(mMokoService.getUUID());
+        orderTasks.add(mMokoService.getMajor());
+        orderTasks.add(mMokoService.getMinor());
+        orderTasks.add(mMokoService.getAdvInterval());
+        orderTasks.add(mMokoService.getTransmission());
+        orderTasks.add(mMokoService.getMeasurePower());
+        orderTasks.add(mMokoService.getAdvTrigger());
+        MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
 //    private boolean isModifyPassword;

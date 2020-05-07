@@ -96,39 +96,16 @@ public class SettingFragment extends Fragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_change_password:
-                // show password
-                final ChangePasswordDialog dialog = new ChangePasswordDialog(getActivity());
-                dialog.setOnPasswordClicked(password -> activity.changePassword(password));
-                dialog.show();
-                Timer timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-
-                    public void run() {
-                        activity.runOnUiThread(() -> dialog.showKeyboard());
-                    }
-                }, 200);
+                showChangePasswordDialog();
                 break;
             case R.id.tv_factory_reset:
-                final ResetDialog resetDialog = new ResetDialog(getActivity());
-                resetDialog.setOnPasswordClicked(password -> activity.reset(password));
-                resetDialog.show();
-                Timer resetTimer = new Timer();
-                resetTimer.schedule(new TimerTask() {
-
-                    @Override
-                    public void run() {
-                        activity.runOnUiThread(() -> resetDialog.showKeyboard());
-                    }
-                }, 200);
+                showResetDialog();
                 break;
             case R.id.tv_update_firmware:
                 activity.chooseFirmwareFile();
                 break;
             case R.id.tv_trigger_sensitivity:
-                final TriggerSensitivityDialog sensitivityDialog = new TriggerSensitivityDialog(getActivity());
-                sensitivityDialog.setOnSensitivityClicked(sensitivity -> activity.setSensitivity(sensitivity));
-                sensitivityDialog.show();
+                showTriggerSensitivityDialog();
                 break;
             case R.id.iv_beacon_scanner:
                 showBeaconScannerDialog();
@@ -143,6 +120,40 @@ public class SettingFragment extends Fragment {
                 showPowerOffDialog();
                 break;
         }
+    }
+
+    private void showTriggerSensitivityDialog() {
+        final TriggerSensitivityDialog dialog = new TriggerSensitivityDialog(getActivity());
+        dialog.setOnSensitivityClicked(sensitivity -> activity.setSensitivity(sensitivity));
+        dialog.show();
+    }
+
+    private void showResetDialog() {
+        final ResetDialog dialog = new ResetDialog(getActivity());
+        dialog.setOnPasswordClicked(password -> activity.reset(password));
+        dialog.show();
+        Timer resetTimer = new Timer();
+        resetTimer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                activity.runOnUiThread(() -> dialog.showKeyboard());
+            }
+        }, 200);
+    }
+
+    private void showChangePasswordDialog() {
+        final ChangePasswordDialog dialog = new ChangePasswordDialog(getActivity());
+        dialog.setOnPasswordClicked(password -> activity.changePassword(password));
+        dialog.show();
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+
+            public void run() {
+                activity.runOnUiThread(() -> dialog.showKeyboard());
+            }
+        }, 200);
     }
 
     private void showBeaconScannerDialog() {

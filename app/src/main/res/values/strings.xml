@@ -18,6 +18,7 @@
     <string name="about_title">ABOUT</string>
     <string name="company_website">www.mokosmart.com</string>
     <string name="storage_interval">*The Beacon will no longer store the ADV data with the same MAC address within %d min.</string>
+    <string name="rssi_filter">*The Beacon will store valid ADV data with RSSI no less than %ddBm.</string>
 
     <string name="permission_storage_close_title">Storage permission is not available</string>
     <string name="permission_storage_close_content">Please find it in cellphone setting- permission, and allow Tracker use the Storage permission</string>
