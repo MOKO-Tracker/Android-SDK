@@ -169,8 +169,6 @@ Adv iBeacon information
 |`GetUUIDTask`|READ|Get iBeacon UUID.
 |`GetAdvIntervalTask`|READ|Get adv interval.
 |`WriteConfigTask`|WRITE|Write `GET_ADV_MOVE_CONDITION`，get adv trigger.
-
-
 |`SetMajorTask`|WRITE|Set major.
 |`SetMinorTask`|WRITE|Set minor.
 |`SetMeasurePowerTask`|WRITE|Set iBeacon measurePower.
