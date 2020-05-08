@@ -57,4 +57,12 @@
         <item name="android:thumb">@drawable/seekbar_thumb</item>
         <item name="android:thumbOffset">0dp</item>
     </style>
+
+    <style name="SensitivitySeekbarStyle">
+        <item name="android:maxHeight">2dp</item>
+        <item name="android:progressDrawable">@drawable/seekbar_progress_drawable_sensitivity</item>
+        <item name="android:minHeight">2dp</item>
+        <item name="android:thumb">@drawable/seekbar_thumb</item>
+        <item name="android:thumbOffset">0dp</item>
+    </style>
 </resources>

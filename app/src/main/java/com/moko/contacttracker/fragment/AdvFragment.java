@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.text.Editable;
 import android.text.InputFilter;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -35,7 +34,7 @@ import butterknife.OnClick;
 public class AdvFragment extends Fragment implements SeekBar.OnSeekBarChangeListener {
     private static final String TAG = AdvFragment.class.getSimpleName();
     public static final String UUID_PATTERN = "[A-Fa-f0-9]{8}-(?:[A-Fa-f0-9]{4}-){3}[A-Fa-f0-9]{12}";
-//    private final String FILTER_ASCII = "\\A\\p{ASCII}*\\z";
+    private final String FILTER_ASCII = "\\A\\p{ASCII}*\\z";
     @Bind(R.id.et_adv_name)
     EditText etAdvName;
     @Bind(R.id.et_uuid)
@@ -91,8 +90,6 @@ public class AdvFragment extends Fragment implements SeekBar.OnSeekBarChangeList
         sbRssi1m.setOnSeekBarChangeListener(this);
         sbTxPower.setOnSeekBarChangeListener(this);
         pattern = Pattern.compile(UUID_PATTERN);
-        //限制只输入大写，自动小写转大写
-//        etUuid.setTransformationMethod(new A2bigA());
         etUuid.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -131,14 +128,14 @@ public class AdvFragment extends Fragment implements SeekBar.OnSeekBarChangeList
                 }
             }
         });
-//        InputFilter filter = (source, start, end, dest, dstart, dend) -> {
-//            if (!(source + "").matches(FILTER_ASCII)) {
-//                return "";
-//            }
-//
-//            return null;
-//        };
-//        etAdvName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(10), filter});
+        InputFilter filter = (source, start, end, dest, dstart, dend) -> {
+            if (!(source + "").matches(FILTER_ASCII)) {
+                return "";
+            }
+
+            return null;
+        };
+        etAdvName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(10), filter});
 //        setDefault();
         return view;
     }

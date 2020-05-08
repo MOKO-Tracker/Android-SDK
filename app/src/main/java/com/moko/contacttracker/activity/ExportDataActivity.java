@@ -224,9 +224,9 @@ public class ExportDataActivity extends BaseActivity {
                                 }
 
                                 StringBuffer stringBuffer = new StringBuffer();
-                                for (int i = 0, l = macBytes.length; i < l; i++) {
+                                for (int i = macBytes.length - 1, l = 0; i >= l; i--) {
                                     stringBuffer.append(MokoUtils.byte2HexString(macBytes[i]));
-                                    if (i < (l - 1))
+                                    if (i > l)
                                         stringBuffer.append(":");
                                 }
                                 String mac = stringBuffer.toString();
@@ -269,7 +269,7 @@ public class ExportDataActivity extends BaseActivity {
 //                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 //                                @Override
 //                                public void onClick(DialogInterface dialog, int which) {
-                                    finish();
+                            finish();
 //                                }
 //                            });
 //                            builder.show();

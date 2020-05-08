@@ -53,7 +53,7 @@
 
             <SeekBar
                 android:id="@+id/sb_sensitivity"
-                style="@style/CustomSeekbarStyle"
+                style="@style/SensitivitySeekbarStyle"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="20dp"

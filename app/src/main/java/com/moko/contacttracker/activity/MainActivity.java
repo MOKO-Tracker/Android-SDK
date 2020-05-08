@@ -181,10 +181,10 @@ public class MainActivity extends BaseActivity implements MokoScanDeviceCallback
 
     @Override
     public void onScanDevice(DeviceInfo deviceInfo) {
-        BeaconInfo beaconInfos = beaconInfoParseable.parseDeviceInfo(deviceInfo);
-        if (beaconInfos == null)
+        BeaconInfo beaconInfo = beaconInfoParseable.parseDeviceInfo(deviceInfo);
+        if (beaconInfo == null)
             return;
-        beaconInfoHashMap.put(beaconInfos.mac, beaconInfos);
+        beaconInfoHashMap.put(beaconInfo.mac, beaconInfo);
     }
 
     @Override

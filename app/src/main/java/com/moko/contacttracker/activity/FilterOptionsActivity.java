@@ -1,12 +1,10 @@
 package com.moko.contacttracker.activity;
 
 
-import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -14,6 +12,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.constraint.ConstraintLayout;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
@@ -52,7 +51,7 @@ import butterknife.OnClick;
 public class FilterOptionsActivity extends BaseActivity implements SeekBar.OnSeekBarChangeListener {
 
     public static final String UUID_PATTERN = "[A-Fa-f0-9]{8}-(?:[A-Fa-f0-9]{4}-){3}[A-Fa-f0-9]{12}";
-    //    private final String FILTER_ASCII = "\\A\\p{ASCII}*\\z";
+    private final String FILTER_ASCII = "\\A\\p{ASCII}*\\z";
     @Bind(R.id.sb_rssi_filter)
     SeekBar sbRssiFilter;
     @Bind(R.id.tv_rssi_filter_value)
@@ -141,14 +140,14 @@ public class FilterOptionsActivity extends BaseActivity implements SeekBar.OnSee
                 }
             }
         });
-//        InputFilter filter = (source, start, end, dest, dstart, dend) -> {
-//            if (!(source + "").matches(FILTER_ASCII)) {
-//                return "";
-//            }
-//
-//            return null;
-//        };
-//        etAdvName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(10), filter});
+        InputFilter filter = (source, start, end, dest, dstart, dend) -> {
+            if (!(source + "").matches(FILTER_ASCII)) {
+                return "";
+            }
+
+            return null;
+        };
+        etAdvName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(10), filter});
         Intent intent = new Intent(this, MokoService.class);
         bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
         EventBus.getDefault().register(this);
@@ -248,7 +247,7 @@ public class FilterOptionsActivity extends BaseActivity implements SeekBar.OnSee
                                     case GET_FILTER_ENABLE:
                                         if (length == 1) {
                                             final int enable = value[4] & 0xFF;
-                                            advDataFilterEnable = enable == 1;
+                                            advDataFilterEnable = enable == 0;
                                             ivAdvDataFilter.setImageResource(advDataFilterEnable ? R.drawable.ic_checked : R.drawable.ic_unchecked);
                                             clAdvDataFilter.setVisibility(advDataFilterEnable ? View.VISIBLE : View.GONE);
                                         }
@@ -375,8 +374,8 @@ public class FilterOptionsActivity extends BaseActivity implements SeekBar.OnSee
 //                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 //                                @Override
 //                                public void onClick(DialogInterface dialog, int which) {
-                                    FilterOptionsActivity.this.setResult(RESULT_OK);
-                                    finish();
+                            FilterOptionsActivity.this.setResult(RESULT_OK);
+                            finish();
 //                                }
 //                            });
 //                            builder.show();
@@ -495,9 +494,9 @@ public class FilterOptionsActivity extends BaseActivity implements SeekBar.OnSee
             orderTasks.add(mMokoService.setFilterMajor(filterMajorEnable ? major : ""));
             orderTasks.add(mMokoService.setFilterMinor(filterMinorEnable ? minor : ""));
             orderTasks.add(mMokoService.setFilterAdvRawData(filterRawAdvDataEnable ? rawData : ""));
-            orderTasks.add(mMokoService.setFilterEnable(1));
-        } else {
             orderTasks.add(mMokoService.setFilterEnable(0));
+        } else {
+            orderTasks.add(mMokoService.setFilterEnable(1));
         }
 
         MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
@@ -510,6 +509,9 @@ public class FilterOptionsActivity extends BaseActivity implements SeekBar.OnSee
         final String major = etIbeaconMajor.getText().toString();
         final String minor = etIbeaconMinor.getText().toString();
         final String rawData = etRawAdvData.getText().toString();
+        if (!advDataFilterEnable) {
+            return true;
+        }
         if (filterMacEnable) {
             if (TextUtils.isEmpty(mac))
                 return false;
