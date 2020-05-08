@@ -124,6 +124,7 @@ public class SettingFragment extends Fragment {
 
     private void showTriggerSensitivityDialog() {
         final TriggerSensitivityDialog dialog = new TriggerSensitivityDialog(getActivity());
+        dialog.setData(sensitivityStr);
         dialog.setOnSensitivityClicked(sensitivity -> activity.setSensitivity(sensitivity));
         dialog.show();
     }
@@ -219,10 +220,12 @@ public class SettingFragment extends Fragment {
         dialog.show(activity.getSupportFragmentManager());
     }
 
+    private String sensitivityStr;
 
     public void setSensitivity(int sensitivity) {
-        tvTriggerSensitivity.setText(getString(R.string.trigger_sensitivity, sensitivity));
-        tvTriggerSensitivity.setTag(String.valueOf(sensitivity));
+        sensitivityStr = String.valueOf(sensitivity);
+        int value = 248 - (sensitivity - 7);
+        tvTriggerSensitivity.setText(getString(R.string.trigger_sensitivity, value));
     }
 
     private boolean scannerState;

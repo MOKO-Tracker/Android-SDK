@@ -91,13 +91,8 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     private ScannerFragment scannerFragment;
     private SettingFragment settingFragment;
     private DeviceFragment deviceFragment;
-    //    public String mPassword;
     public String mDeviceMac;
     public String mDeviceName;
-    //    private boolean mIsClose;
-//    private ValidParams validParams;
-//    private int validCount;
-//    private int lockState;
     public MokoService mMokoService;
     private boolean mReceiverTag = false;
     private int disConnectType;
@@ -107,17 +102,11 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_info);
         ButterKnife.bind(this);
-//        validParams = new ValidParams();
-//        mPassword = getIntent().getStringExtra(AppConstants.EXTRA_KEY_PASSWORD);
         fragmentManager = getFragmentManager();
         initFragment();
 
         Intent intent = new Intent(this, MokoService.class);
         bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
-
-//        showDeviceFragment();
-//        showSettingFragment();
-//        showSlotFragment();
         radioBtnAdv.setChecked(true);
         tvTitle.setText(R.string.title_advertiser);
         rgOptions.setOnCheckedChangeListener(this);
@@ -214,21 +203,9 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
             @Override
             public void run() {
                 if (MokoConstants.ACTION_CONN_STATUS_DISCONNECTED.equals(action)) {
-                    // 设备断开，通知页面更新
-//                    if (mIsClose) {
-//                        return;
-//                    }
                     showDisconnectDialog();
                 }
                 if (MokoConstants.ACTION_DISCOVER_SUCCESS.equals(action)) {
-                    // 设备连接成功，通知页面更新
-//                    showSyncingProgressDialog();
-//                    mMokoService.mHandler.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            MokoSupport.getInstance().sendOrder(mMokoService.getLockState());
-//                        }
-//                    }, 1000);
                 }
             }
         });
@@ -282,7 +259,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
             if (MokoSupport.getInstance().isBluetoothOpen() && !isUpgrade) {
                 AlertMessageDialog dialog = new AlertMessageDialog();
                 dialog.setTitle("Dismiss");
-                dialog.setMessage("The device disconnected!");
+                dialog.setMessage("The Beacon disconnected!");
                 dialog.setConfirm("Exit");
                 dialog.setCancelGone();
                 dialog.setOnAlertConfirmListener(() -> {
@@ -293,33 +270,6 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
             }
         }
     }
-
-//    public void getSlotType() {
-//        if (mMokoService == null) {
-//            return;
-//        }
-//        showSyncingProgressDialog();
-//        tvTitle.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                MokoSupport.getInstance().sendOrder(mMokoService.getSlotType());
-//            }
-//        }, 2000);
-//    }
-//
-//    private void getDeviceInfo() {
-//        if (mMokoService == null) {
-//            return;
-//        }
-//        showSyncingProgressDialog();
-//        validParams.reset();
-//        MokoSupport.getInstance().sendOrder(mMokoService.getDeviceMac(),
-//                mMokoService.getConnectable(),
-//                mMokoService.getManufacturer(), mMokoService.getDeviceModel(),
-//                mMokoService.getProductDate(), mMokoService.getHardwareVersion(),
-//                mMokoService.getFirmwareVersion(), mMokoService.getSoftwareVersion(),
-//                mMokoService.getBattery(), mMokoService.getLockState());
-//    }
 
     private String unLockResponse;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -357,12 +307,6 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                 }
                 if (MokoConstants.ACTION_ORDER_FINISH.equals(action)) {
                     dismissSyncProgressDialog();
-//                    if (validParams.isEmpty() && validCount < 2) {
-//                        validCount++;
-//                        getDeviceInfo();
-//                    } else {
-//                        validCount = 0;
-//                    }
                 }
                 if (MokoConstants.ACTION_ORDER_RESULT.equals(action)) {
                     OrderTaskResponse response = (OrderTaskResponse) intent.getSerializableExtra(MokoConstants.EXTRA_KEY_RESPONSE_ORDER_TASK);
@@ -509,161 +453,11 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                                             dialog.show(getSupportFragmentManager());
                                         }
                                         break;
-//                                    case GET_DEVICE_MAC:
-//                                        if (value.length >= 10) {
-//                                            String valueStr = MokoUtils.bytesToHexString(value);
-//                                            String mac = valueStr.substring(valueStr.length() - 12).toUpperCase();
-//                                            String macShow = String.format("%s:%s:%s:%s:%s:%s", mac.substring(0, 2), mac.substring(2, 4), mac.substring(4, 6), mac.substring(6, 8), mac.substring(8, 10), mac.substring(10, 12));
-//                                            deviceFragment.setDeviceMac(macShow);
-//                                            mDeviceMac = macShow;
-//                                            validParams.mac = macShow;
-//                                        }
-//                                        break;
-//                                    case GET_CONNECTABLE:
-//                                        if (value.length >= 5) {
-//                                            settingFragment.setConnectable(value);
-//                                            validParams.connectable = MokoUtils.byte2HexString(value[4]);
-//                                        }
-//                                        break;
-//                                    case GET_IBEACON_UUID:
-//                                        if (value.length >= 20) {
-//                                            slotFragment.setiBeaconUUID(value);
-//                                        }
-//                                        break;
-//                                    case GET_IBEACON_INFO:
-//                                        if (value.length >= 9) {
-//                                            slotFragment.setiBeaconInfo(value);
-//                                        }
-//                                        break;
-//                                    case SET_CLOSE:
-//                                        if ("eb260000".equals(MokoUtils.bytesToHexString(value).toLowerCase())) {
-//                                            ToastUtils.showToast(DeviceInfoActivity.this, "Success!");
-//                                            settingFragment.setClose();
-//                                            back();
-//                                        }
-//                                        break;
-//                                    case GET_TRIGGER_DATA:
-//                                        if (value.length >= 4) {
-//                                            slotFragment.setTriggerData(value);
-//                                        }
-//                                        break;
                                 }
                             }
                             break;
-//                        case manufacturer:
-//                            deviceFragment.setManufacturer(value);
-//                            validParams.manufacture = "1";
-//                            break;
-//                        case deviceModel:
-//                            deviceFragment.setDeviceModel(value);
-//                            validParams.productModel = "1";
-//                            break;
-//                        case productDate:
-//                            deviceFragment.setProductDate(value);
-//                            validParams.manufactureDate = "1";
-//                            break;
-//                        case hardwareVersion:
-//                            deviceFragment.setHardwareVersion(value);
-//                            validParams.hardwareVersion = "1";
-//                            break;
-//                        case firmwareVersion:
-//                            deviceFragment.setFirmwareVersion(value);
-//                            validParams.firmwareVersion = "1";
-//                            break;
-//                        case softwareVersion:
-//                            deviceFragment.setSoftwareVersion(value);
-//                            validParams.softwareVersion = "1";
-//                            break;
-//                        case battery:
-//                            deviceFragment.setBattery(value);
-//                            validParams.battery = "1";
-//                            break;
-//                        case advSlotData:
-//                            if (value.length >= 1) {
-//                                slotFragment.setSlotData(value);
-//                            }
-//                            break;
-//                        case radioTxPower:
-//                            if (value.length >= 1) {
-//                                slotFragment.setTxPower(value);
-//                            }
-//                            break;
-//                        case advInterval:
-//                            if (value.length >= 2) {
-//                                slotFragment.setAdvInterval(value);
-//                            }
-//                            break;
-//                        case advTxPower:
-//                            if (value.length >= 1) {
-//                                slotFragment.setAdvTxPower(value);
-//                            }
-//                            break;
-//                        case lockState:
-//                            String valueStr = MokoUtils.bytesToHexString(value);
-//                            if (responseType == OrderTask.RESPONSE_TYPE_WRITE) {
-//                                if ("eb63000100".equals(valueStr.toLowerCase())) {
-//                                    // 设备上锁
-//                                    if (isModifyPassword) {
-//                                        isModifyPassword = false;
-//                                        dismissSyncProgressDialog();
-//                                        AlertMessageDialog dialog = new AlertMessageDialog();
-//                                        dialog.setMessage("Password changed successfully! Please reconnect the Device.");
-//                                        dialog.setCancelGone();
-//                                        dialog.setOnAlertConfirmListener(new AlertMessageDialog.OnAlertConfirmListener() {
-//                                            @Override
-//                                            public void onClick() {
-//                                                DeviceInfoActivity.this.setResult(DeviceInfoActivity.this.RESULT_OK);
-//                                                back();
-//                                            }
-//                                        });
-//                                        dialog.show(getSupportFragmentManager());
-//                                    }
-//                                }
-//                            }
-//                            if (responseType == OrderTask.RESPONSE_TYPE_READ) {
-//                                if ("01".equals(valueStr.toLowerCase())) {
-//                                    lockState = 1;
-//                                    settingFragment.setNoPassword(false);
-//                                } else if ("02".equals(valueStr.toLowerCase())) {
-//                                    lockState = 2;
-//                                    settingFragment.setNoPassword(true);
-//                                }
-//                                settingFragment.setModifyPasswordVisiable(!TextUtils.isEmpty(mPassword));
-//                            }
-//                            break;
-//                        case unLock:
-//                            if (responseType == OrderTask.RESPONSE_TYPE_READ) {
-//                                unLockResponse = MokoUtils.bytesToHexString(value);
-//                                LogModule.i("返回的随机数：" + unLockResponse);
-//                                MokoSupport.getInstance().sendOrder(mMokoService.setConfigNotify(), mMokoService.setUnLock(mPassword, value));
-//                            }
-//                            if (responseType == OrderTask.RESPONSE_TYPE_WRITE) {
-//                                MokoSupport.getInstance().sendOrder(mMokoService.getLockState());
-//                            }
-//                            break;
-//                        case resetDevice:
-//                            if (lockState == 2) {
-//                                ToastUtils.showToast(DeviceInfoActivity.this, "Communication Timeout!");
-//                            } else {
-//                                ToastUtils.showToast(DeviceInfoActivity.this, "Reset successfully!");
-//                            }
-//                            break;
                     }
                 }
-
-//                if (MokoConstants.ACTION_RESPONSE_NOTIFY.equals(action)) {
-//                    OrderType orderType = (OrderType) intent.getSerializableExtra(MokoConstants.EXTRA_KEY_RESPONSE_ORDER_TYPE);
-//                    byte[] value = intent.getByteArrayExtra(MokoConstants.EXTRA_KEY_RESPONSE_VALUE);
-//                    switch (orderType) {
-//                        case notifyConfig:
-//                            String valueHexStr = MokoUtils.bytesToHexString(value);
-//                            if ("eb63000100".equals(valueHexStr.toLowerCase())) {
-//                                ToastUtils.showToast(DeviceInfoActivity.this, "Device Locked!");
-//                                back();
-//                            }
-//                            break;
-//                    }
-//                }
                 if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                     int blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0);
                     switch (blueState) {
@@ -682,18 +476,6 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                             });
                             builder.show();
                             break;
-//                        case BluetoothAdapter.STATE_TURNING_ON:
-//                            if (mMokoService == null) {
-//                                return;
-//                            }
-//                            showSyncingProgressDialog();
-//                            MokoSupport.getInstance().sendOrder(mMokoService.getSlotType(),
-//                                    mMokoService.getDeviceMac(), mMokoService.getConnectable(),
-//                                    mMokoService.getManufacturer(), mMokoService.getDeviceModel(),
-//                                    mMokoService.getProductDate(), mMokoService.getHardwareVersion(),
-//                                    mMokoService.getFirmwareVersion(), mMokoService.getSoftwareVersion(),
-//                                    mMokoService.getBattery());
-//                            break;
 
                     }
                 }

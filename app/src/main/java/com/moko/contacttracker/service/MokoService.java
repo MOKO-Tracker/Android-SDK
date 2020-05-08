@@ -13,6 +13,7 @@ import com.moko.support.entity.ConfigKeyEnum;
 import com.moko.support.entity.OrderType;
 import com.moko.support.handler.BaseMessageHandler;
 import com.moko.support.log.LogModule;
+import com.moko.support.task.CloseNotifyTask;
 import com.moko.support.task.GetAdvIntervalTask;
 import com.moko.support.task.GetBatteryTask;
 import com.moko.support.task.GetConnectionModeTask;
@@ -498,6 +499,12 @@ public class MokoService extends Service implements MokoOrderTaskCallback {
         return task;
     }
 
+    public OrderTask deleteTrackedData() {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setData(ConfigKeyEnum.DELETE_STORE_DATA);
+        return task;
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // NOTIFY
     ///////////////////////////////////////////////////////////////////////////
@@ -513,6 +520,16 @@ public class MokoService extends Service implements MokoOrderTaskCallback {
 
     public OrderTask openPasswordNotify() {
         OpenNotifyTask task = new OpenNotifyTask(OrderType.PASSWORD, this);
+        return task;
+    }
+
+    public OrderTask openTrackedNotify() {
+        OpenNotifyTask task = new OpenNotifyTask(OrderType.STORE_DATA_NOTIFY, this);
+        return task;
+    }
+
+    public OrderTask closeTrackedNotify() {
+        CloseNotifyTask task = new CloseNotifyTask(OrderType.STORE_DATA_NOTIFY, this);
         return task;
     }
 }

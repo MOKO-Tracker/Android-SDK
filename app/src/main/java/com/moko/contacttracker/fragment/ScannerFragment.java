@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.moko.contacttracker.R;
 import com.moko.contacttracker.activity.DeviceInfoActivity;
+import com.moko.contacttracker.activity.ExportDataActivity;
 import com.moko.contacttracker.activity.FilterOptionsActivity;
 import com.moko.contacttracker.service.MokoService;
 import com.moko.support.MokoSupport;
@@ -146,7 +147,7 @@ public class ScannerFragment extends Fragment implements SeekBar.OnSeekBarChange
                 startActivity(new Intent(getActivity(), FilterOptionsActivity.class));
                 break;
             case R.id.tv_tracked_data:
-                // TODO: 2020/5/4 跳转追踪数据
+                startActivity(new Intent(getActivity(), ExportDataActivity.class));
                 break;
         }
     }

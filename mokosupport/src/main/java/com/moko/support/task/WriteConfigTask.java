@@ -42,9 +42,10 @@ public class WriteConfigTask extends OrderTask {
             case GET_MOVE_SENSITIVE:
             case GET_FILTER_MAC:
             case GET_FILTER_NAME:
+            case GET_FILTER_UUID:
+            case GET_FILTER_MAJOR:
+            case GET_FILTER_MINOR:
             case GET_FILTER_ADV_RAW_DATA:
-            case GET_FILTER_IBEACON:
-            case GET_FILTER_UID:
             case GET_FILTER_ENABLE:
                 createGetConfigData(key.getConfigKey());
                 break;
@@ -236,81 +237,81 @@ public class WriteConfigTask extends OrderTask {
         }
     }
 
-    public void setFilteriBeacon(String uuid, String major, String minor) {
-        data = new byte[27];
-        data[0] = (byte) 0xEA;
-        data[1] = (byte) ConfigKeyEnum.SET_FILTER_IBEACON.getConfigKey();
-        data[2] = (byte) 0x00;
-        data[3] = (byte) 0x17;
-        if (!TextUtils.isEmpty(uuid)) {
-            byte[] uuidBytes = MokoUtils.hex2bytes(uuid);
-            int length = uuidBytes.length;
-            data[4] = (byte) 0x01;
-            for (int i = 0; i < length; i++) {
-                data[5 + i] = uuidBytes[i];
-            }
-        } else {
-            for (int i = 0; i < 17; i++) {
-                data[4 + i] = (byte) 0x00;
-            }
-        }
-        if (!TextUtils.isEmpty(major)) {
-            byte[] majorBytes = MokoUtils.hex2bytes(major);
-            int length = majorBytes.length;
-            data[21] = (byte) 0x01;
-            for (int i = 0; i < length; i++) {
-                data[22 + i] = majorBytes[i];
-            }
-        } else {
-            for (int i = 0; i < 3; i++) {
-                data[21 + i] = (byte) 0x00;
-            }
-        }
-        if (!TextUtils.isEmpty(minor)) {
-            byte[] minorBytes = MokoUtils.hex2bytes(minor);
-            int length = minorBytes.length;
-            data[24] = (byte) 0x01;
-            for (int i = 0; i < length; i++) {
-                data[25 + i] = minorBytes[i];
-            }
-        } else {
-            for (int i = 0; i < 3; i++) {
-                data[24 + i] = (byte) 0x00;
-            }
-        }
-    }
+//    public void setFilteriBeacon(String uuid, String major, String minor) {
+//        data = new byte[27];
+//        data[0] = (byte) 0xEA;
+//        data[1] = (byte) ConfigKeyEnum.SET_FILTER_IBEACON.getConfigKey();
+//        data[2] = (byte) 0x00;
+//        data[3] = (byte) 0x17;
+//        if (!TextUtils.isEmpty(uuid)) {
+//            byte[] uuidBytes = MokoUtils.hex2bytes(uuid);
+//            int length = uuidBytes.length;
+//            data[4] = (byte) 0x01;
+//            for (int i = 0; i < length; i++) {
+//                data[5 + i] = uuidBytes[i];
+//            }
+//        } else {
+//            for (int i = 0; i < 17; i++) {
+//                data[4 + i] = (byte) 0x00;
+//            }
+//        }
+//        if (!TextUtils.isEmpty(major)) {
+//            byte[] majorBytes = MokoUtils.hex2bytes(major);
+//            int length = majorBytes.length;
+//            data[21] = (byte) 0x01;
+//            for (int i = 0; i < length; i++) {
+//                data[22 + i] = majorBytes[i];
+//            }
+//        } else {
+//            for (int i = 0; i < 3; i++) {
+//                data[21 + i] = (byte) 0x00;
+//            }
+//        }
+//        if (!TextUtils.isEmpty(minor)) {
+//            byte[] minorBytes = MokoUtils.hex2bytes(minor);
+//            int length = minorBytes.length;
+//            data[24] = (byte) 0x01;
+//            for (int i = 0; i < length; i++) {
+//                data[25 + i] = minorBytes[i];
+//            }
+//        } else {
+//            for (int i = 0; i < 3; i++) {
+//                data[24 + i] = (byte) 0x00;
+//            }
+//        }
+//    }
 
-    public void setFilterUid(String instanceId, String namespace) {
-        data = new byte[22];
-        data[0] = (byte) 0xEA;
-        data[1] = (byte) ConfigKeyEnum.SET_FILTER_UID.getConfigKey();
-        data[2] = (byte) 0x00;
-        data[3] = (byte) 0x12;
-        if (!TextUtils.isEmpty(instanceId)) {
-            byte[] instanceIdBytes = MokoUtils.hex2bytes(instanceId);
-            int length = instanceIdBytes.length;
-            data[4] = (byte) 0x01;
-            for (int i = 0; i < length; i++) {
-                data[5 + i] = instanceIdBytes[i];
-            }
-        } else {
-            for (int i = 0; i < 11; i++) {
-                data[4 + i] = (byte) 0x00;
-            }
-        }
-        if (!TextUtils.isEmpty(namespace)) {
-            byte[] namespaceBytes = MokoUtils.hex2bytes(namespace);
-            int length = namespaceBytes.length;
-            data[15] = (byte) 0x01;
-            for (int i = 0; i < length; i++) {
-                data[16 + i] = namespaceBytes[i];
-            }
-        } else {
-            for (int i = 0; i < 7; i++) {
-                data[15 + i] = (byte) 0x00;
-            }
-        }
-    }
+//    public void setFilterUid(String instanceId, String namespace) {
+//        data = new byte[22];
+//        data[0] = (byte) 0xEA;
+//        data[1] = (byte) ConfigKeyEnum.SET_FILTER_UID.getConfigKey();
+//        data[2] = (byte) 0x00;
+//        data[3] = (byte) 0x12;
+//        if (!TextUtils.isEmpty(instanceId)) {
+//            byte[] instanceIdBytes = MokoUtils.hex2bytes(instanceId);
+//            int length = instanceIdBytes.length;
+//            data[4] = (byte) 0x01;
+//            for (int i = 0; i < length; i++) {
+//                data[5 + i] = instanceIdBytes[i];
+//            }
+//        } else {
+//            for (int i = 0; i < 11; i++) {
+//                data[4 + i] = (byte) 0x00;
+//            }
+//        }
+//        if (!TextUtils.isEmpty(namespace)) {
+//            byte[] namespaceBytes = MokoUtils.hex2bytes(namespace);
+//            int length = namespaceBytes.length;
+//            data[15] = (byte) 0x01;
+//            for (int i = 0; i < length; i++) {
+//                data[16 + i] = namespaceBytes[i];
+//            }
+//        } else {
+//            for (int i = 0; i < 7; i++) {
+//                data[15 + i] = (byte) 0x00;
+//            }
+//        }
+//    }
 
     public void setFilterEnable(int enable) {
         data = new byte[5];

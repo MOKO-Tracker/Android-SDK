@@ -8,6 +8,7 @@ public class AppConstants {
     public static final String PATTERN_MM_DD = "MM/dd";
     public static final String PATTERN_MM_DD_2 = "MM-dd";
     public static final String PATTERN_YYYY_MM_DD_HH_MM = "yyyy-MM-dd HH:mm";
+    public static final String PATTERN_YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
     // action
     // sp
     public static final String SP_NAME = "sp_name_beacon";

@@ -106,7 +106,7 @@ public class AdvFragment extends Fragment implements SeekBar.OnSeekBarChangeList
 
             @Override
             public void afterTextChanged(Editable s) {
-                String input = s.toString().toUpperCase();
+                String input = s.toString();
                 if (!pattern.matcher(input).matches()) {
                     if (input.length() == 9 && !input.endsWith("-")) {
                         String show = input.substring(0, 8) + "-" + input.substring(8, input.length());

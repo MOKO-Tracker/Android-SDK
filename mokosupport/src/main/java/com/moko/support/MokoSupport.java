@@ -217,14 +217,6 @@ public class MokoSupport implements MokoResponseCallback {
                     LogModule.i("start connect");
                     mokoBleManager.connect(device)
                             .retry(3, 100)
-                            .fail(new FailCallback() {
-                                @Override
-                                public void onRequestFailed(@NonNull BluetoothDevice device, int status) {
-                                    ConnectStatusEvent connectStatusEvent = new ConnectStatusEvent();
-                                    connectStatusEvent.setAction(MokoConstants.ACTION_CONN_STATUS_DISCONNECTED);
-                                    EventBus.getDefault().post(connectStatusEvent);
-                                }
-                            })
                             .enqueue();
                 }
             });
@@ -424,6 +416,9 @@ public class MokoSupport implements MokoResponseCallback {
             if (characteristic.getUuid().toString().equals(OrderType.DISCONNECTED_NOTIFY.getUuid())) {
                 orderType = OrderType.DISCONNECTED_NOTIFY;
             }
+            if (characteristic.getUuid().toString().equals(OrderType.STORE_DATA_NOTIFY.getUuid())) {
+                orderType = OrderType.STORE_DATA_NOTIFY;
+            }
             if (orderType != null) {
                 LogModule.i(orderType.getName());
                 Intent intent = new Intent(MokoConstants.ACTION_CURRENT_DATA);
@@ -451,7 +446,12 @@ public class MokoSupport implements MokoResponseCallback {
             return;
         }
         OrderTask orderTask = mQueue.peek();
-        if (value != null && value.length > 0 && orderTask.response.responseType == OrderTask.RESPONSE_TYPE_WRITE) {
+        if (value != null && value.length > 0
+                && orderTask.response.responseType == OrderTask.RESPONSE_TYPE_WRITE) {
+            String assembleValue = MokoUtils.bytesToHexString(orderTask.assemble());
+            String valueStr = MokoUtils.bytesToHexString(value);
+            if (!assembleValue.equals(valueStr))
+                return;
             switch (orderTask.orderType) {
                 case UUID:
                 case MAJOR:

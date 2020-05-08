@@ -116,7 +116,7 @@ public class FilterOptionsActivity extends BaseActivity implements SeekBar.OnSee
 
             @Override
             public void afterTextChanged(Editable s) {
-                String input = s.toString().toUpperCase();
+                String input = s.toString();
                 if (!pattern.matcher(input).matches()) {
                     if (input.length() == 9 && !input.endsWith("-")) {
                         String show = input.substring(0, 8) + "-" + input.substring(8, input.length());
@@ -165,7 +165,6 @@ public class FilterOptionsActivity extends BaseActivity implements SeekBar.OnSee
             filter.addAction(MokoConstants.ACTION_ORDER_RESULT);
             filter.addAction(MokoConstants.ACTION_ORDER_TIMEOUT);
             filter.addAction(MokoConstants.ACTION_ORDER_FINISH);
-            filter.addAction(MokoConstants.ACTION_CURRENT_DATA);
             filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
             filter.setPriority(300);
             registerReceiver(mReceiver, filter);
@@ -369,18 +368,18 @@ public class FilterOptionsActivity extends BaseActivity implements SeekBar.OnSee
                     switch (blueState) {
                         case BluetoothAdapter.STATE_TURNING_OFF:
                             dismissSyncProgressDialog();
-                            AlertDialog.Builder builder = new AlertDialog.Builder(FilterOptionsActivity.this);
-                            builder.setTitle("Dismiss");
-                            builder.setCancelable(false);
-                            builder.setMessage("The current system of bluetooth is not available!");
-                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
+//                            AlertDialog.Builder builder = new AlertDialog.Builder(FilterOptionsActivity.this);
+//                            builder.setTitle("Dismiss");
+//                            builder.setCancelable(false);
+//                            builder.setMessage("The current system of bluetooth is not available!");
+//                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
                                     FilterOptionsActivity.this.setResult(RESULT_OK);
                                     finish();
-                                }
-                            });
-                            builder.show();
+//                                }
+//                            });
+//                            builder.show();
                             break;
                     }
                 }
