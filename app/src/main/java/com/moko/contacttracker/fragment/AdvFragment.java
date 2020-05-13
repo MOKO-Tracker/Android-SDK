@@ -125,6 +125,15 @@ public class AdvFragment extends Fragment implements SeekBar.OnSeekBarChangeList
                         etUuid.setText(show);
                         etUuid.setSelection(show.length());
                     }
+                    if (input.length() == 32 && input.indexOf("-") < 0) {
+                        StringBuilder stringBuilder = new StringBuilder(input);
+                        stringBuilder.insert(8, "-");
+                        stringBuilder.insert(13, "-");
+                        stringBuilder.insert(18, "-");
+                        stringBuilder.insert(23, "-");
+                        etUuid.setText(stringBuilder.toString());
+                        etUuid.setSelection(stringBuilder.toString().length());
+                    }
                 }
             }
         });

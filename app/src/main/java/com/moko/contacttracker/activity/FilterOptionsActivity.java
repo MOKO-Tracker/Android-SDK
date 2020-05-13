@@ -137,6 +137,15 @@ public class FilterOptionsActivity extends BaseActivity implements SeekBar.OnSee
                         etIbeaconUuid.setText(show);
                         etIbeaconUuid.setSelection(show.length());
                     }
+                    if (input.length() == 32 && input.indexOf("-") < 0) {
+                        StringBuilder stringBuilder = new StringBuilder(input);
+                        stringBuilder.insert(8, "-");
+                        stringBuilder.insert(13, "-");
+                        stringBuilder.insert(18, "-");
+                        stringBuilder.insert(23, "-");
+                        etIbeaconUuid.setText(stringBuilder.toString());
+                        etIbeaconUuid.setSelection(stringBuilder.toString().length());
+                    }
                 }
             }
         });
@@ -303,7 +312,7 @@ public class FilterOptionsActivity extends BaseActivity implements SeekBar.OnSee
                                             if (length > 1) {
                                                 byte[] majorBytes = Arrays.copyOfRange(value, 4, 4 + length);
                                                 int major = MokoUtils.toInt(majorBytes);
-                                                etIbeaconUuid.setText(String.valueOf(major));
+                                                etIbeaconMajor.setText(String.valueOf(major));
                                             }
                                         }
                                         break;
@@ -485,14 +494,22 @@ public class FilterOptionsActivity extends BaseActivity implements SeekBar.OnSee
         final String major = etIbeaconMajor.getText().toString();
         final String minor = etIbeaconMinor.getText().toString();
         final String rawData = etRawAdvData.getText().toString();
+        String majorStr = "";
+        if (!TextUtils.isEmpty(major)) {
+            majorStr = String.format("%04x", Integer.parseInt(major));
+        }
+        String minorStr = "";
+        if (!TextUtils.isEmpty(minor)) {
+            minorStr = String.format("%04x", Integer.parseInt(minor));
+        }
 
         orderTasks.add(mMokoService.setFilterRssi(filterRssi));
         if (advDataFilterEnable) {
             orderTasks.add(mMokoService.setFilterMac(filterMacEnable ? mac : ""));
             orderTasks.add(mMokoService.setFilterName(filterNameEnable ? name : ""));
             orderTasks.add(mMokoService.setFilterUUID(filterUUIDEnable ? uuidStr : ""));
-            orderTasks.add(mMokoService.setFilterMajor(filterMajorEnable ? major : ""));
-            orderTasks.add(mMokoService.setFilterMinor(filterMinorEnable ? minor : ""));
+            orderTasks.add(mMokoService.setFilterMajor(filterMajorEnable ? majorStr : ""));
+            orderTasks.add(mMokoService.setFilterMinor(filterMinorEnable ? minorStr : ""));
             orderTasks.add(mMokoService.setFilterAdvRawData(filterRawAdvDataEnable ? rawData : ""));
             orderTasks.add(mMokoService.setFilterEnable(0));
         } else {
