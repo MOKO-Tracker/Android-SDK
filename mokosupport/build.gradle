@@ -21,7 +21,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api 'no.nordicsemi.android.support.v18:scanner:1.4.3'
     implementation 'com.elvishew:xlog:1.6.1'
-    api 'no.nordicsemi.android:dfu:1.8.0'
+    api 'no.nordicsemi.android:dfu:0.6.2'
     api 'org.greenrobot:eventbus:3.2.0'
     implementation 'no.nordicsemi.android:ble:2.0.5'
 }
