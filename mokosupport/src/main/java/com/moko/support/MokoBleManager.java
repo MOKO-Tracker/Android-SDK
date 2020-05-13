@@ -1,22 +1,41 @@
 package com.moko.support;
 
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
+import android.bluetooth.BluetoothGattService;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 
 import com.moko.support.callback.MokoResponseCallback;
+import com.moko.support.entity.OrderType;
 import com.moko.support.log.LogModule;
 import com.moko.support.utils.MokoUtils;
 
+import java.util.UUID;
+
 import no.nordicsemi.android.ble.BleManager;
 import no.nordicsemi.android.ble.BleManagerCallbacks;
+import no.nordicsemi.android.ble.ValueChangedCallback;
+import no.nordicsemi.android.ble.callback.DataReceivedCallback;
+import no.nordicsemi.android.ble.callback.SuccessCallback;
+import no.nordicsemi.android.ble.data.Data;
+import no.nordicsemi.android.ble.utils.ParserUtils;
 
 public class MokoBleManager extends BleManager<BleManagerCallbacks> {
 
     private MokoResponseCallback mMokoResponseCallback;
     private static MokoBleManager managerInstance = null;
+    private final static UUID SERVICE_UUID = UUID.fromString("0000FF00-0000-1000-8000-00805F9B34FB");
+    private final static UUID STORE_DATA_UUID = UUID.fromString("0000FF0E-0000-1000-8000-00805F9B34FB");
+
+    private Handler handler;
+
+    private BluetoothGattCharacteristic storeDataCharacteristic;
 
     public static synchronized MokoBleManager getMokoBleManager(final Context context) {
         if (managerInstance == null) {
@@ -32,6 +51,18 @@ public class MokoBleManager extends BleManager<BleManagerCallbacks> {
 
     public MokoBleManager(@NonNull Context context) {
         super(context);
+    }
+
+    public void setHandler(Handler handler) {
+        this.handler = handler;
+    }
+
+    private void runOnUiThread(@NonNull final Runnable runnable) {
+        if (Looper.myLooper() != Looper.getMainLooper()) {
+            handler.post(runnable);
+        } else {
+            runnable.run();
+        }
     }
 
     public void setBeaconResponseCallback(MokoResponseCallback mMokoResponseCallback) {
@@ -53,6 +84,10 @@ public class MokoBleManager extends BleManager<BleManagerCallbacks> {
 
         @Override
         protected boolean isRequiredServiceSupported(@NonNull BluetoothGatt gatt) {
+            final BluetoothGattService service = gatt.getService(SERVICE_UUID);
+            if (service != null) {
+                storeDataCharacteristic = service.getCharacteristic(STORE_DATA_UUID);
+            }
             return true;
         }
 
@@ -62,10 +97,14 @@ public class MokoBleManager extends BleManager<BleManagerCallbacks> {
         }
 
         @Override
-        protected void onCharacteristicNotified(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattCharacteristic characteristic) {
+        protected void onCharacteristicNotified(final @NonNull BluetoothGatt gatt, final @NonNull BluetoothGattCharacteristic characteristic) {
+            if (characteristic.getUuid().toString().equals(OrderType.STORE_DATA_NOTIFY.getUuid())) {
+                return;
+            }
             LogModule.e("onCharacteristicChanged");
             LogModule.e("device to app : " + MokoUtils.bytesToHexString(characteristic.getValue()));
             mMokoResponseCallback.onCharacteristicChanged(characteristic, characteristic.getValue());
+
         }
 
         @Override
@@ -93,4 +132,22 @@ public class MokoBleManager extends BleManager<BleManagerCallbacks> {
             mMokoResponseCallback.onBatteryValueReceived(gatt);
         }
     }
+
+    public void enableStoreDataNotify() {
+        setIndicationCallback(storeDataCharacteristic).with(new DataReceivedCallback() {
+            @Override
+            public void onDataReceived(@NonNull BluetoothDevice device, @NonNull Data data) {
+                final byte[] value = data.getValue();
+                LogModule.e("onDataReceived");
+                LogModule.e("device to app : " + MokoUtils.bytesToHexString(value));
+                mMokoResponseCallback.onCharacteristicChanged(storeDataCharacteristic, value);
+            }
+        });
+        enableNotifications(storeDataCharacteristic).enqueue();
+    }
+
+    public void disableStoreDataNotify() {
+        disableNotifications(storeDataCharacteristic).enqueue();
+    }
+
 }

@@ -1,18 +1,20 @@
 package com.moko.contacttracker.activity;
 
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,7 +27,9 @@ import android.widget.TextView;
 
 import com.moko.contacttracker.AppConstants;
 import com.moko.contacttracker.R;
+import com.moko.contacttracker.adapter.ExportDataListAdapter;
 import com.moko.contacttracker.dialog.AlertMessageDialog;
+import com.moko.contacttracker.entity.ExportData;
 import com.moko.contacttracker.service.MokoService;
 import com.moko.contacttracker.utils.ToastUtils;
 import com.moko.contacttracker.utils.Utils;
@@ -43,6 +47,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
@@ -58,17 +63,19 @@ public class ExportDataActivity extends BaseActivity {
     ImageView ivSync;
     @Bind(R.id.tv_export)
     TextView tvExport;
-    @Bind(R.id.ll_data)
-    LinearLayout llData;
     @Bind(R.id.tv_sync)
     TextView tvSync;
     @Bind(R.id.tv_empty)
     TextView tvEmpty;
+    @Bind(R.id.rv_export_data)
+    RecyclerView rvExportData;
 
     private boolean mReceiverTag = false;
-    private StringBuffer storeString = new StringBuffer();
+    private StringBuilder storeString = new StringBuilder();
+    private ArrayList<ExportData> exportDatas;
     private boolean mIsShown;
     private boolean isSync;
+    private ExportDataListAdapter adapter;
 
 
     @Override
@@ -79,7 +86,12 @@ public class ExportDataActivity extends BaseActivity {
 
         Intent intent = new Intent(this, MokoService.class);
         bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
-
+        exportDatas = new ArrayList<>();
+        adapter = new ExportDataListAdapter();
+        adapter.openLoadAnimation();
+        adapter.replaceData(exportDatas);
+        rvExportData.setLayoutManager(new LinearLayoutManager(this));
+        rvExportData.setAdapter(adapter);
         EventBus.getDefault().register(this);
     }
 
@@ -107,8 +119,9 @@ public class ExportDataActivity extends BaseActivity {
                     finish();
                     return;
                 }
-                showSyncingProgressDialog();
-                MokoSupport.getInstance().sendOrder(mMokoService.openTrackedNotify());
+//                showSyncingProgressDialog();
+//                MokoSupport.getInstance().sendOrder(mMokoService.openTrackedNotify());
+                MokoSupport.getInstance().enableStoreDataNotify();
                 Animation animation = AnimationUtils.loadAnimation(ExportDataActivity.this, R.anim.rotate_refresh);
                 ivSync.startAnimation(animation);
                 tvSync.setText("Stop");
@@ -168,11 +181,11 @@ public class ExportDataActivity extends BaseActivity {
                                 switch (configKeyEnum) {
                                     case DELETE_STORE_DATA:
                                         if (length == 0) {
-                                            storeString = new StringBuffer();
+                                            storeString = new StringBuilder();
                                             LogModule.writeTrackedFile("");
                                             mIsShown = false;
-                                            llData.removeAllViews();
-//                                            llData.setVisibility(View.GONE);
+                                            exportDatas.clear();
+                                            adapter.replaceData(exportDatas);
                                             tvExport.setEnabled(false);
                                             ToastUtils.showToast(ExportDataActivity.this, "Empty success!");
                                         } else {
@@ -193,7 +206,6 @@ public class ExportDataActivity extends BaseActivity {
                             if (!mIsShown) {
                                 mIsShown = true;
                                 tvExport.setEnabled(true);
-//                                llData.setVisibility(View.VISIBLE);
                             }
 
                             if (value.length >= 13) {
@@ -230,20 +242,16 @@ public class ExportDataActivity extends BaseActivity {
                                         stringBuffer.append(":");
                                 }
                                 String mac = stringBuffer.toString();
+                                ExportData exportData = new ExportData();
 
-                                View v = getLayoutInflater().inflate(R.layout.item_export_data, llData, false);
-                                TextView tvTime = ButterKnife.findById(v, R.id.tv_time);
-                                TextView tvMac = ButterKnife.findById(v, R.id.tv_mac);
-                                TextView tvRssi = ButterKnife.findById(v, R.id.tv_rssi);
-                                TextView tvRawData = ButterKnife.findById(v, R.id.tv_raw_data);
                                 String time = Utils.calendar2strDate(calendar, AppConstants.PATTERN_YYYY_MM_DD_HH_MM_SS);
-                                tvTime.setText(time);
+                                exportData.time = time;
+                                exportData.rssi = rssi;
+                                exportData.mac = mac;
+                                exportData.rawData = rawData;
+                                exportDatas.add(exportData);
+                                adapter.replaceData(exportDatas);
 
-                                tvMac.setText(mac);
-                                tvRssi.setText(rssiStr);
-
-                                tvRawData.setText(rawData);
-                                llData.addView(v);
                                 storeString.append(String.format("Time:%s", time));
                                 storeString.append("\n");
                                 storeString.append(String.format("Mac Address:%s", mac));
@@ -331,17 +339,18 @@ public class ExportDataActivity extends BaseActivity {
                 if (!isSync) {
                     isSync = true;
                     tvEmpty.setEnabled(false);
-                    showSyncingProgressDialog();
-                    MokoSupport.getInstance().sendOrder(mMokoService.openTrackedNotify());
+//                    showSyncingProgressDialog();
+//                    MokoSupport.getInstance().sendOrder(mMokoService.openTrackedNotify());
+                    MokoSupport.getInstance().enableStoreDataNotify();
                     Animation animation = AnimationUtils.loadAnimation(this, R.anim.rotate_refresh);
                     ivSync.startAnimation(animation);
                     tvSync.setText("Stop");
                 } else {
-                    showSyncingProgressDialog();
-                    MokoSupport.getInstance().sendOrder(mMokoService.closeTrackedNotify());
+//                    showSyncingProgressDialog();
+//                    MokoSupport.getInstance().sendOrder(mMokoService.closeTrackedNotify());
+                    MokoSupport.getInstance().disableStoreDataNotify();
                     isSync = false;
                     tvEmpty.setEnabled(true);
-                    tvExport.setEnabled(false);
                     ivSync.clearAnimation();
                     tvSync.setText("Sync");
                 }
@@ -373,7 +382,8 @@ public class ExportDataActivity extends BaseActivity {
 
     private void back() {
         // 关闭通知
-        MokoSupport.getInstance().sendOrder(mMokoService.closeTrackedNotify());
+//        MokoSupport.getInstance().sendOrder(mMokoService.closeTrackedNotify());
+        MokoSupport.getInstance().disableStoreDataNotify();
         finish();
     }
 

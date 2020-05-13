@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/grey_f2f2f2"
     android:orientation="vertical">
 
@@ -43,7 +44,7 @@
 
         <LinearLayout
             android:id="@+id/ll_sync"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical">
@@ -99,23 +100,14 @@
             android:textColor="@color/black_333333"
             android:textSize="15sp" />
 
-        <ScrollView
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_export_data"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/ll_sync"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
-            android:layout_weight="1.0">
-
-            <LinearLayout
-                android:id="@+id/ll_data"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="visible">
-
-            </LinearLayout>
-        </ScrollView>
+            tools:listitem="@layout/item_export_data"
+            android:layout_marginTop="5dp"/>
 
     </RelativeLayout>
 </LinearLayout>

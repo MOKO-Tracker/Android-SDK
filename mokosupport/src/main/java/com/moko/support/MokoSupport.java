@@ -549,4 +549,12 @@ public class MokoSupport implements MokoResponseCallback {
     public void timeoutHandler(OrderTask orderTask) {
         mHandler.postDelayed(orderTask.timeoutRunner, orderTask.delayTime);
     }
+
+    public void enableStoreDataNotify() {
+        mokoBleManager.enableStoreDataNotify();
+    }
+
+    public void disableStoreDataNotify(){
+        mokoBleManager.disableStoreDataNotify();
+    }
 }
