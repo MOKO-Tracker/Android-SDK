@@ -251,6 +251,8 @@ public class FilterOptionsActivity extends BaseActivity implements SeekBar.OnSee
                                             final int rssi = value[4];
                                             int progress = rssi + 127;
                                             sbRssiFilter.setProgress(progress);
+                                            tvRssiFilterValue.setText(String.format("%ddBm", rssi));
+                                            tvRssiFilterTips.setText(getString(R.string.rssi_filter, rssi));
                                         }
                                         break;
                                     case GET_FILTER_ENABLE:

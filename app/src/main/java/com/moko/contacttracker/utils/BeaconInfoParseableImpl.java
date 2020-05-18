@@ -60,8 +60,9 @@ public class BeaconInfoParseableImpl implements DeviceInfoParseable<BeaconInfo> 
                     minor = String.valueOf(MokoUtils.toInt(Arrays.copyOfRange(bytes, 2, 4)));
                     rssi_1m = bytes[4];
                     txPower = bytes[5];
-                    connectable = (bytes[6] >> 4) & 0x0f;
-                    track = bytes[6] & 0x0F;
+                    String binary = MokoUtils.hexString2binaryString(MokoUtils.byte2HexString(bytes[6]));
+                    connectable = Integer.parseInt(binary.substring(7));
+                    track = Integer.parseInt(binary.substring(6, 7));
                     battery = MokoUtils.toInt(Arrays.copyOfRange(bytes, 6, 8));
                 }
             } else {

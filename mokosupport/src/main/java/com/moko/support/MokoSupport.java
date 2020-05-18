@@ -554,7 +554,7 @@ public class MokoSupport implements MokoResponseCallback {
         mokoBleManager.enableStoreDataNotify();
     }
 
-    public void disableStoreDataNotify(){
+    public void disableStoreDataNotify() {
         mokoBleManager.disableStoreDataNotify();
     }
 }

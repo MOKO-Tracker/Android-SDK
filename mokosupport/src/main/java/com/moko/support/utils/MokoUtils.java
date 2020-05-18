@@ -28,7 +28,8 @@ public class MokoUtils {
      */
     public static double getDistance(int rssi, int acc) {
         int iRssi = Math.abs(rssi);
-        double power = (iRssi - acc) / (10 * n_Value);
+        int iAcc = Math.abs(acc);
+        double power = (iRssi - iAcc) / (10 * n_Value);
         return Math.pow(10, power);
     }
 
