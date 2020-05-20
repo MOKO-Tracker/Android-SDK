@@ -505,6 +505,12 @@ public class MokoService extends Service implements MokoOrderTaskCallback {
         return task;
     }
 
+    public OrderTask shake(){
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setData(ConfigKeyEnum.SHAKE);
+        return task;
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // NOTIFY
     ///////////////////////////////////////////////////////////////////////////

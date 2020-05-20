@@ -158,6 +158,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                 orderTasks.add(mMokoService.openDisconnectedNotify());
                 orderTasks.add(mMokoService.openWriteConfigNotify());
                 orderTasks.add(mMokoService.setTime());
+                orderTasks.add(mMokoService.shake());
                 // get adv params
                 orderTasks.add(mMokoService.getDeviceName());
                 orderTasks.add(mMokoService.getUUID());

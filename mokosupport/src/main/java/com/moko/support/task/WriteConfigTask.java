@@ -47,6 +47,7 @@ public class WriteConfigTask extends OrderTask {
             case GET_FILTER_MINOR:
             case GET_FILTER_ADV_RAW_DATA:
             case GET_FILTER_ENABLE:
+            case SHAKE:
                 createGetConfigData(key.getConfigKey());
                 break;
         }
