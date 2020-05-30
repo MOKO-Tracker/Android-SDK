@@ -39,7 +39,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import no.nordicsemi.android.ble.BleManagerCallbacks;
-import no.nordicsemi.android.ble.callback.FailCallback;
 import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat;
 import no.nordicsemi.android.support.v18.scanner.ScanFilter;
 import no.nordicsemi.android.support.v18.scanner.ScanSettings;
@@ -216,7 +215,8 @@ public class MokoSupport implements MokoResponseCallback {
                 public void run() {
                     LogModule.i("start connect");
                     mokoBleManager.connect(device)
-                            .retry(3, 100)
+                            .retry(5, 200)
+                            .timeout(50000)
                             .enqueue();
                 }
             });

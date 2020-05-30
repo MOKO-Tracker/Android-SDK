@@ -1,5 +1,7 @@
 package com.moko.support.task;
 
+import android.support.annotation.IntRange;
+
 import com.moko.support.callback.MokoOrderTaskCallback;
 import com.moko.support.entity.OrderType;
 
@@ -10,7 +12,7 @@ public class SetScanModeTask extends OrderTask {
         super(OrderType.SCAN_MODE, callback, OrderTask.RESPONSE_TYPE_WRITE);
     }
 
-    public void setData(int scanMode) {
+    public void setData(@IntRange(from = 0, to = 1) int scanMode) {
         this.data = new byte[1];
         data[0] = (byte) scanMode;
     }

@@ -1,5 +1,6 @@
 package com.moko.support.task;
 
+import android.support.annotation.IntRange;
 import android.text.TextUtils;
 
 import com.moko.support.callback.MokoOrderTaskCallback;
@@ -72,7 +73,7 @@ public class WriteConfigTask extends OrderTask {
         data[9] = macBytes[5];
     }
 
-    public void setAdvMoveCondition(int seconds) {
+    public void setAdvMoveCondition(@IntRange(from = 0, to = 65535) int seconds) {
         if (seconds == 0) {
             data = new byte[5];
             data[0] = (byte) 0xEA;
@@ -92,7 +93,7 @@ public class WriteConfigTask extends OrderTask {
         }
     }
 
-    public void setScanMoveCondition(int second) {
+    public void setScanMoveCondition(@IntRange(from = 0, to = 65535) int second) {
         if (second == 0) {
             data = new byte[5];
             data[0] = (byte) 0xEA;
@@ -112,7 +113,7 @@ public class WriteConfigTask extends OrderTask {
         }
     }
 
-    public void setStoreRssiCondition(int rssi) {
+    public void setStoreRssiCondition(@IntRange(from = -127, to = 0) int rssi) {
         data = new byte[5];
         data[0] = (byte) 0xEA;
         data[1] = (byte) ConfigKeyEnum.SET_STORE_RSSI_CONDITION.getConfigKey();
@@ -121,7 +122,7 @@ public class WriteConfigTask extends OrderTask {
         data[4] = (byte) rssi;
     }
 
-    public void setStoreTimeCondition(int minute) {
+    public void setStoreTimeCondition(@IntRange(from = 0, to = 255) int minute) {
         data = new byte[5];
         data[0] = (byte) 0xEA;
         data[1] = (byte) ConfigKeyEnum.SET_STORE_TIME_CONDITION.getConfigKey();
@@ -151,7 +152,7 @@ public class WriteConfigTask extends OrderTask {
         data[9] = (byte) second;
     }
 
-    public void setTriggerEnable(int enable) {
+    public void setTriggerEnable(@IntRange(from = 0, to = 1) int enable) {
         data = new byte[5];
         data[0] = (byte) 0xEA;
         data[1] = (byte) ConfigKeyEnum.SET_TRIGGER_ENABLE.getConfigKey();
@@ -160,7 +161,7 @@ public class WriteConfigTask extends OrderTask {
         data[4] = (byte) enable;
     }
 
-    public void setMoveSensitive(int sensitive) {
+    public void setMoveSensitive(@IntRange(from = 7, to = 255) int sensitive) {
         data = new byte[5];
         data[0] = (byte) 0xEA;
         data[1] = (byte) ConfigKeyEnum.SET_MOVE_SENSITIVE.getConfigKey();
@@ -314,7 +315,7 @@ public class WriteConfigTask extends OrderTask {
 //        }
 //    }
 
-    public void setFilterEnable(int enable) {
+    public void setFilterEnable(@IntRange(from = 0, to = 1) int enable) {
         data = new byte[5];
         data[0] = (byte) 0xEA;
         data[1] = (byte) ConfigKeyEnum.SET_FILTER_ENABLE.getConfigKey();

@@ -1,5 +1,7 @@
 package com.moko.support.task;
 
+import android.support.annotation.IntRange;
+
 import com.moko.support.callback.MokoOrderTaskCallback;
 import com.moko.support.entity.OrderType;
 import com.moko.support.utils.MokoUtils;
@@ -11,7 +13,7 @@ public class SetAdvIntervlTask extends OrderTask {
         super(OrderType.ADV_INTERVAL, callback, OrderTask.RESPONSE_TYPE_WRITE);
     }
 
-    public void setData(int advInterval) {
+    public void setData(@IntRange(from = 1, to = 100) int advInterval) {
         this.data = MokoUtils.toByteArray(advInterval, 1);
     }
 
