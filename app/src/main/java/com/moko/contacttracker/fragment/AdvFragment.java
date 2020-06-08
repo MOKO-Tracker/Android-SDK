@@ -275,7 +275,7 @@ public class AdvFragment extends Fragment implements SeekBar.OnSeekBarChangeList
         final String advTriggerStr = etAdvTrigger.getText().toString();
         if (TextUtils.isEmpty(advNameStr))
             return false;
-        if (TextUtils.isEmpty(advNameStr) || uuidStr.length() != 36)
+        if (TextUtils.isEmpty(uuidStr) || uuidStr.length() != 36)
             return false;
         if (TextUtils.isEmpty(majorStr))
             return false;
