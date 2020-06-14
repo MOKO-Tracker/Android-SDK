@@ -272,6 +272,12 @@ public class MokoService extends Service implements MokoOrderTaskCallback {
         return task;
     }
 
+    public OrderTask getScanStartTime() {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setData(ConfigKeyEnum.GET_SCAN_START_TIME);
+        return task;
+    }
+
     public OrderTask getButtonPower() {
         WriteConfigTask task = new WriteConfigTask(this);
         task.setData(ConfigKeyEnum.GET_TRIGGER_ENABLE);
@@ -442,6 +448,12 @@ public class MokoService extends Service implements MokoOrderTaskCallback {
     public WriteConfigTask setSensitivity(int sensitivity) {
         WriteConfigTask writeConfigTask = new WriteConfigTask(this);
         writeConfigTask.setMoveSensitive(sensitivity);
+        return writeConfigTask;
+    }
+
+    public WriteConfigTask setScanStartTime(int startTime) {
+        WriteConfigTask writeConfigTask = new WriteConfigTask(this);
+        writeConfigTask.setScanStartTime(startTime);
         return writeConfigTask;
     }
 

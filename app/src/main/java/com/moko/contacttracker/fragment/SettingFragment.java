@@ -14,6 +14,7 @@ import com.moko.contacttracker.activity.DeviceInfoActivity;
 import com.moko.contacttracker.dialog.AlertMessageDialog;
 import com.moko.contacttracker.dialog.ChangePasswordDialog;
 import com.moko.contacttracker.dialog.ResetDialog;
+import com.moko.contacttracker.dialog.ScanWindowDialog;
 import com.moko.contacttracker.dialog.TriggerSensitivityDialog;
 
 import java.util.Timer;
@@ -33,8 +34,8 @@ public class SettingFragment extends Fragment {
     TextView tvUpdateFirmware;
     @Bind(R.id.tv_trigger_sensitivity)
     TextView tvTriggerSensitivity;
-    @Bind(R.id.iv_beacon_scanner)
-    ImageView ivBeaconScanner;
+    @Bind(R.id.tv_scan_window)
+    TextView tvScanWindow;
     @Bind(R.id.iv_connectable)
     ImageView ivConnectable;
     @Bind(R.id.iv_button_power)
@@ -91,7 +92,7 @@ public class SettingFragment extends Fragment {
     }
 
     @OnClick({R.id.tv_change_password, R.id.tv_factory_reset, R.id.tv_update_firmware,
-            R.id.tv_trigger_sensitivity, R.id.iv_beacon_scanner, R.id.iv_connectable,
+            R.id.tv_trigger_sensitivity, R.id.tv_scan_window, R.id.iv_connectable,
             R.id.iv_button_power, R.id.iv_power_off})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -107,7 +108,7 @@ public class SettingFragment extends Fragment {
             case R.id.tv_trigger_sensitivity:
                 showTriggerSensitivityDialog();
                 break;
-            case R.id.iv_beacon_scanner:
+            case R.id.tv_scan_window:
                 showBeaconScannerDialog();
                 break;
             case R.id.iv_connectable:
@@ -158,20 +159,36 @@ public class SettingFragment extends Fragment {
     }
 
     private void showBeaconScannerDialog() {
-        AlertMessageDialog dialog = new AlertMessageDialog();
-        dialog.setTitle("Warning!");
-        if (scannerState) {
-            dialog.setMessage("If you turn off Beacon Scanner function, the Beacon will stop scanning.");
-        } else {
-            dialog.setMessage("If you turn on Beacon Scanner function, the Beacon will start scanning.");
-        }
-        dialog.setConfirm("OK");
-        dialog.setCancelGone();
-        dialog.setOnAlertConfirmListener(() -> {
-            int value = !scannerState ? 1 : 0;
-            activity.changeScannerState(value);
+        final ScanWindowDialog dialog = new ScanWindowDialog(getActivity());
+        dialog.setData(scannerState ? startTime : 0);
+        dialog.setOnScanWindowClicked(scanMode -> {
+            String scanModeStr = "";
+            switch (scanMode) {
+                case 4:
+                    scanModeStr = "0ms/1000ms";
+                    break;
+                case 0:
+                    scanModeStr = "1000ms/1000ms";
+                    break;
+                case 1:
+                    scanModeStr = "500ms/1000ms";
+                    break;
+                case 2:
+                    scanModeStr = "250ms/1000ms";
+                    break;
+                case 3:
+                    scanModeStr = "125ms/1000ms";
+                    break;
+            }
+            tvScanWindow.setText(String.format("Scan Window(%s)", scanModeStr));
+            if (scanMode < 4) {
+                scanMode += 1;
+                activity.changeScannerState(1, scanMode);
+            } else {
+                activity.changeScannerState(0);
+            }
         });
-        dialog.show(activity.getSupportFragmentManager());
+        dialog.show();
     }
 
     private void showConnectableDialog() {
@@ -229,10 +246,34 @@ public class SettingFragment extends Fragment {
     }
 
     private boolean scannerState;
+    private int startTime;
 
     public void setBeaconScanner(int scanner) {
         scannerState = scanner == 1;
-        ivBeaconScanner.setImageResource(scanner == 1 ? R.drawable.ic_checked : R.drawable.ic_unchecked);
+        if (!scannerState) {
+            tvScanWindow.setText("Scan Window(0ms/1000ms)");
+        }
+    }
+
+    public void setScanStartTime(int startTime) {
+        this.startTime = startTime;
+        String scanModeStr = "";
+        switch (startTime) {
+            case 1:
+                scanModeStr = "1000ms/1000ms";
+                break;
+            case 2:
+                scanModeStr = "500ms/1000ms";
+                break;
+            case 3:
+                scanModeStr = "250ms/1000ms";
+                break;
+            case 4:
+                scanModeStr = "125ms/1000ms";
+                break;
+        }
+        tvScanWindow.setText(scannerState ? String.format("Scan Window(%s)", scanModeStr)
+                : "Scan Window(0ms/1000ms)");
     }
 
     private boolean connectState;
@@ -248,4 +289,6 @@ public class SettingFragment extends Fragment {
         buttonPowerState = enable == 1;
         ivButtonPower.setImageResource(enable == 1 ? R.drawable.ic_checked : R.drawable.ic_unchecked);
     }
+
+
 }

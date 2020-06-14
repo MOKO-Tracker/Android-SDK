@@ -37,6 +37,7 @@
     <string name="title_setting">SETTING</string>
     <string name="title_device">DEVICE</string>
     <string name="trigger_sensitivity">Trigger Sensitivity(%d)</string>
+    <string name="scan_window_tips">The scan duration of every 1000ms.\nIf you set the duration to 0ms,the Beacon will stop scanning.</string>
 
     <string-array name="tracking_notify">
         <item>Off</item>

@@ -175,9 +175,9 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                 // setting
                 orderTasks.add(mMokoService.getTriggerSensitivity());
                 orderTasks.add(mMokoService.getScanMode());
+                orderTasks.add(mMokoService.getScanStartTime());
                 orderTasks.add(mMokoService.getConnectionMode());
                 orderTasks.add(mMokoService.getButtonPower());
-                orderTasks.add(mMokoService.getScanMode());
                 // device
                 orderTasks.add(mMokoService.getBattery());
                 orderTasks.add(mMokoService.getMacAddress());
@@ -436,6 +436,12 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                                             settingFragment.setSensitivity(sensitivity);
                                         }
                                         break;
+                                    case GET_SCAN_START_TIME:
+                                        if (length == 1) {
+                                            int startTime = value[4] & 0xFF;
+                                            settingFragment.setScanStartTime(startTime);
+                                        }
+                                        break;
                                     case GET_TRIGGER_ENABLE:
                                         if (length == 1) {
                                             int enable = value[4] & 0xFF;
@@ -624,6 +630,8 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         List<OrderTask> orderTasks = new ArrayList<>();
         // setting
         orderTasks.add(mMokoService.getTriggerSensitivity());
+        orderTasks.add(mMokoService.getScanMode());
+        orderTasks.add(mMokoService.getScanStartTime());
         MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
@@ -686,9 +694,22 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         MokoSupport.getInstance().sendOrder(mMokoService.setSensitivity(sensitivity), mMokoService.getTriggerSensitivity());
     }
 
-    public void changeScannerState(int scannerState) {
+    public void changeScannerState(int enable, int scanMode) {
         showSyncingProgressDialog();
-        MokoSupport.getInstance().sendOrder(mMokoService.setScanMode(scannerState), mMokoService.getTriggerSensitivity());
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(mMokoService.setScanMode(enable));
+        orderTasks.add(mMokoService.getScanMode());
+        orderTasks.add(mMokoService.setScanStartTime(scanMode));
+        orderTasks.add(mMokoService.getScanStartTime());
+        MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+    }
+
+    public void changeScannerState(int enable) {
+        showSyncingProgressDialog();
+        List<OrderTask> orderTasks = new ArrayList<>();
+        orderTasks.add(mMokoService.setScanMode(enable));
+        orderTasks.add(mMokoService.getScanMode());
+        MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     public void changeConnectState(int connectState) {

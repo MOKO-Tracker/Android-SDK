@@ -33,6 +33,9 @@ public enum ConfigKeyEnum implements Serializable {
     GET_MOVE_SENSITIVE(0x40),
     SET_MOVE_SENSITIVE(0x50),
 
+    GET_SCAN_START_TIME(0x60),
+    SET_SCAN_START_TIME(0x70),
+
     GET_FILTER_MAC(0x41),
     SET_FILTER_MAC(0x51),
 

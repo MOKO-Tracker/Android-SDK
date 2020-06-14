@@ -48,6 +48,7 @@ public class WriteConfigTask extends OrderTask {
             case GET_FILTER_MINOR:
             case GET_FILTER_ADV_RAW_DATA:
             case GET_FILTER_ENABLE:
+            case GET_SCAN_START_TIME:
             case SHAKE:
                 createGetConfigData(key.getConfigKey());
                 break;
@@ -168,6 +169,15 @@ public class WriteConfigTask extends OrderTask {
         data[2] = (byte) 0x00;
         data[3] = (byte) 0x01;
         data[4] = (byte) sensitive;
+    }
+
+    public void setScanStartTime(@IntRange(from = 1, to = 4) int startTime) {
+        data = new byte[5];
+        data[0] = (byte) 0xEA;
+        data[1] = (byte) ConfigKeyEnum.SET_SCAN_START_TIME.getConfigKey();
+        data[2] = (byte) 0x00;
+        data[3] = (byte) 0x01;
+        data[4] = (byte) startTime;
     }
 
     public void setFilterMac(String mac) {
