@@ -59,6 +59,8 @@ public class AdvFragment extends Fragment implements SeekBar.OnSeekBarChangeList
     EditText etAdvTrigger;
     @Bind(R.id.cl_adv_trigger)
     ConstraintLayout clAdvTrigger;
+    @Bind(R.id.adv_trigger)
+    TextView advTrigger;
 
 
     private Pattern pattern;
@@ -253,6 +255,11 @@ public class AdvFragment extends Fragment implements SeekBar.OnSeekBarChangeList
         clAdvTrigger.setVisibility(View.VISIBLE);
         etAdvTrigger.setText(String.valueOf(duration));
         etAdvTrigger.setSelection(String.valueOf(duration).length());
+    }
+
+    public void disableTrigger() {
+        advTrigger.setVisibility(View.GONE);
+        ivAdvTrigger.setVisibility(View.GONE);
     }
 
     @OnClick({R.id.iv_adv_trigger})

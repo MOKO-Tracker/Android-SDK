@@ -390,7 +390,8 @@ public class MainActivity extends BaseActivity implements MokoScanDeviceCallback
                         case DEVICE_TYPE:
                             if (value.length < 1)
                                 return;
-                            if (5 != (value[0] & 0xFF)) {
+                            int type = (value[0] & 0xFF);
+                            if (5 != type && 4 !=type) {
                                 deviceTypeErrorAlert();
                                 return;
                             }

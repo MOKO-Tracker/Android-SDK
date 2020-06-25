@@ -290,5 +290,7 @@ public class SettingFragment extends Fragment {
         ivButtonPower.setImageResource(enable == 1 ? R.drawable.ic_checked : R.drawable.ic_unchecked);
     }
 
-
+    public void disableTrigger() {
+        tvTriggerSensitivity.setVisibility(View.GONE);
+    }
 }

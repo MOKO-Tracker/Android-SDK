@@ -46,6 +46,8 @@ public class ScannerFragment extends Fragment implements SeekBar.OnSeekBarChange
     EditText etScannerTrigger;
     @Bind(R.id.cl_scanner_trigger)
     ConstraintLayout clScannerTrigger;
+    @Bind(R.id.scanner_trigger)
+    TextView scannerTrigger;
 
     private DeviceInfoActivity activity;
 
@@ -133,6 +135,11 @@ public class ScannerFragment extends Fragment implements SeekBar.OnSeekBarChange
         clScannerTrigger.setVisibility(View.VISIBLE);
         etScannerTrigger.setText(String.valueOf(duration));
         etScannerTrigger.setSelection(String.valueOf(duration).length());
+    }
+
+    public void disableTrigger() {
+        scannerTrigger.setVisibility(View.GONE);
+        ivScannerTrigger.setVisibility(View.GONE);
     }
 
     @OnClick({R.id.iv_scanner_trigger, R.id.tv_filter_options, R.id.tv_tracked_data})

@@ -96,6 +96,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     public MokoService mMokoService;
     private boolean mReceiverTag = false;
     private int disConnectType;
+    private int deviceType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,6 +160,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                 orderTasks.add(mMokoService.openWriteConfigNotify());
                 orderTasks.add(mMokoService.setTime());
                 orderTasks.add(mMokoService.shake());
+                orderTasks.add(mMokoService.getDeviceType());
                 // get adv params
                 orderTasks.add(mMokoService.getDeviceName());
                 orderTasks.add(mMokoService.getUUID());
@@ -167,11 +169,15 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                 orderTasks.add(mMokoService.getAdvInterval());
                 orderTasks.add(mMokoService.getTransmission());
                 orderTasks.add(mMokoService.getMeasurePower());
-                orderTasks.add(mMokoService.getAdvTrigger());
+                if (4 != deviceType) {
+                    orderTasks.add(mMokoService.getAdvTrigger());
+                }
                 // scanner
                 orderTasks.add(mMokoService.getStoreTimeCondition());
                 orderTasks.add(mMokoService.getStoreAlert());
-                orderTasks.add(mMokoService.getScannerTrigger());
+                if (4 != deviceType) {
+                    orderTasks.add(mMokoService.getScannerTrigger());
+                }
                 // setting
                 orderTasks.add(mMokoService.getTriggerSensitivity());
                 orderTasks.add(mMokoService.getScanMode());
@@ -315,6 +321,17 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                     int responseType = response.responseType;
                     byte[] value = response.responseValue;
                     switch (orderType) {
+                        case DEVICE_TYPE:
+                            if (value.length < 1)
+                                return;
+                            int type = (value[0] & 0xFF);
+                            deviceType = type;
+                            if (4 == type) {
+                                advFragment.disableTrigger();
+                                scannerFragment.disableTrigger();
+                                settingFragment.disableTrigger();
+                            }
+                            break;
                         case DEVICE_NAME:
                             final String deviceName = new String(value);
                             mDeviceName = deviceName;
@@ -649,7 +666,9 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         // scanner
         orderTasks.add(mMokoService.getStoreTimeCondition());
         orderTasks.add(mMokoService.getStoreAlert());
-        orderTasks.add(mMokoService.getScannerTrigger());
+        if (4 != deviceType) {
+            orderTasks.add(mMokoService.getScannerTrigger());
+        }
         MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
@@ -672,7 +691,9 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         orderTasks.add(mMokoService.getAdvInterval());
         orderTasks.add(mMokoService.getTransmission());
         orderTasks.add(mMokoService.getMeasurePower());
-        orderTasks.add(mMokoService.getAdvTrigger());
+        if (4 != deviceType) {
+            orderTasks.add(mMokoService.getAdvTrigger());
+        }
         MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
