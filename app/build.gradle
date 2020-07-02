@@ -8,8 +8,8 @@ android {
         applicationId "com.moko.contacttracker"
         minSdkVersion 18
         targetSdkVersion 28
-        versionCode 4
-        versionName "1.0.3"
+        versionCode 5
+        versionName "1.0.4"
 
         javaCompileOptions {
             annotationProcessorOptions {

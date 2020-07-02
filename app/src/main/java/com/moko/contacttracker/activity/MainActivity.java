@@ -34,6 +34,7 @@ import com.moko.contacttracker.dialog.ScanFilterDialog;
 import com.moko.contacttracker.entity.BeaconInfo;
 import com.moko.contacttracker.service.MokoService;
 import com.moko.contacttracker.utils.BeaconInfoParseableImpl;
+import com.moko.contacttracker.utils.SPUtiles;
 import com.moko.contacttracker.utils.ToastUtils;
 import com.moko.support.MokoConstants;
 import com.moko.support.MokoSupport;
@@ -98,6 +99,7 @@ public class MainActivity extends BaseActivity implements MokoScanDeviceCallback
         startService(intent);
         bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
         EventBus.getDefault().register(this);
+        mSavedPassword = SPUtiles.getStringValue(this, AppConstants.SP_KEY_SAVED_PASSWORD, "");
         beaconInfoHashMap = new HashMap<>();
         beaconInfos = new ArrayList<>();
         adapter = new BeaconListAdapter();
@@ -391,7 +393,7 @@ public class MainActivity extends BaseActivity implements MokoScanDeviceCallback
                             if (value.length < 1)
                                 return;
                             int type = (value[0] & 0xFF);
-                            if (5 != type && 4 !=type) {
+                            if (type < 4 || type > 7) {
                                 deviceTypeErrorAlert();
                                 return;
                             }
@@ -407,6 +409,7 @@ public class MainActivity extends BaseActivity implements MokoScanDeviceCallback
                             showLoadingProgressDialog();
                             if (0 == (value[0] & 0xFF)) {
                                 mSavedPassword = mPassword;
+                                SPUtiles.setStringValue(MainActivity.this, AppConstants.SP_KEY_SAVED_PASSWORD, mSavedPassword);
                                 LogModule.i("Success");
                                 OrderTask orderTask = mMokoService.getDeviceType();
                                 MokoSupport.getInstance().sendOrder(orderTask);

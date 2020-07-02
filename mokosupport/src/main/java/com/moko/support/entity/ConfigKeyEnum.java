@@ -63,7 +63,16 @@ public enum ConfigKeyEnum implements Serializable {
     GET_FILTER_MINOR(0x49),
     SET_FILTER_MINOR(0x59),
 
-    SHAKE(0xF1)
+    SHAKE(0x61),
+
+    GET_VIBRATIONS_NUMBER(0x62),
+    SET_VIBRATIONS_NUMBER(0x72),
+
+    GET_FILTER_MAJOR_RANGE(0x63),
+    SET_FILTER_MAJOR_RANGE(0x73),
+
+    GET_FILTER_MINOR_RANGE(0x64),
+    SET_FILTER_MINOR_RANGE(0x74),
     ;
 
     private int configKey;

@@ -49,6 +49,9 @@ public class WriteConfigTask extends OrderTask {
             case GET_FILTER_ADV_RAW_DATA:
             case GET_FILTER_ENABLE:
             case GET_SCAN_START_TIME:
+            case GET_VIBRATIONS_NUMBER:
+            case GET_FILTER_MAJOR_RANGE:
+            case GET_FILTER_MINOR_RANGE:
             case SHAKE:
                 createGetConfigData(key.getConfigKey());
                 break;
@@ -397,6 +400,65 @@ public class WriteConfigTask extends OrderTask {
             for (int i = 0; i < minorBytes.length; i++) {
                 data[4 + i] = minorBytes[i];
             }
+        }
+    }
+
+    public void setVibrationNumber(@IntRange(from = 1, to = 10) int vibrationNumber) {
+        data = new byte[5];
+        data[0] = (byte) 0xEA;
+        data[1] = (byte) ConfigKeyEnum.SET_VIBRATIONS_NUMBER.getConfigKey();
+        data[2] = (byte) 0x00;
+        data[3] = (byte) 0x01;
+        data[4] = (byte) vibrationNumber;
+    }
+
+    public void setFilterMajorRange(@IntRange(from = 0, to = 1) int enable,
+                                    @IntRange(from = 0, to = 65535) int majorMin,
+                                    @IntRange(from = 0, to = 65535) int majorMax) {
+        if (enable == 0) {
+            data = new byte[5];
+            data[0] = (byte) 0xEA;
+            data[1] = (byte) ConfigKeyEnum.SET_FILTER_MAJOR_RANGE.getConfigKey();
+            data[2] = (byte) 0x00;
+            data[3] = (byte) 0x01;
+            data[4] = (byte) 0x00;
+        } else {
+            byte[] majorMinBytes = MokoUtils.toByteArray(majorMin, 2);
+            byte[] majorMaxBytes = MokoUtils.toByteArray(majorMax, 2);
+            data = new byte[8];
+            data[0] = (byte) 0xEA;
+            data[1] = (byte) ConfigKeyEnum.SET_FILTER_MAJOR_RANGE.getConfigKey();
+            data[2] = (byte) 0x00;
+            data[3] = (byte) 0x04;
+            data[4] = majorMinBytes[0];
+            data[5] = majorMinBytes[1];
+            data[6] = majorMaxBytes[0];
+            data[7] = majorMaxBytes[1];
+        }
+    }
+
+    public void setFilterMinorRange(@IntRange(from = 0, to = 1) int enable,
+                                    @IntRange(from = 0, to = 65535) int minorMin,
+                                    @IntRange(from = 0, to = 65535) int minorMax) {
+        if (enable == 0) {
+            data = new byte[5];
+            data[0] = (byte) 0xEA;
+            data[1] = (byte) ConfigKeyEnum.SET_FILTER_MINOR_RANGE.getConfigKey();
+            data[2] = (byte) 0x00;
+            data[3] = (byte) 0x01;
+            data[4] = (byte) 0x00;
+        } else {
+            byte[] minorMinBytes = MokoUtils.toByteArray(minorMin, 2);
+            byte[] minorMaxBytes = MokoUtils.toByteArray(minorMax, 2);
+            data = new byte[8];
+            data[0] = (byte) 0xEA;
+            data[1] = (byte) ConfigKeyEnum.SET_FILTER_MINOR_RANGE.getConfigKey();
+            data[2] = (byte) 0x00;
+            data[3] = (byte) 0x04;
+            data[4] = minorMinBytes[0];
+            data[5] = minorMinBytes[1];
+            data[6] = minorMaxBytes[0];
+            data[7] = minorMaxBytes[1];
         }
     }
 }

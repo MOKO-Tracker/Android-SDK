@@ -159,40 +159,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                 orderTasks.add(mMokoService.openDisconnectedNotify());
                 orderTasks.add(mMokoService.openWriteConfigNotify());
                 orderTasks.add(mMokoService.setTime());
-                orderTasks.add(mMokoService.shake());
-                orderTasks.add(mMokoService.getDeviceType());
-                // get adv params
-                orderTasks.add(mMokoService.getDeviceName());
-                orderTasks.add(mMokoService.getUUID());
-                orderTasks.add(mMokoService.getMajor());
-                orderTasks.add(mMokoService.getMinor());
-                orderTasks.add(mMokoService.getAdvInterval());
-                orderTasks.add(mMokoService.getTransmission());
-                orderTasks.add(mMokoService.getMeasurePower());
-                if (4 != deviceType) {
-                    orderTasks.add(mMokoService.getAdvTrigger());
-                }
-                // scanner
-                orderTasks.add(mMokoService.getStoreTimeCondition());
-                orderTasks.add(mMokoService.getStoreAlert());
-                if (4 != deviceType) {
-                    orderTasks.add(mMokoService.getScannerTrigger());
-                }
-                // setting
-                orderTasks.add(mMokoService.getTriggerSensitivity());
-                orderTasks.add(mMokoService.getScanMode());
-                orderTasks.add(mMokoService.getScanStartTime());
-                orderTasks.add(mMokoService.getConnectionMode());
-                orderTasks.add(mMokoService.getButtonPower());
-                // device
-                orderTasks.add(mMokoService.getBattery());
-                orderTasks.add(mMokoService.getMacAddress());
-                orderTasks.add(mMokoService.getDeviceModel());
-                orderTasks.add(mMokoService.getSoftwareVersion());
                 orderTasks.add(mMokoService.getFirmwareVersion());
-                orderTasks.add(mMokoService.getHardwareVersion());
-                orderTasks.add(mMokoService.getProductDate());
-                orderTasks.add(mMokoService.getManufacturer());
                 MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
             }
         }
@@ -201,6 +168,50 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         public void onServiceDisconnected(ComponentName name) {
         }
     };
+
+    private void getOtherData() {
+        showSyncingProgressDialog();
+        List<OrderTask> orderTasks = new ArrayList<>();
+        if (MokoSupport.getInstance().firmwareVersion >= 310) {
+            orderTasks.add(mMokoService.shake());
+        }
+        orderTasks.add(mMokoService.getDeviceType());
+        // get adv params
+        orderTasks.add(mMokoService.getDeviceName());
+        orderTasks.add(mMokoService.getUUID());
+        orderTasks.add(mMokoService.getMajor());
+        orderTasks.add(mMokoService.getMinor());
+        orderTasks.add(mMokoService.getAdvInterval());
+        orderTasks.add(mMokoService.getTransmission());
+        orderTasks.add(mMokoService.getMeasurePower());
+        if (deviceType != 4 && deviceType != 6) {
+            orderTasks.add(mMokoService.getAdvTrigger());
+        }
+        // scanner
+        orderTasks.add(mMokoService.getStoreTimeCondition());
+        orderTasks.add(mMokoService.getStoreAlert());
+        if (deviceType != 4 && deviceType != 6) {
+            orderTasks.add(mMokoService.getScannerTrigger());
+        }
+        if (MokoSupport.getInstance().firmwareVersion >= 310) {
+            orderTasks.add(mMokoService.getVibrationNumber());
+        }
+        // setting
+        orderTasks.add(mMokoService.getTriggerSensitivity());
+        orderTasks.add(mMokoService.getScanMode());
+        orderTasks.add(mMokoService.getScanStartTime());
+        orderTasks.add(mMokoService.getConnectionMode());
+        orderTasks.add(mMokoService.getButtonPower());
+        // device
+        orderTasks.add(mMokoService.getBattery());
+        orderTasks.add(mMokoService.getMacAddress());
+        orderTasks.add(mMokoService.getDeviceModel());
+        orderTasks.add(mMokoService.getSoftwareVersion());
+        orderTasks.add(mMokoService.getHardwareVersion());
+        orderTasks.add(mMokoService.getProductDate());
+        orderTasks.add(mMokoService.getManufacturer());
+        MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+    }
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 100)
     public void onConnectStatusEvent(ConnectStatusEvent event) {
@@ -326,7 +337,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                                 return;
                             int type = (value[0] & 0xFF);
                             deviceType = type;
-                            if (4 == type) {
+                            if (type == 4 || type == 6) {
                                 advFragment.disableTrigger();
                                 scannerFragment.disableTrigger();
                                 settingFragment.disableTrigger();
@@ -380,6 +391,15 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                         case FIRMWARE_VERSION:
                             String firmwareVersion = new String(value);
                             deviceFragment.setFirmwareVersion(firmwareVersion);
+                            int index = firmwareVersion.indexOf("V");
+                            if (index > 0) {
+                                String firmwareVersionSuffix = firmwareVersion.substring(index + 1);
+                                String versionCode = firmwareVersionSuffix.replaceAll("\\.", "");
+                                if (!TextUtils.isEmpty(versionCode)) {
+                                    MokoSupport.getInstance().firmwareVersion = Integer.parseInt(versionCode);
+                                }
+                            }
+                            getOtherData();
                             break;
                         case HARDWARE_VERSION:
                             String hardwareVersion = new String(value);
@@ -463,6 +483,12 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                                         if (length == 1) {
                                             int enable = value[4] & 0xFF;
                                             settingFragment.setButtonPower(enable);
+                                        }
+                                        break;
+                                    case GET_VIBRATIONS_NUMBER:
+                                        if (length == 1) {
+                                            int vibrationsNumber = value[4] & 0xFF;
+                                            scannerFragment.setVibrationsNumber(vibrationsNumber);
                                         }
                                         break;
                                     case SET_ADV_MOVE_CONDITION:
@@ -666,8 +692,11 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         // scanner
         orderTasks.add(mMokoService.getStoreTimeCondition());
         orderTasks.add(mMokoService.getStoreAlert());
-        if (4 != deviceType) {
+        if (deviceType != 4 && deviceType != 6) {
             orderTasks.add(mMokoService.getScannerTrigger());
+        }
+        if (MokoSupport.getInstance().firmwareVersion >= 310) {
+            orderTasks.add(mMokoService.getVibrationNumber());
         }
         MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
@@ -691,7 +720,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         orderTasks.add(mMokoService.getAdvInterval());
         orderTasks.add(mMokoService.getTransmission());
         orderTasks.add(mMokoService.getMeasurePower());
-        if (4 != deviceType) {
+        if (deviceType != 4 && deviceType != 6) {
             orderTasks.add(mMokoService.getAdvTrigger());
         }
         MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));

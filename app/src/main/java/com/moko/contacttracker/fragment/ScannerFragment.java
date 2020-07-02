@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -18,6 +19,7 @@ import com.moko.contacttracker.R;
 import com.moko.contacttracker.activity.DeviceInfoActivity;
 import com.moko.contacttracker.activity.ExportDataActivity;
 import com.moko.contacttracker.activity.FilterOptionsActivity;
+import com.moko.contacttracker.activity.FilterOptionsNewActivity;
 import com.moko.contacttracker.service.MokoService;
 import com.moko.support.MokoSupport;
 import com.moko.support.task.OrderTask;
@@ -30,7 +32,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.carbswang.android.numberpickerview.library.NumberPickerView;
 
-public class ScannerFragment extends Fragment implements SeekBar.OnSeekBarChangeListener {
+public class ScannerFragment extends Fragment implements SeekBar.OnSeekBarChangeListener, NumberPickerView.OnValueChangeListener {
     private static final String TAG = ScannerFragment.class.getSimpleName();
     @Bind(R.id.sb_storage_interval)
     SeekBar sbStorageInterval;
@@ -48,6 +50,10 @@ public class ScannerFragment extends Fragment implements SeekBar.OnSeekBarChange
     ConstraintLayout clScannerTrigger;
     @Bind(R.id.scanner_trigger)
     TextView scannerTrigger;
+    @Bind(R.id.npv_vibrations_number)
+    NumberPickerView npvVibrationsNumber;
+    @Bind(R.id.rl_vibrations_number)
+    RelativeLayout rlVibrationsNumber;
 
     private DeviceInfoActivity activity;
 
@@ -78,6 +84,12 @@ public class ScannerFragment extends Fragment implements SeekBar.OnSeekBarChange
         npvTrackingNotify.setMaxValue(3);
         npvTrackingNotify.setMinValue(0);
         npvTrackingNotify.setValue(0);
+        npvTrackingNotify.setOnValueChangedListener(this);
+
+        npvVibrationsNumber.setDisplayedValues(getResources().getStringArray(R.array.vibrations_number));
+        npvVibrationsNumber.setMaxValue(5);
+        npvVibrationsNumber.setMinValue(0);
+        npvVibrationsNumber.setValue(0);
         return view;
     }
 
@@ -151,6 +163,10 @@ public class ScannerFragment extends Fragment implements SeekBar.OnSeekBarChange
                 clScannerTrigger.setVisibility(isScannerTriggerOpen ? View.VISIBLE : View.GONE);
                 break;
             case R.id.tv_filter_options:
+                if (MokoSupport.getInstance().firmwareVersion >= 310) {
+                    startActivity(new Intent(getActivity(), FilterOptionsNewActivity.class));
+                    return;
+                }
                 startActivity(new Intent(getActivity(), FilterOptionsActivity.class));
                 break;
             case R.id.tv_tracked_data:
@@ -181,6 +197,10 @@ public class ScannerFragment extends Fragment implements SeekBar.OnSeekBarChange
         orderTasks.add(mokoService.setStorageInterval(storageIntervalProgress));
 
         orderTasks.add(mokoService.setStoreAlert(trackNotify));
+        if (MokoSupport.getInstance().firmwareVersion >= 310 && trackNotify > 1) {
+            final int vibrationsNumber = npvVibrationsNumber.getValue();
+            orderTasks.add(mokoService.setVibrationNumber(vibrationsNumber));
+        }
 
         if (isScannerTriggerOpen) {
             int scannerTrigger = Integer.parseInt(scannerTriggerStr);
@@ -199,5 +219,19 @@ public class ScannerFragment extends Fragment implements SeekBar.OnSeekBarChange
     public void setTrackNotify(int trackNotify) {
         if (trackNotify <= 3)
             npvTrackingNotify.setValue(trackNotify);
+    }
+
+    public void setVibrationsNumber(int vibrationsNumber) {
+        final int trackNotify = npvTrackingNotify.getValue();
+        if (trackNotify > 1) {
+            rlVibrationsNumber.setVisibility(View.VISIBLE);
+        }
+        npvVibrationsNumber.setValue(vibrationsNumber - 1);
+    }
+
+    @Override
+    public void onValueChange(NumberPickerView picker, int oldVal, int newVal) {
+        if (MokoSupport.getInstance().firmwareVersion >= 310)
+            rlVibrationsNumber.setVisibility(newVal > 1 ? View.VISIBLE : View.GONE);
     }
 }

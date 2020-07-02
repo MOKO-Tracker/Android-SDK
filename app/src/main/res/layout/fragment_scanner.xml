@@ -106,7 +106,6 @@
             android:id="@+id/tracking_notify"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:gravity="center_vertical"
             android:text="Tracking Notification"
             android:textColor="@color/black_333333"
@@ -119,7 +118,7 @@
         <cn.carbswang.android.numberpickerview.library.NumberPickerView
             android:id="@+id/npv_tracking_notify"
             android:layout_width="120dp"
-            android:layout_height="130dp"
+            android:layout_height="80dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/shape_stroke_blue_bg"
             app:layout_constraintRight_toRightOf="parent"
@@ -130,8 +129,8 @@
             app:npv_TextArray="@array/tracking_notify"
             app:npv_TextColorNormal="@color/grey_b3b3b3"
             app:npv_TextColorSelected="@color/blue_2f84d0"
-            app:npv_TextSizeNormal="13sp"
-            app:npv_TextSizeSelected="15sp"
+            app:npv_TextSizeNormal="10sp"
+            app:npv_TextSizeSelected="13sp"
             app:npv_WrapSelectorWheel="false" />
 
         <View
@@ -141,6 +140,49 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/npv_tracking_notify" />
+
+        <RelativeLayout
+            android:id="@+id/rl_vibrations_number"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:visibility="gone"
+            android:layout_marginTop="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/npv_tracking_notify">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="20dp"
+                android:text="Number of Vibrations"
+                android:textColor="@color/black_333333"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <cn.carbswang.android.numberpickerview.library.NumberPickerView
+                android:id="@+id/npv_vibrations_number"
+                android:layout_width="120dp"
+                android:layout_height="80dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/shape_stroke_blue_bg"
+                app:npv_DividerColor="@color/blue_2f84d0"
+                app:npv_DividerMarginLeft="15dp"
+                app:npv_DividerMarginRight="15dp"
+                app:npv_TextArray="@array/vibrations_number"
+                app:npv_TextColorNormal="@color/grey_b3b3b3"
+                app:npv_TextColorSelected="@color/blue_2f84d0"
+                app:npv_TextSizeNormal="10sp"
+                app:npv_TextSizeSelected="13sp"
+                app:npv_WrapSelectorWheel="false" />
+
+            <View
+                style="@style/divider_line"
+                android:layout_alignParentBottom="true" />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/scanner_trigger"
@@ -152,7 +194,7 @@
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/npv_tracking_notify" />
+            app:layout_constraintTop_toBottomOf="@id/rl_vibrations_number" />
 
         <ImageView
             android:id="@+id/iv_scanner_trigger"

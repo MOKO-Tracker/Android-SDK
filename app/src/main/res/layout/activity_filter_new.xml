@@ -388,20 +388,59 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="@id/ibeacon_major" />
 
-                <EditText
-                    android:id="@+id/et_ibeacon_major"
+                <LinearLayout
+                    android:id="@+id/ll_ibeacon_major"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="0~65535"
-                    android:inputType="number"
-                    android:maxLength="5"
-                    android:textColor="@color/black_333333"
-                    android:textColorHint="@color/grey_ebebeb"
-                    android:textSize="15sp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
                     android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/iv_ibeacon_major" />
+                    app:layout_constraintTop_toBottomOf="@id/iv_ibeacon_major">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="From"
+                        android:textColor="@color/black_333333"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/et_ibeacon_major_min"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginRight="12dp"
+                        android:layout_weight="1.0"
+                        android:hint="0~65535"
+                        android:inputType="number"
+                        android:maxLength="5"
+                        android:textColor="@color/black_333333"
+                        android:textColorHint="@color/grey_ebebeb"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="To"
+                        android:textColor="@color/black_333333"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/et_ibeacon_major_max"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:layout_weight="1.0"
+                        android:hint="0~65535"
+                        android:inputType="number"
+                        android:maxLength="5"
+                        android:textColor="@color/black_333333"
+                        android:textColorHint="@color/grey_ebebeb"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
 
                 <View
                     style="@style/divider_line"
@@ -409,7 +448,7 @@
                     android:layout_marginTop="10dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/et_ibeacon_major" />
+                    app:layout_constraintTop_toBottomOf="@id/ll_ibeacon_major" />
 
                 <TextView
                     android:id="@+id/ibeacon_minor"
@@ -421,7 +460,7 @@
                     android:textSize="15sp"
                     android:textStyle="bold"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/et_ibeacon_major" />
+                    app:layout_constraintTop_toBottomOf="@id/ll_ibeacon_major" />
 
                 <ImageView
                     android:id="@+id/iv_ibeacon_minor"
@@ -435,20 +474,60 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="@id/ibeacon_minor" />
 
-                <EditText
-                    android:id="@+id/et_ibeacon_minor"
+                <LinearLayout
+                    android:id="@+id/ll_ibeacon_minor"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="0~65535"
-                    android:inputType="number"
-                    android:maxLength="5"
-                    android:textColor="@color/black_333333"
-                    android:textColorHint="@color/grey_ebebeb"
-                    android:textSize="15sp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
                     android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/iv_ibeacon_minor" />
+                    app:layout_constraintTop_toBottomOf="@id/iv_ibeacon_minor">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="From"
+                        android:textColor="@color/black_333333"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/et_ibeacon_minor_min"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginRight="12dp"
+                        android:layout_weight="1.0"
+                        android:hint="0~65535"
+                        android:inputType="number"
+                        android:maxLength="5"
+                        android:textColor="@color/black_333333"
+                        android:textColorHint="@color/grey_ebebeb"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="To"
+                        android:textColor="@color/black_333333"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/et_ibeacon_minor_max"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:layout_weight="1.0"
+                        android:hint="0~65535"
+                        android:inputType="number"
+                        android:maxLength="5"
+                        android:textColor="@color/black_333333"
+                        android:textColorHint="@color/grey_ebebeb"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
 
                 <View
                     style="@style/divider_line"
@@ -456,7 +535,7 @@
                     android:layout_marginTop="10dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/et_ibeacon_minor" />
+                    app:layout_constraintTop_toBottomOf="@id/ll_ibeacon_minor" />
             </android.support.constraint.ConstraintLayout>
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

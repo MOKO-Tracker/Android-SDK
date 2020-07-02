@@ -338,6 +338,24 @@ public class MokoService extends Service implements MokoOrderTaskCallback {
         return task;
     }
 
+    public OrderTask getVibrationNumber() {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setData(ConfigKeyEnum.GET_VIBRATIONS_NUMBER);
+        return task;
+    }
+
+    public OrderTask getFilterMajorRange() {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setData(ConfigKeyEnum.GET_FILTER_MAJOR_RANGE);
+        return task;
+    }
+
+    public OrderTask getFilterMinorRange() {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setData(ConfigKeyEnum.GET_FILTER_MINOR_RANGE);
+        return task;
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // WRITE
     ///////////////////////////////////////////////////////////////////////////
@@ -517,9 +535,27 @@ public class MokoService extends Service implements MokoOrderTaskCallback {
         return task;
     }
 
-    public OrderTask shake(){
+    public OrderTask shake() {
         WriteConfigTask task = new WriteConfigTask(this);
         task.setData(ConfigKeyEnum.SHAKE);
+        return task;
+    }
+
+    public OrderTask setVibrationNumber(int vibrationNumber) {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setVibrationNumber(vibrationNumber);
+        return task;
+    }
+
+    public OrderTask setFilterMajorRange(int enable, int majorMin, int majorMax) {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setFilterMajorRange(enable, majorMin, majorMax);
+        return task;
+    }
+
+    public OrderTask setFilterMinorRange(int enable, int majorMin, int majorMax) {
+        WriteConfigTask task = new WriteConfigTask(this);
+        task.setFilterMinorRange(enable, majorMin, majorMax);
         return task;
     }
 
