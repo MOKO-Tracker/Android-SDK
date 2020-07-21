@@ -519,8 +519,14 @@ public class FilterOptionsNewActivity extends BaseActivity implements SeekBar.On
             orderTasks.add(mMokoService.setFilterMac(filterMacEnable ? mac : ""));
             orderTasks.add(mMokoService.setFilterName(filterNameEnable ? name : ""));
             orderTasks.add(mMokoService.setFilterUUID(filterUUIDEnable ? uuidStr : ""));
-            orderTasks.add(mMokoService.setFilterMajorRange(filterMajorEnable ? 1 : 0, Integer.parseInt(majorMin), Integer.parseInt(majorMax)));
-            orderTasks.add(mMokoService.setFilterMinorRange(filterMinorEnable ? 1 : 0, Integer.parseInt(minorMin), Integer.parseInt(minorMax)));
+            orderTasks.add(mMokoService.setFilterMajorRange(
+                    filterMajorEnable ? 1 : 0,
+                    filterMajorEnable ? Integer.parseInt(majorMin) : 0,
+                    filterMajorEnable ? Integer.parseInt(majorMax) : 0));
+            orderTasks.add(mMokoService.setFilterMinorRange(
+                    filterMinorEnable ? 1 : 0,
+                    filterMinorEnable ? Integer.parseInt(minorMin) : 0,
+                    filterMinorEnable ? Integer.parseInt(minorMax) : 0));
             orderTasks.add(mMokoService.setFilterAdvRawData(filterRawAdvDataEnable ? rawData : ""));
             orderTasks.add(mMokoService.setFilterEnable(0));
         } else {
