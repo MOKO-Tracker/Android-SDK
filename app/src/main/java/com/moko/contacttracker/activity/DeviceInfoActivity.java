@@ -29,6 +29,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.moko.contacttracker.AppConstants;
 import com.moko.contacttracker.R;
 import com.moko.contacttracker.dialog.AlertMessageDialog;
 import com.moko.contacttracker.dialog.LoadingMessageDialog;
@@ -103,6 +104,16 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_info);
         ButterKnife.bind(this);
+        deviceType = getIntent().getIntExtra(AppConstants.EXTRA_KEY_DEVICE_TYPE, -1);
+        if (deviceType < 0) {
+            finish();
+            return;
+        }
+        if (deviceType == 4 || deviceType == 6) {
+            advFragment.disableTrigger();
+            scannerFragment.disableTrigger();
+            settingFragment.disableTrigger();
+        }
         fragmentManager = getFragmentManager();
         initFragment();
 
@@ -175,7 +186,6 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         if (MokoSupport.getInstance().firmwareVersion >= 310) {
             orderTasks.add(mMokoService.shake());
         }
-        orderTasks.add(mMokoService.getDeviceType());
         // get adv params
         orderTasks.add(mMokoService.getDeviceName());
         orderTasks.add(mMokoService.getUUID());
@@ -187,29 +197,6 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         if (deviceType != 4 && deviceType != 6) {
             orderTasks.add(mMokoService.getAdvTrigger());
         }
-        // scanner
-        orderTasks.add(mMokoService.getStoreTimeCondition());
-        orderTasks.add(mMokoService.getStoreAlert());
-        if (deviceType != 4 && deviceType != 6) {
-            orderTasks.add(mMokoService.getScannerTrigger());
-        }
-        if (MokoSupport.getInstance().firmwareVersion >= 310) {
-            orderTasks.add(mMokoService.getVibrationNumber());
-        }
-        // setting
-        orderTasks.add(mMokoService.getTriggerSensitivity());
-        orderTasks.add(mMokoService.getScanMode());
-        orderTasks.add(mMokoService.getScanStartTime());
-        orderTasks.add(mMokoService.getConnectionMode());
-        orderTasks.add(mMokoService.getButtonPower());
-        // device
-        orderTasks.add(mMokoService.getBattery());
-        orderTasks.add(mMokoService.getMacAddress());
-        orderTasks.add(mMokoService.getDeviceModel());
-        orderTasks.add(mMokoService.getSoftwareVersion());
-        orderTasks.add(mMokoService.getHardwareVersion());
-        orderTasks.add(mMokoService.getProductDate());
-        orderTasks.add(mMokoService.getManufacturer());
         MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
@@ -332,17 +319,6 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                     int responseType = response.responseType;
                     byte[] value = response.responseValue;
                     switch (orderType) {
-                        case DEVICE_TYPE:
-                            if (value.length < 1)
-                                return;
-                            int type = (value[0] & 0xFF);
-                            deviceType = type;
-                            if (type == 4 || type == 6) {
-                                advFragment.disableTrigger();
-                                scannerFragment.disableTrigger();
-                                settingFragment.disableTrigger();
-                            }
-                            break;
                         case DEVICE_NAME:
                             final String deviceName = new String(value);
                             mDeviceName = deviceName;
@@ -399,7 +375,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                                     MokoSupport.getInstance().firmwareVersion = Integer.parseInt(versionCode);
                                 }
                             }
-                            getOtherData();
+                            tvTitle.postDelayed(() -> getOtherData(), 500);
                             break;
                         case HARDWARE_VERSION:
                             String hardwareVersion = new String(value);
@@ -657,6 +633,12 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         List<OrderTask> orderTasks = new ArrayList<>();
         // device
         orderTasks.add(mMokoService.getBattery());
+        orderTasks.add(mMokoService.getMacAddress());
+        orderTasks.add(mMokoService.getDeviceModel());
+        orderTasks.add(mMokoService.getSoftwareVersion());
+        orderTasks.add(mMokoService.getHardwareVersion());
+        orderTasks.add(mMokoService.getProductDate());
+        orderTasks.add(mMokoService.getManufacturer());
         MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
@@ -675,6 +657,8 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         orderTasks.add(mMokoService.getTriggerSensitivity());
         orderTasks.add(mMokoService.getScanMode());
         orderTasks.add(mMokoService.getScanStartTime());
+        orderTasks.add(mMokoService.getConnectionMode());
+        orderTasks.add(mMokoService.getButtonPower());
         MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 

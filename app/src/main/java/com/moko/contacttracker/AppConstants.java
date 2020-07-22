@@ -30,6 +30,7 @@ public class AppConstants {
     public static final String EXTRA_KEY_DEVICE_IBEACON_THREE_AXIS = "EXTRA_KEY_DEVICE_IBEACON_THREE_AXIS";
     public static final String EXTRA_KEY_DEVICE_CONNECTION_MODE = "EXTRA_KEY_DEVICE_CONNECTION_MODE";
     public static final String EXTRA_KEY_DEVICE_PASSWORD = "EXTRA_KEY_DEVICE_PASSWORD";
+    public static final String EXTRA_KEY_DEVICE_TYPE = "EXTRA_KEY_DEVICE_TYPE";
     // request_code
     public static final int REQUEST_CODE_DEVICE_INFO = 101;
     public static final int REQUEST_CODE_SET_UUID = 102;

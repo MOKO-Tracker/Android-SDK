@@ -89,6 +89,7 @@ public class MainActivity extends BaseActivity implements MokoScanDeviceCallback
     private ArrayList<BeaconInfo> beaconInfos;
     private BeaconListAdapter adapter;
     private Animation animation = null;
+    private boolean isVisiable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +112,18 @@ public class MainActivity extends BaseActivity implements MokoScanDeviceCallback
         itemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.shape_recycleview_divider));
         rvDevices.addItemDecoration(itemDecoration);
         rvDevices.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        isVisiable = true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        isVisiable = false;
     }
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -384,6 +397,8 @@ public class MainActivity extends BaseActivity implements MokoScanDeviceCallback
                 if (MokoConstants.ACTION_ORDER_FINISH.equals(action)) {
                 }
                 if (MokoConstants.ACTION_ORDER_RESULT.equals(action)) {
+                    if (!isVisiable)
+                        return;
                     OrderTaskResponse response = (OrderTaskResponse) intent.getSerializableExtra(MokoConstants.EXTRA_KEY_RESPONSE_ORDER_TASK);
                     OrderType orderType = response.orderType;
                     int responseType = response.responseType;
@@ -399,6 +414,7 @@ public class MainActivity extends BaseActivity implements MokoScanDeviceCallback
                             }
                             dismissLoadingProgressDialog();
                             Intent i = new Intent(MainActivity.this, DeviceInfoActivity.class);
+                            i.putExtra(AppConstants.EXTRA_KEY_DEVICE_TYPE, type);
                             startActivityForResult(i, AppConstants.REQUEST_CODE_DEVICE_INFO);
 //                            rvDevices.postDelayed(() -> MokoSupport.getInstance().disConnectBle(), 3000);
                             break;
