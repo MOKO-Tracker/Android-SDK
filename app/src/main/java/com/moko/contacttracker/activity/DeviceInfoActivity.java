@@ -659,6 +659,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         orderTasks.add(mMokoService.getScanStartTime());
         orderTasks.add(mMokoService.getConnectionMode());
         orderTasks.add(mMokoService.getButtonPower());
+        orderTasks.add(mMokoService.getMacAddress());
         MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
