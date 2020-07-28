@@ -198,7 +198,7 @@ public class ScannerFragment extends Fragment implements SeekBar.OnSeekBarChange
 
         orderTasks.add(mokoService.setStoreAlert(trackNotify));
         if (MokoSupport.getInstance().firmwareVersion >= 310 && trackNotify > 1) {
-            final int vibrationsNumber = npvVibrationsNumber.getValue();
+            final int vibrationsNumber = npvVibrationsNumber.getValue() + 1;
             orderTasks.add(mokoService.setVibrationNumber(vibrationsNumber));
         }
 
