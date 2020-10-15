@@ -163,7 +163,7 @@ public class ScannerFragment extends Fragment implements SeekBar.OnSeekBarChange
                 clScannerTrigger.setVisibility(isScannerTriggerOpen ? View.VISIBLE : View.GONE);
                 break;
             case R.id.tv_filter_options:
-                if (MokoSupport.getInstance().firmwareVersion >= 310) {
+                if (activity.isUseNewFunction) {
                     startActivity(new Intent(getActivity(), FilterOptionsNewActivity.class));
                     return;
                 }
@@ -197,7 +197,7 @@ public class ScannerFragment extends Fragment implements SeekBar.OnSeekBarChange
         orderTasks.add(mokoService.setStorageInterval(storageIntervalProgress));
 
         orderTasks.add(mokoService.setStoreAlert(trackNotify));
-        if (MokoSupport.getInstance().firmwareVersion >= 310 && trackNotify > 1) {
+        if (activity.isUseNewFunction && trackNotify > 1) {
             final int vibrationsNumber = npvVibrationsNumber.getValue() + 1;
             orderTasks.add(mokoService.setVibrationNumber(vibrationsNumber));
         }
@@ -231,7 +231,7 @@ public class ScannerFragment extends Fragment implements SeekBar.OnSeekBarChange
 
     @Override
     public void onValueChange(NumberPickerView picker, int oldVal, int newVal) {
-        if (MokoSupport.getInstance().firmwareVersion >= 310)
+        if (activity.isUseNewFunction)
             rlVibrationsNumber.setVisibility(newVal > 1 ? View.VISIBLE : View.GONE);
     }
 }

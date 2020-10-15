@@ -559,4 +559,12 @@ public class MokoSupport implements MokoResponseCallback {
     }
 
     public int firmwareVersion;
+    public String productModel;
+
+    public boolean isUseNewFunction() {
+        if ((!TextUtils.isEmpty(productModel) && "MOKOTracker".equals(productModel)) || firmwareVersion >= 310) {
+            return true;
+        }
+        return false;
+    }
 }

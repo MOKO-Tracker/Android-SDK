@@ -99,6 +99,8 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     private int disConnectType;
     private int deviceType;
 
+    public boolean isUseNewFunction;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -170,6 +172,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                 orderTasks.add(mMokoService.openDisconnectedNotify());
                 orderTasks.add(mMokoService.openWriteConfigNotify());
                 orderTasks.add(mMokoService.setTime());
+                orderTasks.add(mMokoService.getDeviceModel());
                 orderTasks.add(mMokoService.getFirmwareVersion());
                 MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
             }
@@ -183,7 +186,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
     private void getOtherData() {
         showSyncingProgressDialog();
         List<OrderTask> orderTasks = new ArrayList<>();
-        if (MokoSupport.getInstance().firmwareVersion >= 310) {
+        if (isUseNewFunction) {
             orderTasks.add(mMokoService.shake());
         }
         // get adv params
@@ -359,6 +362,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                         case DEVICE_MODEL:
                             String productModel = new String(value);
                             deviceFragment.setProductModel(productModel);
+                            MokoSupport.getInstance().productModel = productModel;
                             break;
                         case SOFTWARE_VERSION:
                             String softwareVersion = new String(value);
@@ -373,6 +377,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                                 String versionCode = firmwareVersionSuffix.replaceAll("\\.", "");
                                 if (!TextUtils.isEmpty(versionCode)) {
                                     MokoSupport.getInstance().firmwareVersion = Integer.parseInt(versionCode);
+                                    isUseNewFunction = MokoSupport.getInstance().isUseNewFunction();
                                 }
                             }
                             tvTitle.postDelayed(() -> getOtherData(), 500);
@@ -680,7 +685,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
         if (deviceType != 4 && deviceType != 6) {
             orderTasks.add(mMokoService.getScannerTrigger());
         }
-        if (MokoSupport.getInstance().firmwareVersion >= 310) {
+        if (isUseNewFunction) {
             orderTasks.add(mMokoService.getVibrationNumber());
         }
         MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));

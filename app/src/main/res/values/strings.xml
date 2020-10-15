@@ -10,7 +10,7 @@
     <string name="password_null">Password cannot be empty!</string>
     <string name="main_password_length">The password should be 8 characters</string>
     <string name="change_password_length">The password should be 8 characters.Please try again</string>
-    <string name="change_password_match">Password do not match!.Please try again</string>
+    <string name="change_password_match">Password do not match!Please try again.</string>
     <string name="main_exit_tips">Are you sure you want to quit?</string>
     <string name="setting_syncing">syncing</string>
 
