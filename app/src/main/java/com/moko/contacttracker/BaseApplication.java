@@ -1,12 +1,9 @@
 package com.moko.contacttracker;
 
 import android.app.Application;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
-
-import com.moko.contacttracker.service.MokoService;
 import com.moko.contacttracker.utils.IOUtils;
 import com.moko.support.MokoSupport;
 import com.moko.support.log.LogModule;

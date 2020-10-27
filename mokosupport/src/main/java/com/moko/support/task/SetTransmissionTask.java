@@ -1,13 +1,12 @@
 package com.moko.support.task;
 
-import com.moko.support.callback.MokoOrderTaskCallback;
 import com.moko.support.entity.OrderType;
 
 public class SetTransmissionTask extends OrderTask {
     public byte[] data;
 
-    public SetTransmissionTask(MokoOrderTaskCallback callback) {
-        super(OrderType.TRANSMISSION, callback, OrderTask.RESPONSE_TYPE_WRITE);
+    public SetTransmissionTask() {
+        super(OrderType.TRANSMISSION, OrderTask.RESPONSE_TYPE_WRITE);
     }
 
     public void setData(int transmisson) {

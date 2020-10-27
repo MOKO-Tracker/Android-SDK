@@ -2,15 +2,14 @@ package com.moko.support.task;
 
 
 import com.moko.support.MokoSupport;
-import com.moko.support.callback.MokoOrderTaskCallback;
 import com.moko.support.entity.OrderType;
 import com.moko.support.log.LogModule;
 
 public class OpenNotifyTask extends OrderTask {
     public byte[] data;
 
-    public OpenNotifyTask(OrderType orderType, MokoOrderTaskCallback callback) {
-        super(orderType, callback, OrderTask.RESPONSE_TYPE_NOTIFY);
+    public OpenNotifyTask(OrderType orderType) {
+        super(orderType, OrderTask.RESPONSE_TYPE_NOTIFY);
     }
 
     @Override

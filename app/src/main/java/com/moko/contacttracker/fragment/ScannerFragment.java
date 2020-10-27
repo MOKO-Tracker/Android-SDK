@@ -20,8 +20,8 @@ import com.moko.contacttracker.activity.DeviceInfoActivity;
 import com.moko.contacttracker.activity.ExportDataActivity;
 import com.moko.contacttracker.activity.FilterOptionsActivity;
 import com.moko.contacttracker.activity.FilterOptionsNewActivity;
-import com.moko.contacttracker.service.MokoService;
 import com.moko.support.MokoSupport;
+import com.moko.support.OrderTaskAssembler;
 import com.moko.support.task.OrderTask;
 
 import java.util.ArrayList;
@@ -188,25 +188,25 @@ public class ScannerFragment extends Fragment implements SeekBar.OnSeekBarChange
     }
 
 
-    public void saveParams(MokoService mokoService) {
+    public void saveParams() {
         final int storageIntervalProgress = sbStorageInterval.getProgress();
         final int trackNotify = npvTrackingNotify.getValue();
         final String scannerTriggerStr = etScannerTrigger.getText().toString();
         List<OrderTask> orderTasks = new ArrayList<>();
 
-        orderTasks.add(mokoService.setStorageInterval(storageIntervalProgress));
+        orderTasks.add(OrderTaskAssembler.setStorageInterval(storageIntervalProgress));
 
-        orderTasks.add(mokoService.setStoreAlert(trackNotify));
+        orderTasks.add(OrderTaskAssembler.setStoreAlert(trackNotify));
         if (activity.isUseNewFunction && trackNotify > 1) {
             final int vibrationsNumber = npvVibrationsNumber.getValue() + 1;
-            orderTasks.add(mokoService.setVibrationNumber(vibrationsNumber));
+            orderTasks.add(OrderTaskAssembler.setVibrationNumber(vibrationsNumber));
         }
 
         if (isScannerTriggerOpen) {
             int scannerTrigger = Integer.parseInt(scannerTriggerStr);
-            orderTasks.add(mokoService.setScannerMoveCondition(scannerTrigger));
+            orderTasks.add(OrderTaskAssembler.setScannerMoveCondition(scannerTrigger));
         } else {
-            orderTasks.add(mokoService.setScannerMoveCondition(0));
+            orderTasks.add(OrderTaskAssembler.setScannerMoveCondition(0));
         }
         MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }

@@ -19,8 +19,8 @@ import android.widget.TextView;
 import com.moko.contacttracker.R;
 import com.moko.contacttracker.activity.DeviceInfoActivity;
 import com.moko.contacttracker.entity.TxPowerEnum;
-import com.moko.contacttracker.service.MokoService;
 import com.moko.support.MokoSupport;
+import com.moko.support.OrderTaskAssembler;
 import com.moko.support.task.OrderTask;
 
 import java.util.ArrayList;
@@ -310,7 +310,7 @@ public class AdvFragment extends Fragment implements SeekBar.OnSeekBarChangeList
     }
 
 
-    public void saveParams(MokoService mokoService) {
+    public void saveParams() {
         final String advNameStr = etAdvName.getText().toString();
         final String uuidStr = etUuid.getText().toString();
         final String majorStr = etMajor.getText().toString();
@@ -319,33 +319,33 @@ public class AdvFragment extends Fragment implements SeekBar.OnSeekBarChangeList
         final String advTriggerStr = etAdvTrigger.getText().toString();
         List<OrderTask> orderTasks = new ArrayList<>();
 
-        orderTasks.add(mokoService.setDeviceName(advNameStr));
+        orderTasks.add(OrderTaskAssembler.setDeviceName(advNameStr));
 
         String uuid = uuidStr.replaceAll("-", "");
-        orderTasks.add(mokoService.setUUID(uuid));
+        orderTasks.add(OrderTaskAssembler.setUUID(uuid));
 
         int major = Integer.parseInt(majorStr);
-        orderTasks.add(mokoService.setMajor(major));
+        orderTasks.add(OrderTaskAssembler.setMajor(major));
 
         int minor = Integer.parseInt(minorStr);
-        orderTasks.add(mokoService.setMinor(minor));
+        orderTasks.add(OrderTaskAssembler.setMinor(minor));
 
         int advInterval = Integer.parseInt(advIntervalStr);
-        orderTasks.add(mokoService.setAdvInterval(advInterval));
+        orderTasks.add(OrderTaskAssembler.setAdvInterval(advInterval));
 
         int rssi1mProgress = sbRssi1m.getProgress();
         int rssi1m = rssi1mProgress - 127;
-        orderTasks.add(mokoService.setMeasurePower(rssi1m));
+        orderTasks.add(OrderTaskAssembler.setMeasurePower(rssi1m));
 
         int txPowerProgress = sbTxPower.getProgress();
         int txPower = TxPowerEnum.fromOrdinal(txPowerProgress).getTxPower();
-        orderTasks.add(mokoService.setTransmission(txPower));
+        orderTasks.add(OrderTaskAssembler.setTransmission(txPower));
 
         if (isAdvTriggerOpen) {
             int advTrigger = Integer.parseInt(advTriggerStr);
-            orderTasks.add(mokoService.setAdvMoveCondition(advTrigger));
+            orderTasks.add(OrderTaskAssembler.setAdvMoveCondition(advTrigger));
         } else {
-            orderTasks.add(mokoService.setAdvMoveCondition(0));
+            orderTasks.add(OrderTaskAssembler.setAdvMoveCondition(0));
         }
         MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }

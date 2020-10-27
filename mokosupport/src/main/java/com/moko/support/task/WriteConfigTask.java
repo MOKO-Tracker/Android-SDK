@@ -3,7 +3,6 @@ package com.moko.support.task;
 import android.support.annotation.IntRange;
 import android.text.TextUtils;
 
-import com.moko.support.callback.MokoOrderTaskCallback;
 import com.moko.support.entity.ConfigKeyEnum;
 import com.moko.support.entity.OrderType;
 import com.moko.support.utils.MokoUtils;
@@ -19,8 +18,8 @@ import java.util.Calendar;
 public class WriteConfigTask extends OrderTask {
     public byte[] data;
 
-    public WriteConfigTask(MokoOrderTaskCallback callback) {
-        super(OrderType.WRITE_CONFIG, callback, OrderTask.RESPONSE_TYPE_WRITE);
+    public WriteConfigTask() {
+        super(OrderType.WRITE_CONFIG, OrderTask.RESPONSE_TYPE_WRITE);
     }
 
     @Override

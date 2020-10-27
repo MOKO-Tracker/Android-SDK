@@ -9,7 +9,6 @@ import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,16 +16,17 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
-import com.moko.support.callback.MokoOrderTaskCallback;
 import com.moko.support.callback.MokoResponseCallback;
 import com.moko.support.callback.MokoScanDeviceCallback;
 import com.moko.support.entity.MokoCharacteristic;
 import com.moko.support.entity.OrderType;
 import com.moko.support.event.ConnectStatusEvent;
+import com.moko.support.event.OrderTaskResponseEvent;
 import com.moko.support.handler.MokoCharacteristicHandler;
 import com.moko.support.handler.MokoLeScanHandler;
 import com.moko.support.log.LogModule;
 import com.moko.support.task.OrderTask;
+import com.moko.support.task.OrderTaskResponse;
 import com.moko.support.utils.MokoUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -102,13 +102,14 @@ public class MokoSupport implements MokoResponseCallback {
 
             @Override
             public void onDeviceDisconnecting(@NonNull BluetoothDevice device) {
-                if (isSyncData()) {
-                    mQueue.clear();
-                }
+
             }
 
             @Override
             public void onDeviceDisconnected(@NonNull BluetoothDevice device) {
+                if (isSyncData()) {
+                    mQueue.clear();
+                }
                 ConnectStatusEvent connectStatusEvent = new ConnectStatusEvent();
                 connectStatusEvent.setAction(MokoConstants.ACTION_CONN_STATUS_DISCONNECTED);
                 EventBus.getDefault().post(connectStatusEvent);
@@ -236,7 +237,7 @@ public class MokoSupport implements MokoResponseCallback {
                 }
                 mQueue.offer(ordertask);
             }
-            executeTask(null);
+            executeTask();
         } else {
             for (OrderTask ordertask : orderTasks) {
                 if (ordertask == null) {
@@ -247,9 +248,11 @@ public class MokoSupport implements MokoResponseCallback {
         }
     }
 
-    public void executeTask(MokoOrderTaskCallback callback) {
-        if (callback != null && !isSyncData()) {
-            callback.onOrderFinish();
+    public void executeTask() {
+        if (!isSyncData()) {
+            OrderTaskResponseEvent event = new OrderTaskResponseEvent();
+            event.setAction(MokoConstants.ACTION_ORDER_FINISH);
+            EventBus.getDefault().post(event);
             return;
         }
         if (mQueue.isEmpty()) {
@@ -421,10 +424,13 @@ public class MokoSupport implements MokoResponseCallback {
             }
             if (orderType != null) {
                 LogModule.i(orderType.getName());
-                Intent intent = new Intent(MokoConstants.ACTION_CURRENT_DATA);
-                intent.putExtra(MokoConstants.EXTRA_KEY_CURRENT_DATA_TYPE, orderType);
-                intent.putExtra(MokoConstants.EXTRA_KEY_RESPONSE_VALUE, value);
-                mContext.sendOrderedBroadcast(intent, null);
+                OrderTaskResponse response = new OrderTaskResponse();
+                response.orderType = orderType;
+                response.responseValue = value;
+                OrderTaskResponseEvent event = new OrderTaskResponseEvent();
+                event.setAction(MokoConstants.ACTION_CURRENT_DATA);
+                event.setResponse(response);
+                EventBus.getDefault().post(event);
             }
         } else {
             OrderTask orderTask = mQueue.peek();
@@ -503,19 +509,7 @@ public class MokoSupport implements MokoResponseCallback {
     }
 
     @Override
-    public void onDescriptorWrite() {
-        if (!isSyncData()) {
-            return;
-        }
-        OrderTask orderTask = mQueue.peek();
-        LogModule.i("device to app notify : " + orderTask.orderType.getName());
-        orderTask.orderStatus = OrderTask.ORDER_STATUS_SUCCESS;
-        mQueue.poll();
-        executeTask(orderTask.callback);
-    }
-
-    @Override
-    public void onBatteryValueReceived(BluetoothGatt gatt) {
+    public void onServicesDiscovered(BluetoothGatt gatt) {
         mBluetoothGatt = gatt;
         mCharacteristicMap = MokoCharacteristicHandler.getInstance().getCharacteristics(gatt);
         ConnectStatusEvent connectStatusEvent = new ConnectStatusEvent();
@@ -527,8 +521,11 @@ public class MokoSupport implements MokoResponseCallback {
         task.orderStatus = OrderTask.ORDER_STATUS_SUCCESS;
         task.response.responseValue = value;
         mQueue.poll();
-        task.callback.onOrderResult(task.response);
-        executeTask(task.callback);
+        OrderTaskResponseEvent event = new OrderTaskResponseEvent();
+        event.setAction(MokoConstants.ACTION_ORDER_RESULT);
+        event.setResponse(task.response);
+        EventBus.getDefault().post(event);
+        executeTask();
     }
 
     public void onOpenNotifyTimeout() {
