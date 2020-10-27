@@ -46,7 +46,7 @@ public class IOUtils {
      */
     public static String getDefaultFilePath() {
         String filepath = "";
-        File file = new File(Environment.getExternalStorageDirectory() + File.separator + "mokoSupport",
+        File file = new File(Environment.getExternalStorageDirectory() + File.separator + "ContactTracker",
                 CRASH_FILE);
         try {
             if (file.exists()) {
@@ -68,7 +68,7 @@ public class IOUtils {
      */
     public static String getFilePath(String fileName) {
         String filepath = "";
-        File file = new File(Environment.getExternalStorageDirectory() + File.separator + "mokoSupport",
+        File file = new File(Environment.getExternalStorageDirectory() + File.separator + "ContactTracker",
                 fileName);
         try {
             if (file.exists()) {
