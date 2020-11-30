@@ -23,9 +23,9 @@ import java.io.IOException;
  * @ClassPath com.moko.support.log.LogModule
  */
 public class LogModule {
-    private static final String TAG = "ContactTracker";
-    private static final String LOG_FOLDER = "ContactTracker";
-    private static final String LOG_FILE = "ContactTracker.txt";
+    private static final String TAG = "MokoTracker";
+    private static final String LOG_FOLDER = "MokoTracker";
+    private static final String LOG_FILE = "MokoTracker.txt";
 
     private static final String TRACKED_FILE = "tracked.txt";
     private static String PATH_LOGCAT;
