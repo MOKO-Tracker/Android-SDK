@@ -1,44 +1,26 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion "28.0.3"
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.moko.contacttracker"
         minSdkVersion 18
-        targetSdkVersion 28
-        versionCode 10
-        versionName "1.0.9"
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                includeCompileClasspath = true
-            }
-        }
+        targetSdkVersion 29
+        versionCode 11
+        versionName "1.0.10"
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    signingConfigs {
-        debug {
-            v1SigningEnabled true
-            v2SigningEnabled true
-        }
-        release {
-            v1SigningEnabled true
-            v2SigningEnabled true
-        }
     }
 
     applicationVariants.all { variant ->
@@ -51,17 +33,6 @@ android {
                     apkFileName = "MokoTracker_${defaultConfig.versionName}_${formatedDate}_debug.apk"
                 }
                 outputFileName = apkFileName
-            }
-        }
-    }
-}
-
-configurations.all {
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-        def requested = details.requested
-        if (requested.group == 'com.android.support') {
-            if (!requested.name.startsWith("multidex")) {
-                details.useVersion '28.0.0'
             }
         }
     }
