@@ -8,8 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -46,21 +44,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
-import butterknife.Bind;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ExportDataActivity extends BaseActivity {
 
-    @Bind(R.id.iv_sync)
+    @BindView(R.id.iv_sync)
     ImageView ivSync;
-    @Bind(R.id.tv_export)
+    @BindView(R.id.tv_export)
     TextView tvExport;
-    @Bind(R.id.tv_sync)
+    @BindView(R.id.tv_sync)
     TextView tvSync;
-    @Bind(R.id.tv_empty)
+    @BindView(R.id.tv_empty)
     TextView tvEmpty;
-    @Bind(R.id.rv_export_data)
+    @BindView(R.id.rv_export_data)
     RecyclerView rvExportData;
 
     private boolean mReceiverTag = false;

@@ -1,6 +1,5 @@
 package com.moko.support.task;
 
-import android.support.annotation.IntRange;
 import android.text.TextUtils;
 
 import com.moko.support.entity.ConfigKeyEnum;
@@ -8,6 +7,8 @@ import com.moko.support.entity.OrderType;
 import com.moko.support.utils.MokoUtils;
 
 import java.util.Calendar;
+
+import androidx.annotation.IntRange;
 
 /**
  * @Date 2018/1/20

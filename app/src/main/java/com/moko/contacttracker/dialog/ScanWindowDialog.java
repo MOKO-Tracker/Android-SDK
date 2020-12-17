@@ -7,14 +7,14 @@ import android.widget.TextView;
 
 import com.moko.contacttracker.R;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 public class ScanWindowDialog extends BaseDialog<Integer> implements SeekBar.OnSeekBarChangeListener {
 
-    @Bind(R.id.sb_scan_window)
+    @BindView(R.id.sb_scan_window)
     SeekBar sbScanWindow;
-    @Bind(R.id.tv_scan_window_value)
+    @BindView(R.id.tv_scan_window_value)
     TextView tvScanWindowValue;
 
     public ScanWindowDialog(Context context) {

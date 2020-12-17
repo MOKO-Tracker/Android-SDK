@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
@@ -43,7 +42,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import butterknife.Bind;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -51,47 +51,47 @@ public class FilterOptionsNewActivity extends BaseActivity implements SeekBar.On
 
     public static final String UUID_PATTERN = "[A-Fa-f0-9]{8}-(?:[A-Fa-f0-9]{4}-){3}[A-Fa-f0-9]{12}";
     private final String FILTER_ASCII = "\\A\\p{ASCII}*\\z";
-    @Bind(R.id.sb_rssi_filter)
+    @BindView(R.id.sb_rssi_filter)
     SeekBar sbRssiFilter;
-    @Bind(R.id.tv_rssi_filter_value)
+    @BindView(R.id.tv_rssi_filter_value)
     TextView tvRssiFilterValue;
-    @Bind(R.id.tv_rssi_filter_tips)
+    @BindView(R.id.tv_rssi_filter_tips)
     TextView tvRssiFilterTips;
-    @Bind(R.id.iv_adv_data_filter)
+    @BindView(R.id.iv_adv_data_filter)
     ImageView ivAdvDataFilter;
-    @Bind(R.id.iv_mac_address)
+    @BindView(R.id.iv_mac_address)
     ImageView ivMacAddress;
-    @Bind(R.id.et_mac_address)
+    @BindView(R.id.et_mac_address)
     EditText etMacAddress;
-    @Bind(R.id.iv_adv_name)
+    @BindView(R.id.iv_adv_name)
     ImageView ivAdvName;
-    @Bind(R.id.et_adv_name)
+    @BindView(R.id.et_adv_name)
     EditText etAdvName;
-    @Bind(R.id.iv_ibeacon_uuid)
+    @BindView(R.id.iv_ibeacon_uuid)
     ImageView ivIbeaconUuid;
-    @Bind(R.id.et_ibeacon_uuid)
+    @BindView(R.id.et_ibeacon_uuid)
     EditText etIbeaconUuid;
-    @Bind(R.id.iv_ibeacon_major)
+    @BindView(R.id.iv_ibeacon_major)
     ImageView ivIbeaconMajor;
-    @Bind(R.id.iv_ibeacon_minor)
+    @BindView(R.id.iv_ibeacon_minor)
     ImageView ivIbeaconMinor;
-    @Bind(R.id.iv_raw_adv_data)
+    @BindView(R.id.iv_raw_adv_data)
     ImageView ivRawAdvData;
-    @Bind(R.id.et_raw_adv_data)
+    @BindView(R.id.et_raw_adv_data)
     EditText etRawAdvData;
-    @Bind(R.id.cl_adv_data_filter)
+    @BindView(R.id.cl_adv_data_filter)
     ConstraintLayout clAdvDataFilter;
-    @Bind(R.id.et_ibeacon_major_min)
+    @BindView(R.id.et_ibeacon_major_min)
     EditText etIbeaconMajorMin;
-    @Bind(R.id.et_ibeacon_major_max)
+    @BindView(R.id.et_ibeacon_major_max)
     EditText etIbeaconMajorMax;
-    @Bind(R.id.ll_ibeacon_major)
+    @BindView(R.id.ll_ibeacon_major)
     LinearLayout llIbeaconMajor;
-    @Bind(R.id.et_ibeacon_minor_min)
+    @BindView(R.id.et_ibeacon_minor_min)
     EditText etIbeaconMinorMin;
-    @Bind(R.id.et_ibeacon_minor_max)
+    @BindView(R.id.et_ibeacon_minor_max)
     EditText etIbeaconMinorMax;
-    @Bind(R.id.ll_ibeacon_minor)
+    @BindView(R.id.ll_ibeacon_minor)
     LinearLayout llIbeaconMinor;
     private boolean mReceiverTag = false;
 

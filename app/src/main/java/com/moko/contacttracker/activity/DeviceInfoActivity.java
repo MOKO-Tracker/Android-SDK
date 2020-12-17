@@ -13,8 +13,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -58,7 +56,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.Bind;
+import androidx.annotation.IdRes;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import no.nordicsemi.android.dfu.DfuProgressListener;
@@ -69,21 +69,21 @@ import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
     public static final int REQUEST_CODE_SELECT_FIRMWARE = 0x10;
 
-    @Bind(R.id.frame_container)
+    @BindView(R.id.frame_container)
     FrameLayout frameContainer;
-    @Bind(R.id.radioBtn_adv)
+    @BindView(R.id.radioBtn_adv)
     RadioButton radioBtnAdv;
-    @Bind(R.id.radioBtn_scanner)
+    @BindView(R.id.radioBtn_scanner)
     RadioButton radioBtnScanner;
-    @Bind(R.id.radioBtn_setting)
+    @BindView(R.id.radioBtn_setting)
     RadioButton radioBtnSetting;
-    @Bind(R.id.radioBtn_device)
+    @BindView(R.id.radioBtn_device)
     RadioButton radioBtnDevice;
-    @Bind(R.id.rg_options)
+    @BindView(R.id.rg_options)
     RadioGroup rgOptions;
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.iv_save)
+    @BindView(R.id.iv_save)
     ImageView ivSave;
     private FragmentManager fragmentManager;
     private AdvFragment advFragment;

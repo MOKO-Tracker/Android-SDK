@@ -12,8 +12,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
 import com.moko.support.callback.MokoResponseCallback;
@@ -38,6 +36,8 @@ import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import no.nordicsemi.android.ble.BleManagerCallbacks;
 import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat;
 import no.nordicsemi.android.support.v18.scanner.ScanFilter;
@@ -521,11 +521,11 @@ public class MokoSupport implements MokoResponseCallback {
         task.orderStatus = OrderTask.ORDER_STATUS_SUCCESS;
         task.response.responseValue = value;
         mQueue.poll();
+        executeTask();
         OrderTaskResponseEvent event = new OrderTaskResponseEvent();
         event.setAction(MokoConstants.ACTION_ORDER_RESULT);
         event.setResponse(task.response);
         EventBus.getDefault().post(event);
-        executeTask();
     }
 
     public void onOpenNotifyTimeout() {

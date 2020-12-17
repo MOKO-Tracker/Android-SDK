@@ -6,7 +6,7 @@
     android:background="@color/white_ffffff"
     android:orientation="vertical">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="10dp">
@@ -366,7 +366,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/adv_trigger" />
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_adv_trigger"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -418,6 +418,6 @@
                 android:textSize="15sp"
                 app:layout_constraintBaseline_toBaselineOf="@id/adv_trigger_range"
                 app:layout_constraintLeft_toRightOf="@id/adv_trigger_range" />
-        </android.support.constraint.ConstraintLayout>
-    </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

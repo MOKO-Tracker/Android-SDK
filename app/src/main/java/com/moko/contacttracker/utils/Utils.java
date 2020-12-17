@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v4.content.FileProvider;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -18,6 +17,8 @@ import java.util.Locale;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+
+import androidx.core.content.FileProvider;
 
 /**
  * @Date 2017/12/7 0007

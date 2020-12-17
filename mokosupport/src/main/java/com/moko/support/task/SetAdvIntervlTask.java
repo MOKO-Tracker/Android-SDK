@@ -1,9 +1,9 @@
 package com.moko.support.task;
 
-import android.support.annotation.IntRange;
-
 import com.moko.support.entity.OrderType;
 import com.moko.support.utils.MokoUtils;
+
+import androidx.annotation.IntRange;
 
 public class SetAdvIntervlTask extends OrderTask {
     public byte[] data;

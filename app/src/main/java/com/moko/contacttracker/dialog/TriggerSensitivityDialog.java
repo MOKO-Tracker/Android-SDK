@@ -7,14 +7,14 @@ import android.widget.TextView;
 
 import com.moko.contacttracker.R;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 public class TriggerSensitivityDialog extends BaseDialog<String> implements SeekBar.OnSeekBarChangeListener {
 
-    @Bind(R.id.sb_sensitivity)
+    @BindView(R.id.sb_sensitivity)
     SeekBar sbSensitivity;
-    @Bind(R.id.tv_sensitivity_value)
+    @BindView(R.id.tv_sensitivity_value)
     TextView tvSensitivityValue;
 
     public TriggerSensitivityDialog(Context context) {

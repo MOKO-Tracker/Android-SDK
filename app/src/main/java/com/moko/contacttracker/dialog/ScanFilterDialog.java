@@ -9,15 +9,15 @@ import android.widget.TextView;
 
 import com.moko.contacttracker.R;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 public class ScanFilterDialog extends BaseDialog {
-    @Bind(R.id.et_filter_name)
+    @BindView(R.id.et_filter_name)
     EditText etFilterName;
-    @Bind(R.id.tv_rssi)
+    @BindView(R.id.tv_rssi)
     TextView tvRssi;
-    @Bind(R.id.sb_rssi)
+    @BindView(R.id.sb_rssi)
     SeekBar sbRssi;
 
     private int filterRssi;

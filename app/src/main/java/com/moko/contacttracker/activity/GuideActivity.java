@@ -12,11 +12,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Process;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
 
 import com.moko.contacttracker.AppConstants;
 import com.moko.contacttracker.R;
 import com.moko.contacttracker.utils.Utils;
+
+import androidx.core.app.ActivityCompat;
 
 /**
  * @Date 2020/4/18

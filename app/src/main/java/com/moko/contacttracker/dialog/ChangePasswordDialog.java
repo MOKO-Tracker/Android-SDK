@@ -13,16 +13,16 @@ import android.widget.TextView;
 import com.moko.contacttracker.R;
 import com.moko.contacttracker.utils.ToastUtils;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 public class ChangePasswordDialog extends BaseDialog<Object> {
-    @Bind(R.id.et_password)
+    @BindView(R.id.et_password)
     EditText etPassword;
     private final String FILTER_ASCII = "\\A\\p{ASCII}*\\z";
-    @Bind(R.id.et_password_confirm)
+    @BindView(R.id.et_password_confirm)
     EditText etPasswordConfirm;
-    @Bind(R.id.tv_password_ensure)
+    @BindView(R.id.tv_password_ensure)
     TextView tvPasswordEnsure;
     private boolean passwordEnable;
     private boolean confirmPasswordEnable;

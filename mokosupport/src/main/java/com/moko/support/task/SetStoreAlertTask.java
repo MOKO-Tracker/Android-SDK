@@ -1,8 +1,8 @@
 package com.moko.support.task;
 
-import android.support.annotation.IntRange;
-
 import com.moko.support.entity.OrderType;
+
+import androidx.annotation.IntRange;
 
 public class SetStoreAlertTask extends OrderTask {
     public byte[] data;

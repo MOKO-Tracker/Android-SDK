@@ -11,26 +11,26 @@ import android.widget.TextView;
 import com.moko.contacttracker.R;
 import com.moko.contacttracker.activity.DeviceInfoActivity;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DeviceFragment extends Fragment {
     private static final String TAG = DeviceFragment.class.getSimpleName();
-    @Bind(R.id.tv_battery_voltage)
+    @BindView(R.id.tv_battery_voltage)
     TextView tvBatteryVoltage;
-    @Bind(R.id.tv_mac_address)
+    @BindView(R.id.tv_mac_address)
     TextView tvMacAddress;
-    @Bind(R.id.tv_product_model)
+    @BindView(R.id.tv_product_model)
     TextView tvProductModel;
-    @Bind(R.id.tv_software_version)
+    @BindView(R.id.tv_software_version)
     TextView tvSoftwareVersion;
-    @Bind(R.id.tv_firmware_version)
+    @BindView(R.id.tv_firmware_version)
     TextView tvFirmwareVersion;
-    @Bind(R.id.tv_hardware_version)
+    @BindView(R.id.tv_hardware_version)
     TextView tvHardwareVersion;
-    @Bind(R.id.tv_manufacture_date)
+    @BindView(R.id.tv_manufacture_date)
     TextView tvManufactureDate;
-    @Bind(R.id.tv_manufacture)
+    @BindView(R.id.tv_manufacture)
     TextView tvManufacture;
 
 
@@ -66,13 +66,6 @@ public class DeviceFragment extends Fragment {
     public void onPause() {
         Log.i(TAG, "onPause: ");
         super.onPause();
-    }
-
-    @Override
-    public void onDestroyView() {
-        Log.i(TAG, "onDestroyView: ");
-        super.onDestroyView();
-        ButterKnife.unbind(this);
     }
 
     @Override

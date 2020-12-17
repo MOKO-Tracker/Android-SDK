@@ -3,7 +3,6 @@ package com.moko.contacttracker.fragment;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,32 +26,33 @@ import com.moko.support.task.OrderTask;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.carbswang.android.numberpickerview.library.NumberPickerView;
 
 public class ScannerFragment extends Fragment implements SeekBar.OnSeekBarChangeListener, NumberPickerView.OnValueChangeListener {
     private static final String TAG = ScannerFragment.class.getSimpleName();
-    @Bind(R.id.sb_storage_interval)
+    @BindView(R.id.sb_storage_interval)
     SeekBar sbStorageInterval;
-    @Bind(R.id.tv_storage_interval_value)
+    @BindView(R.id.tv_storage_interval_value)
     TextView tvStorageIntervalValue;
-    @Bind(R.id.tv_storage_interval_tips)
+    @BindView(R.id.tv_storage_interval_tips)
     TextView tvStorageIntervalTips;
-    @Bind(R.id.npv_tracking_notify)
+    @BindView(R.id.npv_tracking_notify)
     NumberPickerView npvTrackingNotify;
-    @Bind(R.id.iv_scanner_trigger)
+    @BindView(R.id.iv_scanner_trigger)
     ImageView ivScannerTrigger;
-    @Bind(R.id.et_scanner_trigger)
+    @BindView(R.id.et_scanner_trigger)
     EditText etScannerTrigger;
-    @Bind(R.id.cl_scanner_trigger)
+    @BindView(R.id.cl_scanner_trigger)
     ConstraintLayout clScannerTrigger;
-    @Bind(R.id.scanner_trigger)
+    @BindView(R.id.scanner_trigger)
     TextView scannerTrigger;
-    @Bind(R.id.npv_vibrations_number)
+    @BindView(R.id.npv_vibrations_number)
     NumberPickerView npvVibrationsNumber;
-    @Bind(R.id.rl_vibrations_number)
+    @BindView(R.id.rl_vibrations_number)
     RelativeLayout rlVibrationsNumber;
 
     private DeviceInfoActivity activity;
@@ -118,13 +118,6 @@ public class ScannerFragment extends Fragment implements SeekBar.OnSeekBarChange
     public void onPause() {
         Log.i(TAG, "onPause: ");
         super.onPause();
-    }
-
-    @Override
-    public void onDestroyView() {
-        Log.i(TAG, "onDestroyView: ");
-        super.onDestroyView();
-        ButterKnife.unbind(this);
     }
 
     @Override

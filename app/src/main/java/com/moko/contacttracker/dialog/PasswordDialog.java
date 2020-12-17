@@ -11,11 +11,11 @@ import android.widget.EditText;
 import com.moko.contacttracker.R;
 import com.moko.contacttracker.utils.ToastUtils;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 public class PasswordDialog extends BaseDialog<String> {
-    @Bind(R.id.et_password)
+    @BindView(R.id.et_password)
     EditText etPassword;
     private final String FILTER_ASCII = "\\A\\p{ASCII}*\\z";
 

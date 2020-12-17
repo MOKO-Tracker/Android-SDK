@@ -48,7 +48,7 @@
             android:windowSoftInputMode="adjustPan" />
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="com.moko.contacttracker.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">

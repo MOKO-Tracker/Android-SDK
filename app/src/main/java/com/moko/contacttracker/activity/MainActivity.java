@@ -7,11 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.Animation;
@@ -59,7 +54,12 @@ import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import butterknife.Bind;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -70,17 +70,17 @@ import butterknife.OnClick;
  * @ClassPath com.moko.contacttracker.activity.MainActivity
  */
 public class MainActivity extends BaseActivity implements MokoScanDeviceCallback, BaseQuickAdapter.OnItemChildClickListener {
-    @Bind(R.id.iv_refresh)
+    @BindView(R.id.iv_refresh)
     ImageView ivRefresh;
-    @Bind(R.id.rv_devices)
+    @BindView(R.id.rv_devices)
     RecyclerView rvDevices;
-    @Bind(R.id.tv_device_num)
+    @BindView(R.id.tv_device_num)
     TextView tvDeviceNum;
-    @Bind(R.id.rl_edit_filter)
+    @BindView(R.id.rl_edit_filter)
     RelativeLayout rl_edit_filter;
-    @Bind(R.id.rl_filter)
+    @BindView(R.id.rl_filter)
     RelativeLayout rl_filter;
-    @Bind(R.id.tv_filter)
+    @BindView(R.id.tv_filter)
     TextView tv_filter;
     private boolean mReceiverTag = false;
     private HashMap<String, BeaconInfo> beaconInfoHashMap;
